@@ -42,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    // Make a change for funsies
     private void startLocationActivity() {
         Intent intent = new Intent(this, ConnectionLocation.class);
         startActivityForResult(intent, this.REQUEST_CODE_STANDARD_OPERATION);
