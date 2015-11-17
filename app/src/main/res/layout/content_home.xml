@@ -20,7 +20,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/input_text_username"
         android:textAlignment="center"
         android:layout_below="@+id/textView3"
         android:layout_alignRight="@+id/textView"
@@ -37,18 +37,6 @@
         android:layout_marginTop="34dp"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editText2"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,16 +57,30 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Password"
         android:id="@+id/textView4"
-        android:layout_above="@+id/editText2"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/input_text_username"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
         android:id="@+id/login_button"
-        android:layout_marginTop="42dp"
-        android:layout_below="@+id/editText2"
+        android:layout_marginTop="34dp"
+        android:layout_below="@+id/input_password_password"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/input_password_password"
+        android:layout_below="@+id/textView4"
+        android:layout_alignRight="@+id/input_text_username"
+        android:layout_alignEnd="@+id/input_text_username"
+        android:layout_alignLeft="@+id/input_text_username"
+        android:layout_alignStart="@+id/input_text_username" />
 
 </RelativeLayout>
