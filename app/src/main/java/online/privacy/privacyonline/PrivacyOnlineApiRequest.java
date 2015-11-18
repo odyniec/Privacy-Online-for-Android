@@ -20,9 +20,12 @@ public class PrivacyOnlineApiRequest {
     private String apiUrl             = "http://polaris:3000/";
     private static final String LOG_TAG_API_REQUEST = "online.privacy.privacyonline.privacyonlineapirequest";
 
+    public static final int VERIFY_USER_ACCOUNT = 1;
+    public static final int GET_LOCATION_LIST   = 2;
+
     PrivacyOnlineApiRequest() {}
 
-    public boolean verifyUserAccount(String username, String password) {
+    public String verifyUserAccount(String username, String password) {
         Log.i(LOG_TAG_API_REQUEST, "Attempting to Verify User Account");
         JSONObject responseData;
         try {
@@ -31,18 +34,20 @@ public class PrivacyOnlineApiRequest {
             requestData.put("password", password);
             responseData = makeAPIRequest("PUT", "user/verify", requestData.toString());
             Log.i(LOG_TAG_API_REQUEST, "Response data: " + responseData.get("ok"));
-            return (responseData.getString("ok").equals("1"));
+            return responseData.getString("ok");
 
         } catch (JSONException je) {
             Log.e(LOG_TAG_API_REQUEST, je.toString());
-            return false;
+            return "0";
 
         } catch (IOException ioe) {
             Log.e(LOG_TAG_API_REQUEST, ioe.toString());
-            return false;
+            return "0";
         }
 
     }
+
+    public Srting getLo
 
     private JSONObject makeAPIRequest(String method, String endPoint, String jsonPayload)
             throws IOException, JSONException {

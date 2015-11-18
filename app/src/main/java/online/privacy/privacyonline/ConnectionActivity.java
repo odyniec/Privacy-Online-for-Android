@@ -3,23 +3,44 @@ package online.privacy.privacyonline;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 
+import java.util.Map;
+import java.util.Set;
+
 public class ConnectionActivity extends AppCompatActivity {
+
+    private static final String PRIVACYONLINE_PREFERENCES = "online.privacy.privacyonline.PREFERENCES";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection_location);
-
-
-
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Check for settings, and spew the set-up activity if we don't have any.
+        if (!havePreferences()) {
+            Intent intent = new Intent(this, SetupActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    private boolean havePreferences() {
+        SharedPreferences preferences = getSharedPreferences(PRIVACYONLINE_PREFERENCES, MODE_PRIVATE);
+        String locationDefault = preferences.getString("locationDefault", "");
+        String username        = preferences.getString("username", "");
+        String password        = preferences.getString("password", "");
+        return !(locationDefault.equals("") && username.equals("") && password.equals(""));
+    }
 
 
 //    // Implement a receiver so we can use the APIService to check login details.
