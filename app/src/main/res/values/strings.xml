@@ -16,4 +16,5 @@
         completions."
     </string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="privacy_online_signup">https://privacy.online/signup</string>
 </resources>

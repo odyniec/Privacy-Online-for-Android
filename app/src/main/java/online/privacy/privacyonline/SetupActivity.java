@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -17,10 +18,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class SetupActivity extends AppCompatActivity {
@@ -77,6 +78,18 @@ public class SetupActivity extends AppCompatActivity {
             }
         });
 
+        // Ugh, apparently we can't define text on buttons to have the underlined property from
+        // within the XML, so we'll do it here we have to set the intent chooser here anyway.
+        Button buttonSignUp = (Button) findViewById(R.id.button_cta_signup);
+        buttonSignUp.setPaintFlags(buttonSignUp.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        buttonSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ctaIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.privacy_online_signup)));
+                startActivity(ctaIntent);
+            }
+        });
+
         Button buttonLogin = (Button) findViewById(R.id.button_save);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +126,7 @@ public class SetupActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
+        getMenuInflater().inflate(R.menu.menu_connectionlocation, menu);
         return true;
     }
 

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_home" tools:context=".HomeActivity">
+    tools:showIn="@layout/activity_setup" tools:context="online.privacy.privacyonline.SetUpActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -30,7 +32,23 @@
                 android:textAlignment="center"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/textView" />
+                android:id="@+id/label_settings_title" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Need an acocunt? Sign up here!"
+                android:id="@+id/button_cta_signup"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textAlignment="center" />
+
         </LinearLayout>
 
         <GridLayout
@@ -54,17 +72,17 @@
                 android:layout_alignEnd="@+id/button_save"
                 android:layout_alignLeft="@+id/button_save"
                 android:layout_alignStart="@+id/button_save"
-                android:layout_below="@+id/textView" />
+                android:layout_below="@+id/label_settings_title" />
 
             <EditText
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/input_text_username"
                 android:layout_below="@+id/label_username"
-                android:layout_alignRight="@+id/textView"
-                android:layout_alignEnd="@+id/textView"
-                android:layout_alignLeft="@+id/textView"
-                android:layout_alignStart="@+id/textView" />
+                android:layout_alignRight="@+id/label_settings_title"
+                android:layout_alignEnd="@+id/label_settings_title"
+                android:layout_alignLeft="@+id/label_settings_title"
+                android:layout_alignStart="@+id/label_settings_title" />
         </GridLayout>
 
         <GridLayout
