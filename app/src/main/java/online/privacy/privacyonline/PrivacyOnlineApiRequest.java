@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -48,19 +49,19 @@ public class PrivacyOnlineApiRequest {
 
     }
 
-    // TODO - Make this VPNLocation[] array, an ArrayList<VPNLocation>
-    public VPNLocation[] getLocationList() {
+    public ArrayList<VPNLocation> getLocationList() {
         Log.i(LOG_TAG_API_REQUEST, "Attempting to get location list.");
         JSONObject responseData;
-        VPNLocation[] locationList;
+        ArrayList<VPNLocation> locationList;
         try {
             responseData = makeAPIRequest("GET", "location", null);
             JSONArray locations = responseData.getJSONArray("location");
-            locationList = new VPNLocation[locations.length()];
+            locationList = new ArrayList<>(locations.length());
             for (int i = 0; i < locations.length(); i++) {
-                JSONObject locationiterator = locations.getJSONObject(i);
-                locationList[i]
-                        = new VPNLocation(locationiterator.getString("label"), locationiterator.getString("hostname"));
+                JSONObject locationIterator = locations.getJSONObject(i);
+                locationList.add(
+                        new VPNLocation(locationIterator.getString("label"), locationIterator.getString("hostname"))
+                );
             }
             return locationList;
         } catch (JSONException je) {

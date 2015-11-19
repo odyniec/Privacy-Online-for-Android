@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -67,7 +68,7 @@ public class PrivacyOnlineAPIService extends IntentService {
     private void handleActionGetLocationList() {
         Log.i(LOG_TAG_API_SERVICE, "Get Location List handler executed.");
         PrivacyOnlineApiRequest requestPrivacyAPI = new PrivacyOnlineApiRequest();
-        VPNLocation[] locationList = requestPrivacyAPI.getLocationList();
+        ArrayList<VPNLocation> locationList = requestPrivacyAPI.getLocationList();
         broadcastGetLocationListResult(locationList);
     }
 
@@ -80,7 +81,7 @@ public class PrivacyOnlineAPIService extends IntentService {
         sendBroadcast(broadcastIntent);
     }
 
-    private void broadcastGetLocationListResult(VPNLocation[] checkResult) {
+    private void broadcastGetLocationListResult(ArrayList<VPNLocation> checkResult) {
         Log.i(LOG_TAG_API_SERVICE, "Broadcasting response.");
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(SetupActivity.GetLocationListReceiver.API_RESPONSE);
