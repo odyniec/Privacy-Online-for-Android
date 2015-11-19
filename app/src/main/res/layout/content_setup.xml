@@ -60,7 +60,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/input_text_username"
-                android:textAlignment="center"
                 android:layout_below="@+id/label_username"
                 android:layout_alignRight="@+id/textView"
                 android:layout_alignEnd="@+id/textView"
@@ -120,7 +119,7 @@
                 android:layout_column="0" />
 
             <Spinner
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/input_spinner_default_vpn_location"
                 android:layout_row="1"

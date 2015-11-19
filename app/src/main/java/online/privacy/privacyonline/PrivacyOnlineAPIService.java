@@ -18,6 +18,8 @@ public class PrivacyOnlineAPIService extends IntentService {
     private static final String LOG_TAG_API_SERVICE = "online.privacy.privacyonline.service.API";
     public static final String ACTION_VERIFY_USERNAME
             = "online.privacy.privacyonline.action.VERIFY_USERNAME";
+    public static final String ACTION_GET_LOCATIONS
+            = "online.privacy.privacyonline.action.GET_LOCATIONS";
 
     public static final String PARAM_USERNAME = "online.privacy.privacyonline.extra.USERNAME";
     public static final String PARAM_PASSWORD = "online.privacy.privacyonline.extra.PASSWORD";
@@ -54,6 +56,9 @@ public class PrivacyOnlineAPIService extends IntentService {
                 final String username = intent.getStringExtra(PARAM_USERNAME);
                 final String password = intent.getStringExtra(PARAM_PASSWORD);
                 handleActionVerifyUserAccount(username, password);
+            } else if (ACTION_GET_LOCATIONS.equals(action)) {
+                Log.i(LOG_TAG_API_SERVICE, "Action is to get location list.");
+                handleActionGetLocationList();
             }
         }
     }

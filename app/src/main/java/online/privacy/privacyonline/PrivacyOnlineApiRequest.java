@@ -54,7 +54,7 @@ public class PrivacyOnlineApiRequest {
         JSONObject responseData;
         ArrayList<VPNLocation> locationList;
         try {
-            responseData = makeAPIRequest("GET", "location", null);
+            responseData = makeAPIRequest("GET", "location", "");
             JSONArray locations = responseData.getJSONArray("location");
             locationList = new ArrayList<>(locations.length());
             for (int i = 0; i < locations.length(); i++) {
@@ -79,8 +79,12 @@ public class PrivacyOnlineApiRequest {
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
-        byte[] payload = jsonPayload.getBytes();
-        int payloadSize = payload.length;
+        byte[] payload;
+        int payloadSize = jsonPayload.length();
+        Log.i(LOG_TAG_API_REQUEST, "Payload size: "+payloadSize);
+        if (payloadSize > 0) {
+            payload = jsonPayload.getBytes();
+        }
 
         try {
             URL url = new URL(apiUrl + endPoint);
@@ -91,19 +95,17 @@ public class PrivacyOnlineApiRequest {
             connection.setRequestMethod(method);
             connection.setRequestProperty("Content-Type", "application/json");
 
-            if (!jsonPayload.isEmpty()) {
+            if (payloadSize > 0) {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 connection.setFixedLengthStreamingMode(payloadSize);
-            } else {
-                connection.setDoInput(false);
             }
 
             // Initiate the connection
             connection.connect();
 
             // Write the payload if there is one.
-            if (!jsonPayload.isEmpty()) {
+            if (payloadSize > 0) {
                 outputStream = connection.getOutputStream();
                 outputStream.write(jsonPayload.getBytes("UTF-8"));
             }

@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,25 +28,54 @@ public class SetupActivity extends AppCompatActivity {
     final static private int REQUEST_CODE_STANDARD_OPERATION = 1;
     final static private String LOG_TAG_HOME = "privacyonline.setup";
     final static private String PRIVACYONLINE_PREFERENCES = "online.privacy.privacyonline.PREFERENCES";
+
     final private Context contextHome = this;
 
+    private VerifyUserAccountReceiver verifyReceiver;
+    private GetLocationListReceiver locationReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
 
+        SharedPreferences preferences = getSharedPreferences(PRIVACYONLINE_PREFERENCES, MODE_PRIVATE);
+        final SharedPreferences.Editor preferencesEditor = preferences.edit();
 
         // Register the IntentService Listeners to get the response of the user check and location list.
         IntentFilter verifyFilter = new IntentFilter(SetupActivity.VerifyUserAccountReceiver.API_RESPONSE);
         verifyFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        VerifyUserAccountReceiver verifyReceiver = new VerifyUserAccountReceiver();
+        verifyReceiver = new VerifyUserAccountReceiver();
         registerReceiver(verifyReceiver, verifyFilter);
 
         IntentFilter locationFilter = new IntentFilter(SetupActivity.GetLocationListReceiver.API_RESPONSE);
         locationFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        GetLocationListReceiver locationReceiver = new GetLocationListReceiver();
+        locationReceiver = new GetLocationListReceiver();
         registerReceiver(locationReceiver, locationFilter);
+
+        final EditText usernameInput = (EditText) findViewById(R.id.input_text_username);
+        usernameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    String username = usernameInput.getText().toString();
+                    preferencesEditor.putString("username", username);
+                    preferencesEditor.commit();
+                }
+            }
+        });
+
+        final EditText passwordInput = (EditText) findViewById(R.id.input_password_password);
+        passwordInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    String password = passwordInput.getText().toString();
+                    preferencesEditor.putString("password", password);
+                    preferencesEditor.commit();
+                }
+            }
+        });
 
         Button buttonLogin = (Button) findViewById(R.id.button_save);
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +92,22 @@ public class SetupActivity extends AppCompatActivity {
                 startService(apiIntent);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Populate the Location list.
+        Intent apiLocationIntent = new Intent(this, PrivacyOnlineAPIService.class);
+        apiLocationIntent.setAction(PrivacyOnlineAPIService.ACTION_GET_LOCATIONS);
+        startService(apiLocationIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(locationReceiver);
+        unregisterReceiver(verifyReceiver);
     }
 
     @Override
@@ -86,7 +132,6 @@ public class SetupActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     private void startLocationActivity() {
         Intent intent = new Intent(this, ConnectionActivity.class);
         startActivity(intent);
@@ -97,7 +142,11 @@ public class SetupActivity extends AppCompatActivity {
     }
 
     private void updateSpinnerValues(ArrayList<VPNLocation> locationList) {
-        VPNLocationAdapter locationAdapter
+        SharedPreferences preferences = getSharedPreferences(PRIVACYONLINE_PREFERENCES, MODE_PRIVATE);
+        final SharedPreferences.Editor preferencesEditor = preferences.edit();
+        final String currentDefaultLocation = preferences.getString("default_vpn_location", "");
+
+        final VPNLocationAdapter locationAdapter
                 = new VPNLocationAdapter(SetupActivity.this, android.R.layout.simple_spinner_item, locationList);
 
         Spinner defaulVPNLocationSpinner = (Spinner) findViewById(R.id.input_spinner_default_vpn_location);
@@ -106,11 +155,17 @@ public class SetupActivity extends AppCompatActivity {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-
+                VPNLocation location = locationAdapter.getItem(position);
+                preferencesEditor.putString("default_vpn_location", location.getHostname());
+                preferencesEditor.commit();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public void onNothingSelected(AdapterView<?> adapter) {
+                int currentDefaultItemPosition = locationAdapter.getEntryLocationByHostname(currentDefaultLocation);
+                if (!currentDefaultLocation.equals("")) {
+                    adapter.setSelection(currentDefaultItemPosition);
+                }
             }
         });
     }
@@ -150,9 +205,14 @@ public class SetupActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(LOG_TAG_HOME, "Received Service Broadcast");
+            Log.i(LOG_TAG_HOME, "Received Get Location Service Broadcast");
             ArrayList<VPNLocation> locationList
                     = intent.getParcelableArrayListExtra(PrivacyOnlineAPIService.CHECK_RESULT);
+            // Stop the App crashing if we can't get stuff from the API
+            // TODO - Connectivity checking, and graceful handling.
+            if (locationList == null) {
+                locationList = new ArrayList<>();
+            }
             updateSpinnerValues(locationList);
         }
     }

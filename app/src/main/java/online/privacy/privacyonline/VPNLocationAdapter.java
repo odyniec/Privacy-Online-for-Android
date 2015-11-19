@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class VPNLocationAdapter extends ArrayAdapter<VPNLocation> {
 
     private Context                context;
-    private ArrayList<VPNLocation> values;
+    private ArrayList<VPNLocation> values = new ArrayList<>();
 
     public VPNLocationAdapter(Context context, int textViewResourceId, ArrayList<VPNLocation> values) {
         super(context, textViewResourceId, values);
@@ -25,11 +25,31 @@ public class VPNLocationAdapter extends ArrayAdapter<VPNLocation> {
     }
 
     public int getCount(){
-       return values.size();
+       return this.values.size();
     }
 
     public VPNLocation getItem(int position) {
-       return values.get(position);
+       return this.values.get(position);
+    }
+
+    public VPNLocation getItemByHostname(String hostname) {
+        VPNLocation matchingLocation = new VPNLocation("Unknown", "Unknown");
+        for (VPNLocation location : this.values) {
+            if (location.getHostname().equals(hostname)) {
+                matchingLocation = location;
+            }
+        }
+        return matchingLocation;
+    }
+
+    public int getEntryLocationByHostname(String hostname) {
+        int locationId = 0;
+        for (int i = 0; i < this.values.size(); i++) {
+            if (this.values.get(i).getHostname().equals(hostname)) {
+                locationId = i;
+            }
+        }
+        return locationId;
     }
 
     public long getItemId(int position){
