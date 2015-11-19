@@ -3,6 +3,7 @@ package online.privacy.privacyonline;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -66,24 +67,25 @@ public class PrivacyOnlineAPIService extends IntentService {
     private void handleActionGetLocationList() {
         Log.i(LOG_TAG_API_SERVICE, "Get Location List handler executed.");
         PrivacyOnlineApiRequest requestPrivacyAPI = new PrivacyOnlineApiRequest();
-        HashMap<String,String> locationList = requestPrivacyAPI.getLocationList();
+        VPNLocation[] locationList = requestPrivacyAPI.getLocationList();
         broadcastGetLocationListResult(locationList);
     }
 
     private void broadcastVerifyAccountResult(boolean checkResult) {
         Log.i(LOG_TAG_API_SERVICE, "Broadcasting response.");
         Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(SetupActivity.ApiResponseReceiver.API_RESPONSE);
+        broadcastIntent.setAction(SetupActivity.VerifyUserAccountReceiver.API_RESPONSE);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
         broadcastIntent.putExtra(CHECK_RESULT, checkResult);
         sendBroadcast(broadcastIntent);
     }
-    private void broadcastGetLocationListResult(HashMap<String,String> checkResult) {
+
+    private void broadcastGetLocationListResult(VPNLocation[] checkResult) {
         Log.i(LOG_TAG_API_SERVICE, "Broadcasting response.");
         Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(SetupActivity.ApiResponseReceiver.API_RESPONSE);
+        broadcastIntent.setAction(SetupActivity.GetLocationListReceiver.API_RESPONSE);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        broadcastIntent.putExtra(CHECK_RESULT, );
+        broadcastIntent.putExtra(CHECK_RESULT, checkResult);
         sendBroadcast(broadcastIntent);
     }
 }

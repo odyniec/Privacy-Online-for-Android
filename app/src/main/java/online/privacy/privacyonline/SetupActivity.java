@@ -17,13 +17,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class SetupActivity extends AppCompatActivity {
 
     final static private int REQUEST_CODE_STANDARD_OPERATION = 1;
-    final static private String LOG_TAG_HOME = "online.privacy.privacyonline.SetupActivity";
+    final static private String LOG_TAG_HOME = "privacyonline.setup";
     final static private String PRIVACYONLINE_PREFERENCES = "online.privacy.privacyonline.PREFERENCES";
     final private Context contextHome = this;
 
@@ -32,15 +33,13 @@ public class SetupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        LoginDetailsCheckReceiver receiver;
+        VerifyUserAccountReceiver receiver;
 
         // Register the IntentService Listener to get the response of the user check.
-        IntentFilter filter = new IntentFilter(SetupActivity.LoginDetailsCheckReceiver.ACTION_REPONSE);
+        IntentFilter filter = new IntentFilter(SetupActivity.VerifyUserAccountReceiver.API_RESPONSE);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new LoginDetailsCheckReceiver();
+        receiver = new VerifyUserAccountReceiver();
         registerReceiver(receiver, filter);
 
         Button buttonLogin = (Button) findViewById(R.id.button_save);
@@ -127,10 +126,10 @@ public class SetupActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(LOG_TAG_HOME, "Received Service Broadcast");
-            HashMap<String,String> locationMap
-                    = (HashMap) intent.getSerializableExtra(PrivacyOnlineAPIService.CHECK_RESULT);
+            ArrayList<VPNLocation> locationList
+                    = intent.getParcelableArrayListExtra(PrivacyOnlineAPIService.CHECK_RESULT);
 
-            Spinner defaulVPNLocationSpinner = findViewById(R.id.input_spinner_default_vpn_location);
+            Spinner defaulVPNLocationSpinner = (Spinner) findViewById(R.id.input_spinner_default_vpn_location);
 
 
         }

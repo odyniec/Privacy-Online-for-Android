@@ -2,6 +2,7 @@ package online.privacy.privacyonline;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,14 +19,14 @@ import javax.net.ssl.HttpsURLConnection;
 public class PrivacyOnlineApiRequest {
 
     private String apiUrl             = "http://polaris:3000/";
-    private static final String LOG_TAG_API_REQUEST = "online.privacy.privacyonline.privacyonlineapirequest";
+    private static final String LOG_TAG_API_REQUEST = "privacyonlineapirequest";
 
     public static final int VERIFY_USER_ACCOUNT = 1;
     public static final int GET_LOCATION_LIST   = 2;
 
     PrivacyOnlineApiRequest() {}
 
-    public String verifyUserAccount(String username, String password) {
+    public boolean verifyUserAccount(String username, String password) {
         Log.i(LOG_TAG_API_REQUEST, "Attempting to Verify User Account");
         JSONObject responseData;
         try {
@@ -34,20 +35,42 @@ public class PrivacyOnlineApiRequest {
             requestData.put("password", password);
             responseData = makeAPIRequest("PUT", "user/verify", requestData.toString());
             Log.i(LOG_TAG_API_REQUEST, "Response data: " + responseData.get("ok"));
-            return responseData.getString("ok");
+            return (responseData.getString("ok").equals("1"));
 
         } catch (JSONException je) {
             Log.e(LOG_TAG_API_REQUEST, je.toString());
-            return "0";
+            return false;
 
         } catch (IOException ioe) {
             Log.e(LOG_TAG_API_REQUEST, ioe.toString());
-            return "0";
+            return false;
         }
 
     }
 
-    public Srting getLo
+    // TODO - Make this VPNLocation[] array, an ArrayList<VPNLocation>
+    public VPNLocation[] getLocationList() {
+        Log.i(LOG_TAG_API_REQUEST, "Attempting to get location list.");
+        JSONObject responseData;
+        VPNLocation[] locationList;
+        try {
+            responseData = makeAPIRequest("GET", "location", null);
+            JSONArray locations = responseData.getJSONArray("location");
+            locationList = new VPNLocation[locations.length()];
+            for (int i = 0; i < locations.length(); i++) {
+                JSONObject locationiterator = locations.getJSONObject(i);
+                locationList[i]
+                        = new VPNLocation(locationiterator.getString("label"), locationiterator.getString("hostname"));
+            }
+            return locationList;
+        } catch (JSONException je) {
+            Log.e(LOG_TAG_API_REQUEST, je.toString());
+            return null;
+        } catch (IOException ioe) {
+            Log.e(LOG_TAG_API_REQUEST, ioe.toString());
+            return null;
+        }
+    }
 
     private JSONObject makeAPIRequest(String method, String endPoint, String jsonPayload)
             throws IOException, JSONException {
@@ -66,16 +89,23 @@ public class PrivacyOnlineApiRequest {
             connection.setConnectTimeout(5000);
             connection.setRequestMethod(method);
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            connection.setFixedLengthStreamingMode(payloadSize);
+
+            if (!jsonPayload.isEmpty()) {
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setFixedLengthStreamingMode(payloadSize);
+            } else {
+                connection.setDoInput(false);
+            }
 
             // Initiate the connection
             connection.connect();
 
-            // Write the payload.
-            outputStream = connection.getOutputStream();
-            outputStream.write(jsonPayload.getBytes("UTF-8"));
+            // Write the payload if there is one.
+            if (!jsonPayload.isEmpty()) {
+                outputStream = connection.getOutputStream();
+                outputStream.write(jsonPayload.getBytes("UTF-8"));
+            }
 
             // Get the response.
             int responseCode = connection.getResponseCode();
