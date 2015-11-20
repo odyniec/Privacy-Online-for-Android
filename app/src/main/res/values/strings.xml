@@ -1,4 +1,7 @@
 <resources>
+
+    <string name="privacyonline_preferences">online.privacy.privacyonline.PREFERENCES</string>
+
     <string name="app_name">Privacy Online</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Privacy Online</string>

@@ -15,46 +15,38 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javax.net.ssl.HttpsURLConnection;
-
 public class PrivacyOnlineApiRequest {
 
-    private String apiUrl             = "http://polaris:3000/";
-    private static final String LOG_TAG_API_REQUEST = "privacyonlineapirequest";
-
-    public static final int VERIFY_USER_ACCOUNT = 1;
-    public static final int GET_LOCATION_LIST   = 2;
-
-    PrivacyOnlineApiRequest() {}
+    private static final String LOG_TAG = "p.o.api.request";
 
     public boolean verifyUserAccount(String username, String password) {
-        Log.i(LOG_TAG_API_REQUEST, "Attempting to Verify User Account");
+        Log.i(LOG_TAG, "Attempting to Verify User Account");
         JSONObject responseData;
         try {
             JSONObject requestData = new JSONObject();
             requestData.put("username", username);
             requestData.put("password", password);
-            responseData = makeAPIRequest("PUT", "user/verify", requestData.toString());
-            Log.i(LOG_TAG_API_REQUEST, "Response data: " + responseData.get("ok"));
+            responseData = makeAPIRequest("PUT", "/user/verify", requestData.toString());
+            Log.i(LOG_TAG, "Response data: " + responseData.get("ok"));
             return (responseData.getString("ok").equals("1"));
 
         } catch (JSONException je) {
-            Log.e(LOG_TAG_API_REQUEST, je.toString());
+            Log.e(LOG_TAG, je.toString());
             return false;
 
         } catch (IOException ioe) {
-            Log.e(LOG_TAG_API_REQUEST, ioe.toString());
+            Log.e(LOG_TAG, ioe.toString());
             return false;
         }
 
     }
 
     public ArrayList<VPNLocation> getLocationList() {
-        Log.i(LOG_TAG_API_REQUEST, "Attempting to get location list.");
+        Log.i(LOG_TAG, "Attempting to get location list.");
         JSONObject responseData;
         ArrayList<VPNLocation> locationList;
         try {
-            responseData = makeAPIRequest("GET", "location", "");
+            responseData = makeAPIRequest("GET", "/location", "");
             JSONArray locations = responseData.getJSONArray("location");
             locationList = new ArrayList<>(locations.length());
             for (int i = 0; i < locations.length(); i++) {
@@ -65,29 +57,28 @@ public class PrivacyOnlineApiRequest {
             }
             return locationList;
         } catch (JSONException je) {
-            Log.e(LOG_TAG_API_REQUEST, je.toString());
+            Log.e(LOG_TAG, je.toString());
             return null;
         } catch (IOException ioe) {
-            Log.e(LOG_TAG_API_REQUEST, ioe.toString());
+            Log.e(LOG_TAG, ioe.toString());
             return null;
         }
     }
 
     private JSONObject makeAPIRequest(String method, String endPoint, String jsonPayload)
             throws IOException, JSONException {
-        Log.i(LOG_TAG_API_REQUEST, "Attempting to verify with data payload: "+jsonPayload);
-        InputStream inputStream = null;
+        Log.i(LOG_TAG, "Attempting to verify with data payload: " + jsonPayload);
+        InputStream  inputStream  = null;
         OutputStream outputStream = null;
+        String       apiUrl       = "http://polaris:3000";
+        String       apiKey       = "914B021A-8DE2-11E5-A61C-C0D88CCA4EEA";
+        String       keyString    = "?key=" + apiKey;
 
-        byte[] payload;
         int payloadSize = jsonPayload.length();
-        Log.i(LOG_TAG_API_REQUEST, "Payload size: "+payloadSize);
-        if (payloadSize > 0) {
-            payload = jsonPayload.getBytes();
-        }
+        Log.i(LOG_TAG, "Payload size: " + payloadSize);
 
         try {
-            URL url = new URL(apiUrl + endPoint);
+            URL url = new URL(apiUrl + endPoint + keyString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             // Sec 5 second connect/read timeouts
             connection.setReadTimeout(5000);
@@ -112,7 +103,7 @@ public class PrivacyOnlineApiRequest {
 
             // Get the response.
             int responseCode = connection.getResponseCode();
-            Log.i(LOG_TAG_API_REQUEST, "Got response code: "+responseCode);
+            Log.i(LOG_TAG, "Got response code: "+responseCode);
             inputStream = connection.getInputStream();
 
             String responseContent = readInputStream(inputStream, connection.getContentLength());

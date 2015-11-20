@@ -52,6 +52,16 @@ public class VPNLocationAdapter extends ArrayAdapter<VPNLocation> {
         return locationId;
     }
 
+    public int getEntryLocationByLabel(String label) {
+        int locationId = 0;
+        for (int i = 0; i < this.values.size(); i++) {
+            if (this.values.get(i).getLabel().equals(label)) {
+                locationId = i;
+            }
+        }
+        return locationId;
+    }
+
     public long getItemId(int position){
        return position;
     }
