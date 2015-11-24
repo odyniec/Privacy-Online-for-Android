@@ -1,5 +1,5 @@
-import java.util.regex.Pattern
 apply plugin: 'com.android.application'
+import java.util.regex.Pattern
 
 android {
     compileSdkVersion 23
@@ -21,8 +21,9 @@ android {
 
     // Prevent auto Android.mk generation as we need to specify flags
     sourceSets.main {
+        assets.srcDirs = ['src/main/assets', 'ovpnlibs/assets']
+        jniLibs.srcDirs = ['ovpnlibs/jniLibs']
         jni.srcDirs = []
-        jniLibs.srcDir 'src/main/jni'
     }
 
     productFlavors {
@@ -57,9 +58,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.android.support:design:23.1.0'
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.google.android.gms:play-services-appindexing:8.3.0'
 }
 
 def getVersionCodeFromManifest() {

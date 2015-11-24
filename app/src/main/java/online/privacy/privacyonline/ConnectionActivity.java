@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -49,6 +50,18 @@ public class ConnectionActivity extends AppCompatActivity {
         apiLocationIntent.setAction(PrivacyOnlineAPIService.ACTION_GET_LOCATIONS);
         apiLocationIntent.putExtra(PrivacyOnlineAPIService.EXTRA_CALLER, ConnectionActivity.GetLocationListReceiver.API_RESPONSE);
         startService(apiLocationIntent);
+
+        // Set the Connect button so it actually conencts.
+        Button connectionButton = (Button) findViewById(R.id.button_connection);
+        connectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+
+
     }
 
     @Override

@@ -1,4 +1,6 @@
-[submodule "volley"]
-	path = volley
-	url = https://android.googlesource.com/platform/frameworks/volley
-	branch = master
+[submodule "app/openvpn"]
+	path = app/openvpn
+	url = git@github.com:schwabe/openvpn.git
+[submodule "app/openssl"]
+	path = app/openssl
+	url = git@github.com:schwabe/platform_external_openssl.git
