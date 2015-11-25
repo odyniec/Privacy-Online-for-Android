@@ -1,11 +1,13 @@
 package online.privacy.privacyonline;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.VpnService;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,12 +19,27 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
+import de.blinkt.openvpn.LaunchVPN;
+import de.blinkt.openvpn.VpnProfile;
+import de.blinkt.openvpn.core.ProfileManager;
+import de.blinkt.openvpn.core.VPNLaunchHelper;
+import de.blinkt.openvpn.core.VpnStatus;
+import de.blinkt.openvpn.core.Connection;
+
 
 public class ConnectionActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "p.o.connection";
     private Activity activityConnection = this;
     private GetLocationListReceiver locationReceiver;
+
+    // This is online.privacy.VpnProfile, not de.blinkt.openvpn.VpnProfile, as I don't need the
+    // profile management, nor half the guff in there.
+    private ProfileManager profileManager;
+    private VpnProfile openVPNProfile;
+    private String vpnProfileName = "privacy-online";
+
+    private final int START_VPN_PROFILE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +50,17 @@ public class ConnectionActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
         // Check for settings, and spew the set-up activity if we don't have any.
         if (!havePreferences()) {
             Intent intent = new Intent(this, SetupActivity.class);
             startActivity(intent);
+        }
+        // Get the VPN Profile, or create one if we don't have one.
+        profileManager = ProfileManager.getInstance(this);
+        openVPNProfile = profileManager.getProfileByName(vpnProfileName);
+        if (openVPNProfile == null) {
+            PrivacyOnlineUtility.createVPNProfile(this, vpnProfileName);
         }
 
         // Registrer the listerner for the Spinner content update.
@@ -56,12 +80,13 @@ public class ConnectionActivity extends AppCompatActivity {
         connectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(activityConnection, LaunchVPN.class);
+                intent.putExtra(LaunchVPN.EXTRA_KEY, openVPNProfile.getUUID().toString());
+                intent.setAction(Intent.ACTION_MAIN);
+                startActivity(intent);
 
             }
         });
-
-
     }
 
     @Override
@@ -115,7 +140,63 @@ public class ConnectionActivity extends AppCompatActivity {
         String locationDefault = preferences.getString("locationDefault", "");
         String username = preferences.getString("username", "");
         String password = preferences.getString("password", "");
-        return !(locationDefault.equals("") && username.equals("") && password.equals(""));
+
+        profileManager = ProfileManager.getInstance(this);
+        openVPNProfile = profileManager.getProfileByName("privacy-online");
+
+        return !(locationDefault.equals("") || username.equals("") || password.equals("") || openVPNProfile == null);
+    }
+
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == START_VPN_PROFILE) {
+            if (resultCode == Activity.RESULT_OK) {
+//                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//                boolean showLogWindow = prefs.getBoolean("showlogwindow", true);
+//                if(!mhideLog && showLogWindow)
+//                    showLogWindow();
+                new startOpenVpnThread().start();
+
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // User does not want us to start, so we just vanish
+                VpnStatus.updateStateString("USER_VPN_PERMISSION_CANCELLED", "", R.string.state_user_vpn_permission_cancelled,
+                        VpnStatus.ConnectionStatus.LEVEL_NOTCONNECTED);
+                finish();
+            }
+        }
+    }
+
+
+    // Method prepares and attempts to launch the VPN connection.
+    void launchVPN() {
+
+        Intent intent = VpnService.prepare(this);
+        if (intent != null) {
+            VpnStatus.updateStateString("USER_VPN_PERMISSION", "", R.string.state_user_vpn_permission,
+                    VpnStatus.ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
+            // Start the query
+            try {
+                startActivityForResult(intent, START_VPN_PROFILE);
+            } catch (ActivityNotFoundException ane) {
+                // Shame on you Sony! At least one user reported that
+                // an official Sony Xperia Arc S image triggers this exception
+                VpnStatus.logError(R.string.no_vpn_support_image);
+                //showLogWindow();
+            }
+        } else {
+            onActivityResult(START_VPN_PROFILE, Activity.RESULT_OK, null);
+        }
+    }
+
+    private class startOpenVpnThread extends Thread {
+        @Override
+        public void run() {
+            VPNLaunchHelper.startOpenVpn(openVPNProfile, getBaseContext());
+            finish();
+
+        }
     }
 
     // Implement a receiver so we can use the APIService to check login details.
@@ -143,6 +224,16 @@ public class ConnectionActivity extends AppCompatActivity {
                     locationAdapter, new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                    // Get the selected location, and update the OpenVPN connection profile
+                    String newVpnLocation = adapterView.getSelectedItem().toString();
+
+                    Connection conn = new Connection();
+                    conn.mServerName = newVpnLocation;
+                    openVPNProfile.mConnections[0] = conn;
+
+                    profileManager.addProfile(openVPNProfile);
+                    profileManager.saveProfileList(activityConnection);
+                    profileManager.saveProfile(activityConnection, openVPNProfile);
                 }
 
                 @Override

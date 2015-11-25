@@ -26,11 +26,12 @@ import android.widget.EditText;
 
 import java.io.IOException;
 
-import de.blinkt.openvpn.activities.LogWindow;
+//import de.blinkt.openvpn.activities.LogWindow;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
 import de.blinkt.openvpn.core.VpnStatus.ConnectionStatus;
+import online.privacy.privacyonline.R;
 
 /**
  * This Activity actually handles two stages of a launcher shortcut's life cycle.
@@ -70,7 +71,7 @@ public class LaunchVPN extends Activity {
 
 	private ProfileManager mPM;
 	private VpnProfile mSelectedProfile;
-	private boolean mhideLog=false;
+	private boolean mhideLog=true;
 
 	private boolean mCmfixed=false;
 
@@ -84,6 +85,7 @@ public class LaunchVPN extends Activity {
 
 	@Override
 	protected void onStart() {
+
 		super.onStart();
 		// Resolve the intent
 
@@ -121,6 +123,13 @@ public class LaunchVPN extends Activity {
 		}
 	}
 
+
+	private void askForPW(final int type) {
+		Log.e("LaunchVPN", "askForPW() called - It really shouldn't have been! DaFuq?!");
+	}
+/*
+	// We really shouldn't be calling this, as the username/password are set in the SetupActivity.
+	// So I'll comment this out for now, and stub it with an error.
 	private void askForPW(final int type) {
 
 		final EditText entry = new EditText(this);
@@ -189,6 +198,9 @@ public class LaunchVPN extends Activity {
 		dialog.create().show();
 
 	}
+*/
+
+
 	@Override
 	protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -218,10 +230,10 @@ public class LaunchVPN extends Activity {
 		}
 	}
 	void showLogWindow() {
-
-		Intent startLW = new Intent(getBaseContext(),LogWindow.class);
-		startLW.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		startActivity(startLW);
+        Log.e("LaunchVPN", "showLogWindow() called - probably shouldn't have been");
+//		Intent startLW = new Intent(getBaseContext(),LogWindow.class);
+//		startLW.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//		startActivity(startLW);
 
 	}
 

@@ -32,7 +32,8 @@ import java.util.Locale;
 import java.util.UnknownFormatConversionException;
 import java.util.Vector;
 
-import de.blinkt.openvpn.R;
+//import de.blinkt.openvpn.R;
+import online.privacy.privacyonline.R;
 
 public class VpnStatus {
 

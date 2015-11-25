@@ -16,23 +16,43 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
+
+import de.blinkt.openvpn.VpnProfile;
+import de.blinkt.openvpn.core.ProfileManager;
+import de.blinkt.openvpn.core.Connection;
 
 public class SetupActivity extends AppCompatActivity {
 
     final static private String LOG_TAG = "p.o.setup";
 
-    final private Context  contextSetup  = this;
+    final private Context contextSetup = this;
     final private Activity activitySetup = this;
 
     private VerifyUserAccountReceiver verifyReceiver;
     private GetLocationListReceiver locationReceiver;
+    private ProfileManager profileManager;
+    private VpnProfile openVPNProfile;
+    private String vpnProfileName = "privacy-online";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
+
+        // Get the VPN Profile, or create one if we don't have one.
+        profileManager = ProfileManager.getInstance(this);
+        openVPNProfile = profileManager.getProfileByName(vpnProfileName);
+        if (openVPNProfile == null) {
+            PrivacyOnlineUtility.createVPNProfile(this, vpnProfileName);
+        }
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
 
@@ -58,7 +78,7 @@ public class SetupActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updatePreferences();
+                updatePreferencesAndSaveProfile();
                 EditText inputTextUsername = (EditText) findViewById(R.id.input_text_username);
                 EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
 
@@ -69,6 +89,7 @@ public class SetupActivity extends AppCompatActivity {
                 startService(apiIntent);
             }
         });
+
     }
 
     @Override
@@ -76,12 +97,12 @@ public class SetupActivity extends AppCompatActivity {
         super.onStart();
 
         // Register the IntentService Listeners to get the response of the user check and location list.
-        IntentFilter verifyFilter = new IntentFilter(SetupActivity.VerifyUserAccountReceiver.API_RESPONSE);
+        IntentFilter verifyFilter = new IntentFilter(VerifyUserAccountReceiver.API_RESPONSE);
         verifyFilter.addCategory(Intent.CATEGORY_DEFAULT);
         verifyReceiver = new VerifyUserAccountReceiver();
         registerReceiver(verifyReceiver, verifyFilter);
 
-        IntentFilter locationFilter = new IntentFilter(SetupActivity.GetLocationListReceiver.API_RESPONSE);
+        IntentFilter locationFilter = new IntentFilter(GetLocationListReceiver.API_RESPONSE);
         locationFilter.addCategory(Intent.CATEGORY_DEFAULT);
         locationReceiver = new GetLocationListReceiver();
         registerReceiver(locationReceiver, locationFilter);
@@ -89,7 +110,7 @@ public class SetupActivity extends AppCompatActivity {
         // Populate the Location list.
         Intent apiLocationIntent = new Intent(this, PrivacyOnlineAPIService.class);
         apiLocationIntent.setAction(PrivacyOnlineAPIService.ACTION_GET_LOCATIONS);
-        apiLocationIntent.putExtra(PrivacyOnlineAPIService.EXTRA_CALLER, SetupActivity.GetLocationListReceiver.API_RESPONSE);
+        apiLocationIntent.putExtra(PrivacyOnlineAPIService.EXTRA_CALLER, GetLocationListReceiver.API_RESPONSE);
         startService(apiLocationIntent);
     }
 
@@ -115,22 +136,37 @@ public class SetupActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void startLocationActivity() {
-        Intent intent = new Intent(this, ConnectionActivity.class);
-        startActivity(intent);
-    }
-
-    private void updatePreferences() {
+    private void updatePreferencesAndSaveProfile() {
         SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
         final SharedPreferences.Editor preferencesEditor = preferences.edit();
 
         EditText inputTextUsername = (EditText) findViewById(R.id.input_text_username);
-        EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
+        String username = inputTextUsername.getText().toString();
 
-        preferencesEditor.putString("username", inputTextUsername.getText().toString());
-        preferencesEditor.putString("password", inputTextPassword.getText().toString());
+        EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
+        String password = inputTextPassword.getText().toString();
+
+        Spinner vpnDefaultLocation = (Spinner) findViewById(R.id.input_spinner_default_vpn_location);
+        String defaultLocation = vpnDefaultLocation.getSelectedItem().toString();
+
+        preferencesEditor.putString("username", username);
+        preferencesEditor.putString("password", password);
         preferencesEditor.apply();
+
+        // Now save the OpenVPN profile too.
+        openVPNProfile.mCaFilename = "file:///android_asset/privacy-online-ca.crt";
+        openVPNProfile.mUsername = username;
+        openVPNProfile.mPassword = password;
+
+        Connection conn = new Connection();
+        conn.mServerName = defaultLocation;
+        openVPNProfile.mConnections[0] = conn;
+
+        profileManager.addProfile(openVPNProfile);
+        profileManager.saveProfileList(activitySetup);
+        profileManager.saveProfile(activitySetup, openVPNProfile);
     }
+
 
     // Implement a receiver so we can use the APIService to check login details.
     public class VerifyUserAccountReceiver extends BroadcastReceiver {
@@ -141,7 +177,7 @@ public class SetupActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(LOG_TAG, "Received Service Broadcast");
-            boolean checkResult = intent.getBooleanExtra(PrivacyOnlineAPIService.CHECK_RESULT , false);
+            boolean checkResult = intent.getBooleanExtra(PrivacyOnlineAPIService.CHECK_RESULT, false);
 
             // If the details were good, launch the ConnectionActivity Activity.
             if (checkResult) {
@@ -181,19 +217,20 @@ public class SetupActivity extends AppCompatActivity {
             PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
             utility.updateSpinnerValues(activitySetup, R.id.input_spinner_default_vpn_location,
                     locationAdapter, new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                    SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
-                    final SharedPreferences.Editor preferencesEditor = preferences.edit();
-                    ;
-                    VPNLocation location = locationAdapter.getItem(position);
-                    preferencesEditor.putString("default_vpn_location", location.getHostname());
-                    preferencesEditor.apply();
-                }
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                            SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
+                            final SharedPreferences.Editor preferencesEditor = preferences.edit();
+                            ;
+                            VPNLocation location = locationAdapter.getItem(position);
+                            preferencesEditor.putString("default_vpn_location", location.getHostname());
+                            preferencesEditor.apply();
+                        }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> adapter) {}
-            });
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapter) {
+                        }
+                    });
         }
     }
 }

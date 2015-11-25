@@ -17,14 +17,16 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Vector;
 
-import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.VpnProfile;
+
+// Integrate this lib with PrivacyOnline App.
+import online.privacy.privacyonline.R;
+
 
 public class VPNLaunchHelper {
     private static final String MININONPIEVPN = "nopie_openvpn";
     private static final String MINIPIEVPN = "pie_openvpn";
     private static final String OVPNCONFIGFILE = "android.conf";
-
 
 
     static private String writeMiniVPN(Context context) {
@@ -123,21 +125,22 @@ public class VPNLaunchHelper {
         }
 
     }
-	
 
-	public static void startOpenVpn(VpnProfile startprofile, Context context) {
-		if(writeMiniVPN(context)==null) {
-			VpnStatus.logError("Error writing minivpn binary");
-			return;
-		}
 
-		VpnStatus.logInfo(R.string.building_configration);
+    public static void startOpenVpn(VpnProfile startprofile, Context context) {
+        if(writeMiniVPN(context)==null) {
+            VpnStatus.logError("Error writing minivpn binary");
+            return;
+        }
 
-		Intent startVPN = startprofile.prepareStartService(context);
-		if(startVPN!=null)
-			context.startService(startVPN);
+        VpnStatus.logInfo(R.string.building_configration);
 
-	}
+        Intent startVPN = startprofile.prepareStartService(context);
+        if(startVPN!=null)
+            context.startService(startVPN);
+
+    }
+
 
     public static String getConfigFilePath(Context context) {
         return context.getCacheDir().getAbsolutePath() + "/" + OVPNCONFIGFILE;

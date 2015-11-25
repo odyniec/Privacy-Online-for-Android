@@ -38,11 +38,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Vector;
 
-import de.blinkt.openvpn.BuildConfig;
-import de.blinkt.openvpn.R;
+//import de.blinkt.openvpn.BuildConfig;
+//import de.blinkt.openvpn.R;
+import online.privacy.privacyonline.BuildConfig;
+import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.activities.DisconnectVPN;
-import de.blinkt.openvpn.activities.LogWindow;
+//import de.blinkt.openvpn.activities.LogWindow;
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
 import de.blinkt.openvpn.core.VpnStatus.ConnectionStatus;
 import de.blinkt.openvpn.core.VpnStatus.StateListener;
@@ -243,12 +245,13 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     PendingIntent getLogPendingIntent() {
         // Let the configure Button show the Log
-        Intent intent = new Intent(getBaseContext(), LogWindow.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        PendingIntent startLW = PendingIntent.getActivity(this, 0, intent, 0);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        return startLW;
-
+//        Intent intent = new Intent(getBaseContext(), LogWindow.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        PendingIntent startLW = PendingIntent.getActivity(this, 0, intent, 0);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        return startLW;
+        Log.e("OpenVPNService", "LogWindow called, and probably shouldn't have been");
+        return null;
     }
 
     synchronized void registerDeviceStateReceiver(OpenVPNManagement magnagement) {

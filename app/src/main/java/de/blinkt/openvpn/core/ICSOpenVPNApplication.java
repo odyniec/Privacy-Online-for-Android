@@ -12,9 +12,12 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 */
 
-import de.blinkt.openvpn.BuildConfig;
-import de.blinkt.openvpn.R;
+//import de.blinkt.openvpn.BuildConfig;
+//import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.core.PRNGFixes;
+
+import online.privacy.privacyonline.BuildConfig;
+import online.privacy.privacyonline.R;
 
 /*
 @ReportsCrashes(

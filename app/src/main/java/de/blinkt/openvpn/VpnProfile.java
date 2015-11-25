@@ -55,6 +55,8 @@ import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
 import de.blinkt.openvpn.core.X509Utils;
 
+import online.privacy.privacyonline.R;
+
 public class VpnProfile implements Serializable, Cloneable {
     // Note that this class cannot be moved to core where it belongs since
     // the profile loading depends on it being here
@@ -95,7 +97,7 @@ public class VpnProfile implements Serializable, Cloneable {
     // but needs to keep wrong name to guarante loading of old
     // profiles
     public transient boolean profileDeleted = false;
-    public int mAuthenticationType = TYPE_KEYSTORE;
+    public int mAuthenticationType = TYPE_USERPASS;
     public String mName;
     public String mAlias;
     public String mClientCertFilename;
@@ -113,7 +115,7 @@ public class VpnProfile implements Serializable, Cloneable {
     public String mIPv4Address;
     public String mIPv6Address;
     public boolean mOverrideDNS = false;
-    public String mSearchDomain = "blinkt.de";
+    public String mSearchDomain = "";
     public boolean mUseDefaultRoute = true;
     public boolean mUsePull = true;
     public String mCustomRoutes;

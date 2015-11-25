@@ -7,6 +7,9 @@ import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import de.blinkt.openvpn.VpnProfile;
+import de.blinkt.openvpn.core.ProfileManager;
+
 /**
  * PrivacyOnlineUtility - Class holding common code used in more than one location.
  */
@@ -37,5 +40,13 @@ public class PrivacyOnlineUtility {
         }
 
         defaultVPNLocationSpinner.setOnItemSelectedListener(onItemSelectedListener);
+    }
+
+    public void createVPNProfile(Context context, String name) {
+        ProfileManager profileManager = ProfileManager.getInstance(context);
+        VpnProfile openVPNProfile = new VpnProfile(name);
+        profileManager.addProfile(openVPNProfile);
+        profileManager.saveProfileList(context);
+        profileManager.saveProfile(context, openVPNProfile);
     }
 }

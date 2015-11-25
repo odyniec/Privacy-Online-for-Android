@@ -14,7 +14,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
-import de.blinkt.openvpn.R;
+//import de.blinkt.openvpn.R;
+import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.VpnProfile;
 
 public class ProxyDetection {

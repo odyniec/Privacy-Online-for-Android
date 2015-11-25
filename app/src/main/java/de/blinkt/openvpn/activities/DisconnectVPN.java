@@ -10,7 +10,8 @@ import android.app.AlertDialog;
 import android.content.*;
 import android.os.IBinder;
 
-import de.blinkt.openvpn.R;
+//import de.blinkt.openvpn.R;
+import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.core.OpenVPNService;
 import de.blinkt.openvpn.core.ProfileManager;
 
