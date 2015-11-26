@@ -18,15 +18,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.util.ArrayList;
 
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.core.ProfileManager;
-import de.blinkt.openvpn.core.Connection;
 
 public class SetupActivity extends AppCompatActivity {
 
@@ -46,13 +41,6 @@ public class SetupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
-
-        // Get the VPN Profile, or create one if we don't have one.
-        profileManager = ProfileManager.getInstance(this);
-        openVPNProfile = profileManager.getProfileByName(vpnProfileName);
-        if (openVPNProfile == null) {
-            PrivacyOnlineUtility.createVPNProfile(this, vpnProfileName);
-        }
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
 
@@ -78,7 +66,7 @@ public class SetupActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updatePreferencesAndSaveProfile();
+                updatePreferences();
                 EditText inputTextUsername = (EditText) findViewById(R.id.input_text_username);
                 EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
 
@@ -136,7 +124,7 @@ public class SetupActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void updatePreferencesAndSaveProfile() {
+    private void updatePreferences() {
         SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
         final SharedPreferences.Editor preferencesEditor = preferences.edit();
 
@@ -152,19 +140,6 @@ public class SetupActivity extends AppCompatActivity {
         preferencesEditor.putString("username", username);
         preferencesEditor.putString("password", password);
         preferencesEditor.apply();
-
-        // Now save the OpenVPN profile too.
-        openVPNProfile.mCaFilename = "file:///android_asset/privacy-online-ca.crt";
-        openVPNProfile.mUsername = username;
-        openVPNProfile.mPassword = password;
-
-        Connection conn = new Connection();
-        conn.mServerName = defaultLocation;
-        openVPNProfile.mConnections[0] = conn;
-
-        profileManager.addProfile(openVPNProfile);
-        profileManager.saveProfileList(activitySetup);
-        profileManager.saveProfile(activitySetup, openVPNProfile);
     }
 
 

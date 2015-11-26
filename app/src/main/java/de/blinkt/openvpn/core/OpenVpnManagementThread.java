@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.Vector;
 
 //import de.blinkt.openvpn.BuildConfig;
-//import de.blinkt.openvpn.R;
+//import online.privacy.privacyonline.R;
 import online.privacy.privacyonline.BuildConfig;
 import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.VpnProfile;

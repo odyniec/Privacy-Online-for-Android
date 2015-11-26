@@ -16,7 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import de.blinkt.openvpn.LaunchVPN;
@@ -38,6 +43,7 @@ public class ConnectionActivity extends AppCompatActivity {
     private ProfileManager profileManager;
     private VpnProfile openVPNProfile;
     private String vpnProfileName = "privacy-online";
+    private File vpnCACertFile;
 
     private final int START_VPN_PROFILE = 100;
 
@@ -45,6 +51,8 @@ public class ConnectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_connection);
+        vpnCACertFile = new File(getCacheDir(), "privacy-online-ca.crt");
+        unpackCAFile();
     }
 
     @Override
@@ -56,11 +64,13 @@ public class ConnectionActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SetupActivity.class);
             startActivity(intent);
         }
+
         // Get the VPN Profile, or create one if we don't have one.
         profileManager = ProfileManager.getInstance(this);
         openVPNProfile = profileManager.getProfileByName(vpnProfileName);
         if (openVPNProfile == null) {
-            PrivacyOnlineUtility.createVPNProfile(this, vpnProfileName);
+            PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+            utility.createVPNProfile(this, vpnProfileName);
         }
 
         // Registrer the listerner for the Spinner content update.
@@ -80,6 +90,28 @@ public class ConnectionActivity extends AppCompatActivity {
         connectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences preferences
+                        = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
+                String username = preferences.getString("username", "");
+                String password = preferences.getString("password", "");
+
+                Spinner vpnLocationSpinner = (Spinner) findViewById(R.id.input_spinner_vpn_location);
+                VPNLocation vpnServer = (VPNLocation) vpnLocationSpinner.getSelectedItem();
+
+                openVPNProfile.mCaFilename = vpnCACertFile.getPath();
+                openVPNProfile.mUsername = username;
+                openVPNProfile.mPassword = password;
+                openVPNProfile.mCipher   = "AES-256-CBC";
+                openVPNProfile.mAuth     = "SHA256";
+
+                Connection conn = new Connection();
+                conn.mServerName = vpnServer.getHostname();
+                openVPNProfile.mConnections[0] = conn;
+
+                profileManager.addProfile(openVPNProfile);
+                profileManager.saveProfileList(activityConnection);
+                profileManager.saveProfile(activityConnection, openVPNProfile);
+
                 Intent intent = new Intent(activityConnection, LaunchVPN.class);
                 intent.putExtra(LaunchVPN.EXTRA_KEY, openVPNProfile.getUUID().toString());
                 intent.setAction(Intent.ACTION_MAIN);
@@ -135,16 +167,39 @@ public class ConnectionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void unpackCAFile() {
+
+        // So we can't use a file in the .apk as a CA file for our VPN connection profile.
+        // We'll unpack it here to the cache directory and pass that to the VpnProfile.
+        try {
+            InputStream inputStream = getAssets().open("privacy-online-ca.crt");
+            try {
+                FileOutputStream outputStream = new FileOutputStream(vpnCACertFile);
+                try {
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = inputStream.read(buf)) > 0) {
+                        outputStream.write(buf, 0, len);
+                    }
+                } finally {
+                    outputStream.close();
+                }
+            } finally {
+                inputStream.close();
+            }
+        } catch (IOException e) {
+            Log.e("ConnectionActivity", "Unable to write CA cert to cache directory");
+        }
+    }
+
+
     private boolean havePreferences() {
         SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
-        String locationDefault = preferences.getString("locationDefault", "");
+        String locationDefault = preferences.getString("default_vpn_location", "");
         String username = preferences.getString("username", "");
         String password = preferences.getString("password", "");
 
-        profileManager = ProfileManager.getInstance(this);
-        openVPNProfile = profileManager.getProfileByName("privacy-online");
-
-        return !(locationDefault.equals("") || username.equals("") || password.equals("") || openVPNProfile == null);
+        return !(locationDefault.equals("") || username.equals("") || password.equals(""));
     }
 
     @Override
@@ -224,16 +279,6 @@ public class ConnectionActivity extends AppCompatActivity {
                     locationAdapter, new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                    // Get the selected location, and update the OpenVPN connection profile
-                    String newVpnLocation = adapterView.getSelectedItem().toString();
-
-                    Connection conn = new Connection();
-                    conn.mServerName = newVpnLocation;
-                    openVPNProfile.mConnections[0] = conn;
-
-                    profileManager.addProfile(openVPNProfile);
-                    profileManager.saveProfileList(activityConnection);
-                    profileManager.saveProfile(activityConnection, openVPNProfile);
                 }
 
                 @Override

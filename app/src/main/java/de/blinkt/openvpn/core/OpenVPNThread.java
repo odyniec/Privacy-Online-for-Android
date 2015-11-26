@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//import de.blinkt.openvpn.R;
+//import online.privacy.privacyonline.R;
 import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.core.VpnStatus.ConnectionStatus;

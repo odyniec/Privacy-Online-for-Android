@@ -39,7 +39,7 @@ import java.util.Locale;
 import java.util.Vector;
 
 //import de.blinkt.openvpn.BuildConfig;
-//import de.blinkt.openvpn.R;
+//import online.privacy.privacyonline.R;
 import online.privacy.privacyonline.BuildConfig;
 import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.VpnProfile;
@@ -297,6 +297,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         if (intent != null && intent.getBooleanExtra(ALWAYS_SHOW_NOTIFICATION, false))
             mNotificationAlwaysVisible = true;
 
+        Log.i("OpenVPNService", "OpenVPNService onStart() called");
         VpnStatus.addStateListener(this);
         VpnStatus.addByteCountListener(this);
 

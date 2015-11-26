@@ -15,7 +15,7 @@ import android.net.NetworkInfo.State;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
-//import de.blinkt.openvpn.R;
+//import online.privacy.privacyonline.R;
 import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
 

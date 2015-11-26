@@ -45,6 +45,7 @@ public class PrivacyOnlineUtility {
     public void createVPNProfile(Context context, String name) {
         ProfileManager profileManager = ProfileManager.getInstance(context);
         VpnProfile openVPNProfile = new VpnProfile(name);
+
         profileManager.addProfile(openVPNProfile);
         profileManager.saveProfileList(context);
         profileManager.saveProfile(context, openVPNProfile);

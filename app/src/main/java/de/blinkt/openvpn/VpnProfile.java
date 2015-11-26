@@ -18,6 +18,7 @@ import android.security.KeyChain;
 import android.security.KeyChainException;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 
 import org.spongycastle.util.io.pem.PemObject;
 import org.spongycastle.util.io.pem.PemWriter;
@@ -621,24 +622,26 @@ public class VpnProfile implements Serializable, Cloneable {
 
 
     public Intent prepareStartService(Context context) {
+        Log.w("VpnProfile", "prepareStartService() called.");
         Intent intent = getStartServiceIntent(context);
-
 
         if (mAuthenticationType == VpnProfile.TYPE_KEYSTORE || mAuthenticationType == VpnProfile.TYPE_USERPASS_KEYSTORE) {
             if (getKeyStoreCertificates(context) == null)
                 return null;
         }
 
-
         try {
+            Log.w("VpnProfile", "Writing ovpn config file.");
             FileWriter cfg = new FileWriter(VPNLaunchHelper.getConfigFilePath(context));
             cfg.write(getConfigFile(context, false));
             cfg.flush();
             cfg.close();
         } catch (IOException e) {
             VpnStatus.logException(e);
+            Log.w("VpnProfile", "Config writer failed: " + e.toString());
         }
 
+        Log.w("VpnProfile", "Returning service intent to start");
         return intent;
     }
 

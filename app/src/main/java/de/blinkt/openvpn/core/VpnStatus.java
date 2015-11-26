@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -32,7 +33,7 @@ import java.util.Locale;
 import java.util.UnknownFormatConversionException;
 import java.util.Vector;
 
-//import de.blinkt.openvpn.R;
+//import online.privacy.privacyonline.R;
 import online.privacy.privacyonline.R;
 
 public class VpnStatus {
@@ -509,6 +510,7 @@ public class VpnStatus {
     }
 
     public static void logError(String msg) {
+        Log.e("VpnStatus", msg);
         newLogItem(new LogItem(LogLevel.ERROR, msg));
 
     }
@@ -518,6 +520,7 @@ public class VpnStatus {
     }
 
     public static void logWarning(String msg) {
+        Log.w("VpnStatus", msg);
         newLogItem(new LogItem(LogLevel.WARNING, msg));
     }
 
@@ -531,6 +534,7 @@ public class VpnStatus {
     }
 
     public static void logMessageOpenVPN(LogLevel level, int ovpnlevel, String message) {
+        Log.i("VpnStatus", message);
         newLogItem(new LogItem(level, ovpnlevel, message));
 
     }
