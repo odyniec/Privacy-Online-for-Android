@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#64ae11</color>
+    <color name="colorPrimaryDark">#64ae11</color>
     <color name="colorAccent">#FF4081</color>
-
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="borderLightGrey">#cdcdcd</color>
+    <color name="secondary_text_material_dark">#FFFFFF</color>
 
     <!-- Indigo -->
     <!-- OpenVPN colours #203155, #C66D0D -->
@@ -13,6 +16,6 @@
     <color name="gelb">#ffff00</color>
     <color name="rot">#ff0000</color>
     <color name="switchbar">@android:color/darker_gray</color>
-    <color name="background_tab_pressed">#1AFFFFFF</color>
-
+    <color name="background_tab_pressed">#1AFFFF</color>
+    <color name="accent_material_light">#64ae11</color>
 </resources>

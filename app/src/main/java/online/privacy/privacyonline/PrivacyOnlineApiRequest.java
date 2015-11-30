@@ -71,6 +71,7 @@ public class PrivacyOnlineApiRequest {
         InputStream  inputStream  = null;
         OutputStream outputStream = null;
         String       apiUrl       = "http://polaris:3000";
+        //String       apiUrl       = "https://controller3.vpn-test.dev.uk2.net:3000";
         String       apiKey       = "914B021A-8DE2-11E5-A61C-C0D88CCA4EEA";
         String       keyString    = "?key=" + apiKey;
 

@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context="online.privacy.privacyonline.ConnectionActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/testbg"
+    tools:context="online.privacy.privacyonline.SetupActivity">
 
-    <include layout="@layout/content_setup" />
+    <include layout="@layout/content_setup"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:layout_marginLeft="30dp"
+             android:layout_marginRight="30dp"
+             android:layout_marginTop="60dp"
+             android:layout_marginBottom="55dp"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

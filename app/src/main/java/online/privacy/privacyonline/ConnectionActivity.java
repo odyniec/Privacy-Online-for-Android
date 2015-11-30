@@ -50,7 +50,7 @@ public class ConnectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_connection);
+        setContentView(R.layout.activity_connection);
         vpnCACertFile = new File(getCacheDir(), "privacy-online-ca.crt");
         unpackCAFile();
     }
