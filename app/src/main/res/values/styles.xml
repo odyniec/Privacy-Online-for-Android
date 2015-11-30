@@ -1,11 +1,10 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -13,53 +12,13 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-
-    <!-- blinkt stuff -->
-    <style name="blinkt.baseTheme" parent="android:Theme.DeviceDefault.Light" />
-    <style name="blinkt.common" parent="blinkt.baseTheme" >
-        <!-- Shared between Holo and Material -->
-        <item name="android:preferenceStyle">@style/BlinktPreferencePanel</item>
-
-    </style>
-
-    <style name="blinkt" parent="blinkt.common">
-    </style>
-
-    <!-- No margins or background by default. Not different for x-large screens -->
-    <style name="BlinktPreferencePanel">
-        <item name="android:background">@color/gelb</item>
-    </style>
-
-    <style name="item">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-        <item name="android:singleLine">true</item>
-    </style>
-
-    <style name="faqitem">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-    </style>
-
-    <style name="faqhead">
-        <item name="android:paddingTop">10sp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-        <!-- <item name="android:singleLine">true</item> -->
-    </style>
-
-    <style name="accountSetupButton">
+    <style name="AppTheme.poButton" parent="@android:style/Widget.Button">
         <item name="android:layout_width">160sp</item>
         <item name="android:layout_height">40sp</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:background">@drawable/button_privacyonline</item>
+        <item name="android:textColor">@color/secondary_text_material_dark</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
     </style>
-
-    <style name="Theme.CreateShortCut" parent="android:Theme.Holo.DialogWhenLarge" />
 
     <style name="logWindowStatusText">
         <item name="android:paddingLeft">@dimen/paddingItemsSidebarLog</item>
