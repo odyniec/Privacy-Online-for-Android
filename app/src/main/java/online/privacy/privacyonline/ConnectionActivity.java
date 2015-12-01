@@ -9,7 +9,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +53,15 @@ public class ConnectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection);
+
+        /*
+        Toolbar customToolBar = (Toolbar) findViewById(R.id.toolbar_connection);
+        setSupportActionBar(customToolBar);
+        customToolBar.setNavigationIcon(null);
+        customToolBar.setNavigationContentDescription(null);
+//        customToolBar.setLogo(R.drawable.test_toolbar);
+//        customToolBar.setLogoDescription(getResources().getString(R.string.app_name));
+        */
         vpnCACertFile = new File(getCacheDir(), "privacy-online-ca.crt");
         unpackCAFile();
     }
@@ -79,11 +90,31 @@ public class ConnectionActivity extends AppCompatActivity {
         locationReceiver = new GetLocationListReceiver();
         registerReceiver(locationReceiver, locationFilter);
 
+/*
+
         // Populate the Location list.
         Intent apiLocationIntent = new Intent(this, PrivacyOnlineAPIService.class);
         apiLocationIntent.setAction(PrivacyOnlineAPIService.ACTION_GET_LOCATIONS);
         apiLocationIntent.putExtra(PrivacyOnlineAPIService.EXTRA_CALLER, ConnectionActivity.GetLocationListReceiver.API_RESPONSE);
         startService(apiLocationIntent);
+*/
+        // Populate the Location list.
+        VPNLocations vpnLocations = new VPNLocations(this);
+        ArrayList<VPNLocation> locationList = vpnLocations.getArrayList();
+        final VPNLocationAdapter locationAdapter
+                = new VPNLocationAdapter(this, R.layout.spinner_layout_full, locationList);
+        PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+        utility.updateSpinnerValues(activityConnection, R.id.input_spinner_vpn_location,
+                locationAdapter, new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapter) {
+                    }
+                });
+
 
         // Set the Connect button so it actually conencts.
         Button connectionButton = (Button) findViewById(R.id.button_connection);

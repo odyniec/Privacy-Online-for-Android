@@ -1,0 +1,32 @@
+[
+  {
+    "label": "US - Seattle",
+    "hostname": "gateway.seattle.us.privacy.online",
+    "flag": "icon_usa.png",
+    "headerimage": "header_singapore.png"
+  },
+  {
+    "label": "Singapore",
+    "hostname": "gateway.singapore.privacy.online",
+    "flag": "icon_singapore.png",
+    "headerimage": "header_singapore.png"
+  },
+  {
+    "label": "France",
+    "hostname": "gateway.france.privacy.online",
+    "flag": "icon_france.png",
+    "headerimage": "header_france.png"
+  },
+  {
+    "label": "London",
+    "hostname": "gateway.london.privacy.online",
+    "flag": "icon_united_kingdom.png",
+    "headerimage": "header_london.png"
+  },
+  {
+    "label": "Dev Test - US",
+    "hostname": "node.vpn-test.dev.uk2.net",
+    "flag": "icon_devtest.png",
+    "headerimage": "header_devtest.png"
+  },
+]

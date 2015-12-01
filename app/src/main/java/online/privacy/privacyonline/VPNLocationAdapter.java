@@ -1,13 +1,25 @@
 package online.privacy.privacyonline;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -69,18 +81,40 @@ public class VPNLocationAdapter extends ArrayAdapter<VPNLocation> {
     // This is for the "passive" state of the spinner
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextView label = new TextView(context);
-        label.setTextColor(Color.BLACK);
-        label.setText(values.get(position).getLabel());
-        return label;
+        return getDropDownView(position, convertView, parent);
     }
 
     // And here is when the "chooser" is popped up
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        TextView label = new TextView(context);
-        label.setTextColor(Color.BLACK);
-        label.setText(values.get(position).getLabel());
-        return label;
+        View row = convertView;
+        if (row == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            row = inflater.inflate(R.layout.spinner_layout_full, parent, false);
+        }
+
+        VPNLocation item = values.get(position);
+        if (item != null) {
+            ImageView flag    = (ImageView) row.findViewById(R.id.location_flag);
+            TextView label    = (TextView)  row.findViewById(R.id.location_label);
+            TextView hostname = (TextView)  row.findViewById(R.id.location_hostname);
+
+            flag.setImageBitmap( getBitmapFromAsset(item.getFlag()) );
+            label.setText(item.getLabel());
+            hostname.setText(item.getHostname());
+        }
+
+        return row;
+    }
+
+    private Bitmap getBitmapFromAsset(String assetFileName) {
+        Bitmap bitmap = null;
+        try {
+            InputStream assetFileStream = context.getAssets().open(assetFileName);
+            bitmap = BitmapFactory.decodeStream(assetFileStream);
+        } catch (IOException ioe) {
+            Log.e("VPNLocationAdapter", "Unable to read icon image: " + assetFileName);
+        }
+        return bitmap;
     }
 }

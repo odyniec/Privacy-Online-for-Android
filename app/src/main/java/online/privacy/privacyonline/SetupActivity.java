@@ -96,10 +96,27 @@ public class SetupActivity extends AppCompatActivity {
         registerReceiver(locationReceiver, locationFilter);
 
         // Populate the Location list.
-        Intent apiLocationIntent = new Intent(this, PrivacyOnlineAPIService.class);
-        apiLocationIntent.setAction(PrivacyOnlineAPIService.ACTION_GET_LOCATIONS);
-        apiLocationIntent.putExtra(PrivacyOnlineAPIService.EXTRA_CALLER, GetLocationListReceiver.API_RESPONSE);
-        startService(apiLocationIntent);
+        VPNLocations vpnLocations = new VPNLocations(this);
+        ArrayList<VPNLocation> locationList = vpnLocations.getArrayList();
+        final VPNLocationAdapter locationAdapter
+                = new VPNLocationAdapter(this, R.layout.spinner_layout_full, locationList);
+        PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+        utility.updateSpinnerValues(activitySetup, R.id.input_spinner_default_vpn_location,
+                locationAdapter, new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                        SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
+                        final SharedPreferences.Editor preferencesEditor = preferences.edit();
+
+                        VPNLocation location = locationAdapter.getItem(position);
+                        preferencesEditor.putString("default_vpn_location", location.getHostname());
+                        preferencesEditor.apply();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapter) {
+                    }
+                });
     }
 
     @Override
@@ -133,9 +150,6 @@ public class SetupActivity extends AppCompatActivity {
 
         EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
         String password = inputTextPassword.getText().toString();
-
-        Spinner vpnDefaultLocation = (Spinner) findViewById(R.id.input_spinner_default_vpn_location);
-        String defaultLocation = vpnDefaultLocation.getSelectedItem().toString();
 
         preferencesEditor.putString("username", username);
         preferencesEditor.putString("password", password);
@@ -187,7 +201,7 @@ public class SetupActivity extends AppCompatActivity {
             }
 
             final VPNLocationAdapter locationAdapter
-                    = new VPNLocationAdapter(context, android.R.layout.simple_spinner_item, locationList);
+                    = new VPNLocationAdapter(context, R.layout.spinner_layout_full, locationList);
 
             PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
             utility.updateSpinnerValues(activitySetup, R.id.input_spinner_default_vpn_location,
