@@ -64,6 +64,18 @@ public class VPNLocationAdapter extends ArrayAdapter<VPNLocation> {
         return locationId;
     }
 
+    public VPNLocation getEntryByHostname(String hostname) {
+        VPNLocation matchingEntry = null;
+
+        for (int i = 0; i < this.values.size(); i++) {
+            VPNLocation entry = this.values.get(i);
+            if (entry.getHostname().equals(hostname)) {
+                matchingEntry = entry;
+            }
+        }
+        return matchingEntry;
+    }
+
     public int getEntryLocationByLabel(String label) {
         int locationId = 0;
         for (int i = 0; i < this.values.size(); i++) {
@@ -99,22 +111,12 @@ public class VPNLocationAdapter extends ArrayAdapter<VPNLocation> {
             TextView label    = (TextView)  row.findViewById(R.id.location_label);
             TextView hostname = (TextView)  row.findViewById(R.id.location_hostname);
 
-            flag.setImageBitmap( getBitmapFromAsset(item.getFlag()) );
+            PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+            flag.setImageBitmap( utility.getBitmapFromAsset(context, item.getFlag()) );
             label.setText(item.getLabel());
             hostname.setText(item.getHostname());
         }
 
         return row;
-    }
-
-    private Bitmap getBitmapFromAsset(String assetFileName) {
-        Bitmap bitmap = null;
-        try {
-            InputStream assetFileStream = context.getAssets().open(assetFileName);
-            bitmap = BitmapFactory.decodeStream(assetFileStream);
-        } catch (IOException ioe) {
-            Log.e("VPNLocationAdapter", "Unable to read icon image: " + assetFileName);
-        }
-        return bitmap;
     }
 }

@@ -16,8 +16,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import java.io.File;
@@ -46,6 +48,8 @@ public class ConnectionActivity extends AppCompatActivity {
     private VpnProfile openVPNProfile;
     private String vpnProfileName = "privacy-online";
     private File vpnCACertFile;
+    private boolean headerImageExpandState;
+    private int headerImageHeightChange;
 
     private final int START_VPN_PROFILE = 100;
 
@@ -53,28 +57,13 @@ public class ConnectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection);
-
-        /*
         Toolbar customToolBar = (Toolbar) findViewById(R.id.toolbar_connection);
         setSupportActionBar(customToolBar);
         customToolBar.setNavigationIcon(null);
         customToolBar.setNavigationContentDescription(null);
-//        customToolBar.setLogo(R.drawable.test_toolbar);
-//        customToolBar.setLogoDescription(getResources().getString(R.string.app_name));
-        */
+
         vpnCACertFile = new File(getCacheDir(), "privacy-online-ca.crt");
         unpackCAFile();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // Check for settings, and spew the set-up activity if we don't have any.
-        if (!havePreferences()) {
-            Intent intent = new Intent(this, SetupActivity.class);
-            startActivity(intent);
-        }
 
         // Get the VPN Profile, or create one if we don't have one.
         profileManager = ProfileManager.getInstance(this);
@@ -84,20 +73,6 @@ public class ConnectionActivity extends AppCompatActivity {
             utility.createVPNProfile(this, vpnProfileName);
         }
 
-        // Registrer the listerner for the Spinner content update.
-        IntentFilter locationFilter = new IntentFilter(ConnectionActivity.GetLocationListReceiver.API_RESPONSE);
-        locationFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        locationReceiver = new GetLocationListReceiver();
-        registerReceiver(locationReceiver, locationFilter);
-
-/*
-
-        // Populate the Location list.
-        Intent apiLocationIntent = new Intent(this, PrivacyOnlineAPIService.class);
-        apiLocationIntent.setAction(PrivacyOnlineAPIService.ACTION_GET_LOCATIONS);
-        apiLocationIntent.putExtra(PrivacyOnlineAPIService.EXTRA_CALLER, ConnectionActivity.GetLocationListReceiver.API_RESPONSE);
-        startService(apiLocationIntent);
-*/
         // Populate the Location list.
         VPNLocations vpnLocations = new VPNLocations(this);
         ArrayList<VPNLocation> locationList = vpnLocations.getArrayList();
@@ -108,12 +83,61 @@ public class ConnectionActivity extends AppCompatActivity {
                 locationAdapter, new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                        VPNLocation vpnLocation = locationAdapter.getItem(position);
+                        ImageView headerImageView = (ImageView) activityConnection.findViewById(R.id.header_image);
+
+                        PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+                        utility.updateHeaderImage(activityConnection, headerImageView, vpnLocation);
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> adapter) {
                     }
                 });
+
+        // Add a dirty testing hack, to listen for a click on teh header image and expand it using
+        // the expand animation.
+        // TODO: Remove this, it's for testing the animation that should fire on connection
+        headerImageExpandState = false; // Make sure we start with it set to false.
+        ImageView headerImage = (ImageView) findViewById(R.id.header_image);
+        headerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final View myView = view;
+                if (!headerImageExpandState) {
+                    int startHeight = view.getHeight();
+                    headerImageHeightChange = (int) (startHeight * 0.5); // 50% bigger
+                    ExpandAnimation expandAnimation = new ExpandAnimation(view, headerImageHeightChange, startHeight, 800);
+                    expandAnimation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            headerImageExpandState = true;
+                        }
+                        @Override
+                        public void onAnimationEnd(Animation animation) {}
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+                    view.startAnimation(expandAnimation);
+
+                } else {
+                    int startHeight = view.getHeight();
+                    ShrinkAnimation shrinkAnimation = new ShrinkAnimation(view, headerImageHeightChange, startHeight, 1000);
+                    shrinkAnimation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            headerImageExpandState = false;
+                        }
+                        @Override
+                        public void onAnimationEnd(Animation animation) {}
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+                    view.startAnimation(shrinkAnimation);
+
+                }
+            }
+        });
 
 
         // Set the Connect button so it actually conencts.
@@ -132,8 +156,8 @@ public class ConnectionActivity extends AppCompatActivity {
                 openVPNProfile.mCaFilename = vpnCACertFile.getPath();
                 openVPNProfile.mUsername = username;
                 openVPNProfile.mPassword = password;
-                openVPNProfile.mCipher   = "AES-256-CBC";
-                openVPNProfile.mAuth     = "SHA256";
+                openVPNProfile.mCipher = "AES-256-CBC";
+                openVPNProfile.mAuth = "SHA256";
 
                 Connection conn = new Connection();
                 conn.mServerName = vpnServer.getHostname();
@@ -153,9 +177,33 @@ public class ConnectionActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // Check for settings, and spew the set-up activity if we don't have any.
+        if (!havePreferences()) {
+            Intent intent = new Intent(this, SetupActivity.class);
+            startActivity(intent);
+        }
+/*
+        // Registrer the listerner for the Spinner content update.
+        IntentFilter locationFilter = new IntentFilter(ConnectionActivity.GetLocationListReceiver.API_RESPONSE);
+        locationFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        locationReceiver = new GetLocationListReceiver();
+        registerReceiver(locationReceiver, locationFilter);
+
+        // Populate the Location list.
+        Intent apiLocationIntent = new Intent(this, PrivacyOnlineAPIService.class);
+        apiLocationIntent.setAction(PrivacyOnlineAPIService.ACTION_GET_LOCATIONS);
+        apiLocationIntent.putExtra(PrivacyOnlineAPIService.EXTRA_CALLER, ConnectionActivity.GetLocationListReceiver.API_RESPONSE);
+        startService(apiLocationIntent);
+*/
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
-        unregisterReceiver(locationReceiver);
+//        unregisterReceiver(locationReceiver);
     }
 
     @Override
