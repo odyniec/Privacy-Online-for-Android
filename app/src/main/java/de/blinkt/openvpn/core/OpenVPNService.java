@@ -163,8 +163,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
 
         // Try to set the priority available since API 16 (Jellybean)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-            jbNotificationExtras(lowpriority, nbuilder);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+//            jbNotificationExtras(lowpriority, nbuilder);
 
         if (tickerText != null && !tickerText.equals(""))
             nbuilder.setTicker(tickerText);

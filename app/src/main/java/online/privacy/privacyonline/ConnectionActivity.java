@@ -1,12 +1,14 @@
 package online.privacy.privacyonline;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.app.ActionBar;
@@ -20,7 +22,10 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,6 +35,7 @@ import java.util.ArrayList;
 
 import de.blinkt.openvpn.LaunchVPN;
 import de.blinkt.openvpn.VpnProfile;
+import de.blinkt.openvpn.activities.DisconnectVPN;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
@@ -41,6 +47,7 @@ public class ConnectionActivity extends AppCompatActivity {
     private static final String LOG_TAG = "p.o.connection";
     private Activity activityConnection = this;
     private GetLocationListReceiver locationReceiver;
+    private VPNStatusReceiver vpnStatusReceiver;
 
     // This is online.privacy.VpnProfile, not de.blinkt.openvpn.VpnProfile, as I don't need the
     // profile management, nor half the guff in there.
@@ -48,10 +55,12 @@ public class ConnectionActivity extends AppCompatActivity {
     private VpnProfile openVPNProfile;
     private String vpnProfileName = "privacy-online";
     private File vpnCACertFile;
-    private boolean headerImageExpandState;
+    private boolean headerImageExpanded = false;
     private int headerImageHeightChange;
+    private int vpnLocationHeightChange;
 
     private final int START_VPN_PROFILE = 100;
+    private final int VPN_DISCONNECT    = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,53 +107,24 @@ public class ConnectionActivity extends AppCompatActivity {
         // Add a dirty testing hack, to listen for a click on teh header image and expand it using
         // the expand animation.
         // TODO: Remove this, it's for testing the animation that should fire on connection
-        headerImageExpandState = false; // Make sure we start with it set to false.
+        headerImageExpanded = false; // Make sure we start with it set to false.
         ImageView headerImage = (ImageView) findViewById(R.id.header_image);
         headerImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                final View myView = view;
-                if (!headerImageExpandState) {
-                    int startHeight = view.getHeight();
-                    headerImageHeightChange = (int) (startHeight * 0.5); // 50% bigger
-                    ExpandAnimation expandAnimation = new ExpandAnimation(view, headerImageHeightChange, startHeight, 800);
-                    expandAnimation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                            headerImageExpandState = true;
-                        }
-                        @Override
-                        public void onAnimationEnd(Animation animation) {}
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {}
-                    });
-                    view.startAnimation(expandAnimation);
-
-                } else {
-                    int startHeight = view.getHeight();
-                    ShrinkAnimation shrinkAnimation = new ShrinkAnimation(view, headerImageHeightChange, startHeight, 1000);
-                    shrinkAnimation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                            headerImageExpandState = false;
-                        }
-                        @Override
-                        public void onAnimationEnd(Animation animation) {}
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {}
-                    });
-                    view.startAnimation(shrinkAnimation);
-
-                }
+            public void onClick(View v) {
+                slideHeaderImage();
             }
         });
 
+        // Wire up the Dis/Connect buttons.
+        final Button connectionButton = (Button) findViewById(R.id.button_connection);
+        final Button disconnectButton = (Button) findViewById(R.id.button_disconnect);
 
-        // Set the Connect button so it actually conencts.
-        Button connectionButton = (Button) findViewById(R.id.button_connection);
         connectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                switchConnectionButtons(connectionButton, disconnectButton);
+
                 SharedPreferences preferences
                         = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
                 String username = preferences.getString("username", "");
@@ -174,7 +154,83 @@ public class ConnectionActivity extends AppCompatActivity {
 
             }
         });
+
+        disconnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent disconnectVPN = new Intent(activityConnection, DisconnectVPN.class);
+                disconnectVPN.setAction("de.blinkt.openvpn.DISCONNECT_VPN");
+                startActivityForResult(disconnectVPN, VPN_DISCONNECT);
+            }
+        });
+
     }
+
+    private void switchConnectionButtons(Button buttonToHide, Button buttonToShow) {
+        Log.i("ConnectionActivity", "Dis/Connect button clicked");
+        buttonToHide.setEnabled(false);
+        buttonToHide.setVisibility(View.GONE);
+        buttonToShow.setEnabled(true);
+        buttonToShow.setVisibility(View.VISIBLE);
+    }
+
+
+    /**
+     * Toggles the state of the header imeage. Goes from greyscale "small", to coloured big.
+     * Note: Also hides the selection spinner when it slides out, and reveals it when it slides in.
+     */
+    private void slideHeaderImage() {
+        final ImageView view = (ImageView) findViewById(R.id.header_image);
+        final Spinner vpnLocation = (Spinner) findViewById(R.id.input_spinner_vpn_location);
+
+        if (!headerImageExpanded) {
+            int startHeight = view.getHeight();
+            headerImageHeightChange = (int) (startHeight * 0.5); // 50% bigger
+            ExpandAnimation expandAnimation = new ExpandAnimation(view, headerImageHeightChange, startHeight, 800);
+            expandAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    headerImageExpanded = true;
+                    vpnLocationHeightChange = vpnLocation.getHeight();
+                    ShrinkAnimation shrinkVpnSpinner = new ShrinkAnimation(vpnLocation, vpnLocationHeightChange, vpnLocationHeightChange, 800);
+                    vpnLocation.startAnimation(shrinkVpnSpinner);
+                }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+                    utility.unsetGreyScale(view);
+                }
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
+            view.startAnimation(expandAnimation);
+
+        } else {
+            int startHeight = view.getHeight();
+            ShrinkAnimation shrinkAnimation = new ShrinkAnimation(view, headerImageHeightChange, startHeight, 1000);
+            shrinkAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    headerImageExpanded = false;
+
+                    // This Kludge is apparently required, because animating from 0 fails in a fiery ball of death.
+                    vpnLocation.getLayoutParams().height = 1;
+                    ExpandAnimation expandVpnSpinner = new ExpandAnimation(vpnLocation, (vpnLocationHeightChange-1), 1, 800);
+                    vpnLocation.startAnimation(expandVpnSpinner);
+
+                    PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+                    utility.setGreyScale(view);
+                }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                }
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
+            view.startAnimation(shrinkAnimation);
+        }
+    }
+
 
     @Override
     public void onStart() {
@@ -185,8 +241,14 @@ public class ConnectionActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SetupActivity.class);
             startActivity(intent);
         }
+
+        // Register the listener for the VPN Status update.
+        IntentFilter vpnStatusFilter = new IntentFilter(VPNStatusReceiver.ACTION);
+        vpnStatusFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        vpnStatusReceiver = new VPNStatusReceiver();
+        registerReceiver(vpnStatusReceiver, vpnStatusFilter);
 /*
-        // Registrer the listerner for the Spinner content update.
+        // Register the listener for the Spinner content update.
         IntentFilter locationFilter = new IntentFilter(ConnectionActivity.GetLocationListReceiver.API_RESPONSE);
         locationFilter.addCategory(Intent.CATEGORY_DEFAULT);
         locationReceiver = new GetLocationListReceiver();
@@ -204,6 +266,7 @@ public class ConnectionActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 //        unregisterReceiver(locationReceiver);
+        unregisterReceiver(vpnStatusReceiver);
     }
 
     @Override
@@ -217,9 +280,7 @@ public class ConnectionActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
+    protected void onDestroy() { super.onDestroy(); }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -287,10 +348,6 @@ public class ConnectionActivity extends AppCompatActivity {
 
         if (requestCode == START_VPN_PROFILE) {
             if (resultCode == Activity.RESULT_OK) {
-//                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//                boolean showLogWindow = prefs.getBoolean("showlogwindow", true);
-//                if(!mhideLog && showLogWindow)
-//                    showLogWindow();
                 new startOpenVpnThread().start();
 
             } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -299,10 +356,25 @@ public class ConnectionActivity extends AppCompatActivity {
                         VpnStatus.ConnectionStatus.LEVEL_NOTCONNECTED);
                 finish();
             }
+
+        } else if (requestCode == VPN_DISCONNECT) {
+            if (resultCode == Activity.RESULT_OK) {
+                Button connectionButton = (Button) findViewById(R.id.button_connection);
+                Button disconnectButton = (Button) findViewById(R.id.button_disconnect);
+                switchConnectionButtons(disconnectButton, connectionButton);
+
+                slideHeaderImage();
+
+                LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
+                infoArea.setVisibility(View.GONE);
+
+                Toast toast = Toast.makeText(activityConnection, "VPN Disconnected", Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
     }
 
-
+/*
     // Method prepares and attempts to launch the VPN connection.
     void launchVPN() {
 
@@ -322,6 +394,16 @@ public class ConnectionActivity extends AppCompatActivity {
         } else {
             onActivityResult(START_VPN_PROFILE, Activity.RESULT_OK, null);
         }
+    }
+*/
+
+    private void updateConnectionStatusText(String status) {
+        LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
+        if (infoArea.getVisibility() != View.VISIBLE) {
+            infoArea.setVisibility(View.VISIBLE);
+        }
+        TextView vpnStatus = (TextView) findViewById(R.id.vpn_status);
+        vpnStatus.setText(status);
     }
 
     private class startOpenVpnThread extends Thread {
@@ -364,6 +446,22 @@ public class ConnectionActivity extends AppCompatActivity {
                 public void onNothingSelected(AdapterView<?> adapter) {
                 }
             });
+        }
+    }
+
+
+    public class VPNStatusReceiver extends BroadcastReceiver {
+
+        public static final String ACTION = "de.blinkt.openvpn.VPN_STATUS";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String vpnStatus = intent.getStringExtra("detailstatus");
+            updateConnectionStatusText(getString(VpnStatus.getLocalizedState(vpnStatus)));
+
+            if (vpnStatus.equals("CONNECTED")) {
+                slideHeaderImage();
+            }
         }
     }
 }

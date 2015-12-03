@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -80,6 +82,7 @@ public class PrivacyOnlineUtility {
             if (imageView.getDrawable() == null) {
                 Log.i("PrivacyOnlineUtility", "Image has no Drawable.");
                 imageView.setImageBitmap(headerImage);
+                setGreyScale(imageView);
             } else {
                 Log.i("PrivacyOnlineUtility", "Image drawable: "+imageView.getDrawable().toString());
                 fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -111,5 +114,16 @@ public class PrivacyOnlineUtility {
             Log.e("PrivacyOnlineUtility","Unable to read image: " + assetFileName);
         }
         return bitmap;
+    }
+
+    public void setGreyScale(ImageView imageView) {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);  //0 means grayscale
+        ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+        imageView.setColorFilter(cf);
+    }
+
+    public void unsetGreyScale(ImageView imageView) {
+        imageView.setColorFilter(null);
     }
 }

@@ -370,7 +370,7 @@ public class VpnStatus {
         }
     }
 
-    private static int getLocalizedState(String state) {
+    public static int getLocalizedState(String state) {
         if (state.equals("CONNECTING"))
             return R.string.state_connecting;
         else if (state.equals("WAIT"))
@@ -395,7 +395,12 @@ public class VpnStatus {
             return R.string.state_resolve;
         else if (state.equals("TCP_CONNECT"))
             return R.string.state_tcp_connect;
+        else if (state.equals("NOPROCESS"))
+            return R.string.state_not_connected;
+        else if (state.equals("AUTH_FAILED"))
+            return R.string.state_auth_failed;
         else
+            Log.e("VpnStatus", "Unknown VPN Status: "+state);
             return R.string.unknown_state;
 
     }

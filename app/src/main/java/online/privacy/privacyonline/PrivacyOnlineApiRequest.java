@@ -20,6 +20,11 @@ public class PrivacyOnlineApiRequest {
     private static final String LOG_TAG = "p.o.api.request";
 
     public boolean verifyUserAccount(String username, String password) {
+
+        // TODO - Remove this hacky temp code, and actually use the API remote call.
+        return (username.equals("jamesr") && password.equals("test"));
+
+        /* TODO - Reinstate this code!
         Log.i(LOG_TAG, "Attempting to Verify User Account");
         JSONObject responseData;
         try {
@@ -38,7 +43,7 @@ public class PrivacyOnlineApiRequest {
             Log.e(LOG_TAG, ioe.toString());
             return false;
         }
-
+        */
     }
 
     public ArrayList<VPNLocation> getLocationList() {

@@ -26,23 +26,58 @@
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/header_image"
-                android:scaleType="centerCrop"/>
-        </LinearLayout>
+                android:scaleType="centerCrop"
+                android:minHeight="100dp"
+                android:layout_marginTop="0dp"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_setup"
+                    android:padding="10dp"
+                    android:id="@+id/info_area_status"
+                    android:visibility="gone"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="VPN STATUS"
+                        android:id="@+id/label_vpn_status"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/vpn_status"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+        </FrameLayout>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -59,7 +94,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center">
@@ -67,12 +102,23 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Connect VPN"
+                android:text="CONNECT VPN"
                 android:id="@+id/button_connection"
                 android:textColor="@color/white"
                 android:background="@drawable/button_privacyonline"
                 android:paddingRight="10dp"
-                android:paddingLeft="10dp"/>
+                android:paddingLeft="10dp"
+                android:enabled="true"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DISCONNECT"
+                android:id="@+id/button_disconnect"
+                android:enabled="true"
+                style="?attr/borderlessButtonStyle"
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>
