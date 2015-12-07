@@ -112,7 +112,7 @@ public class ConnectionActivity extends AppCompatActivity {
         headerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                slideHeaderImage();
+                slideHeaderImage(false, null);
             }
         });
 
@@ -179,9 +179,23 @@ public class ConnectionActivity extends AppCompatActivity {
      * Toggles the state of the header imeage. Goes from greyscale "small", to coloured big.
      * Note: Also hides the selection spinner when it slides out, and reveals it when it slides in.
      */
-    private void slideHeaderImage() {
+    private void slideHeaderImage(boolean forceState, String forcedState) {
         final ImageView view = (ImageView) findViewById(R.id.header_image);
         final Spinner vpnLocation = (Spinner) findViewById(R.id.input_spinner_vpn_location);
+
+        if (forceState) {
+            switch (forcedState) {
+                case "closed":
+                    if (!headerImageExpanded) {
+                        return; // If it's already closed, do nothing.
+                    }
+                    headerImageExpanded = true;
+                    break;
+                case "open":
+                    headerImageExpanded = false;
+                    break;
+            }
+        }
 
         if (!headerImageExpanded) {
             int startHeight = view.getHeight();
@@ -363,7 +377,7 @@ public class ConnectionActivity extends AppCompatActivity {
                 Button disconnectButton = (Button) findViewById(R.id.button_disconnect);
                 switchConnectionButtons(disconnectButton, connectionButton);
 
-                slideHeaderImage();
+                slideHeaderImage(true, "closed");
 
                 LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
                 infoArea.setVisibility(View.GONE);
@@ -373,29 +387,6 @@ public class ConnectionActivity extends AppCompatActivity {
             }
         }
     }
-
-/*
-    // Method prepares and attempts to launch the VPN connection.
-    void launchVPN() {
-
-        Intent intent = VpnService.prepare(this);
-        if (intent != null) {
-            VpnStatus.updateStateString("USER_VPN_PERMISSION", "", R.string.state_user_vpn_permission,
-                    VpnStatus.ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
-            // Start the query
-            try {
-                startActivityForResult(intent, START_VPN_PROFILE);
-            } catch (ActivityNotFoundException ane) {
-                // Shame on you Sony! At least one user reported that
-                // an official Sony Xperia Arc S image triggers this exception
-                VpnStatus.logError(R.string.no_vpn_support_image);
-                //showLogWindow();
-            }
-        } else {
-            onActivityResult(START_VPN_PROFILE, Activity.RESULT_OK, null);
-        }
-    }
-*/
 
     private void updateConnectionStatusText(String status) {
         LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
@@ -460,7 +451,7 @@ public class ConnectionActivity extends AppCompatActivity {
             updateConnectionStatusText(getString(VpnStatus.getLocalizedState(vpnStatus)));
 
             if (vpnStatus.equals("CONNECTED")) {
-                slideHeaderImage();
+                slideHeaderImage(false, null);
             }
         }
     }
