@@ -26,17 +26,9 @@
                              android:layout_width="234dp"
                              android:layout_height="111dp"
                              android:id="@+id/imageView"
-                             android:src="@drawable/temp_icon"
+                             android:src="@drawable/setup_logo"
                              />
 
-                         <TextView
-                     android:text="PRIVACY ONLINE"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:textSize="25sp"
-                     android:id="@+id/label_settings_title"
-                     android:textColor="@color/black"
-                     android:textIsSelectable="false"/>
                      </LinearLayout>
 
         <LinearLayout
@@ -52,7 +44,8 @@
         android:text="Need an account? Sign up here!"
         android:id="@+id/button_cta_signup"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:textSize="9sp"/>
+        android:textSize="9sp"
+        android:textColor="@color/signupLinkText"/>
 
         </LinearLayout>
 
@@ -126,7 +119,8 @@
                      android:layout_height="wrap_content"
                      android:id="@+id/input_spinner_default_vpn_location"
                      android:layout_row="1"
-                     android:layout_column="0" />
+                     android:layout_column="0"
+                     android:spinnerMode="dialog"/>
 
                      </GridLayout>
 

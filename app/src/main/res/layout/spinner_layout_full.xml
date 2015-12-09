@@ -2,32 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="fill_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+    >
 
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:id="@+id/location_flag"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"
+        android:scaleType="fitCenter"
+        android:padding="5dp"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_height="fill_parent"
+        android:layout_margin="5dp"
+        android:layout_gravity="left|center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Label"
-            android:id="@+id/location_label"/>
+            android:id="@+id/location_label"
+            android:textSize="@dimen/spinner_option_label"
+            android:textColor="@color/primary_text_color"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Hostname"
-            android:id="@+id/location_hostname"/>
+            android:id="@+id/location_hostname"
+            android:textSize="@dimen/spinner_option_hostname"
+            android:textColor="@color/secondary_text_color"/>
     </LinearLayout>
 </LinearLayout>

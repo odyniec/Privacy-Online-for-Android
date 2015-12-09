@@ -2,17 +2,28 @@
 <resources>
     <color name="colorPrimary">#64ae11</color>
     <color name="colorPrimaryDark">#64ae11</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="greyLight">#aaaaaa</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="borderLightGrey">#cdcdcd</color>
-    <color name="darkGrey">#303030</color>
+    <color name="setup_background_border">#FFD6D4D1</color>
+    <color name="setup_background_color">#E6FFFFFF</color>
+    <color name="toolbar_background">#FF303030</color>
+    <color name="connection_background">#FFE2E2E2</color>
+
+    <color name="primary_text_color">#FF231F20</color>
+    <color name="primary_text_color_inverse">#FFFFFFFF</color>
+    <color name="secondary_text_color">#FF9A9A9A</color>
     <color name="secondary_text_material_dark">#FFFFFF</color>
+
+    <color name="errorRed">#AAF34235</color>
+    <color name="errorRedHighlight">#FFF34235</color>
+
+    <color name="signupLinkText">#FF2B3A45</color>
 
     <!-- Indigo -->
     <!-- OpenVPN colours #203155, #C66D0D -->
-    <color name="primary">#3F51B5</color>      <!--500-->
-    <color name="primary_dark">#303F9F</color> <!--700-->
+<!--    <color name="primary">#3F51B5</color>      <!- -500-->
+<!--    <color name="primary_dark">#303F9F</color> <!- -700-->
     <color name="accent">#FFA726</color>       <!-- Orange 400 -->
     <color name="gelb">#ffff00</color>
     <color name="rot">#ff0000</color>

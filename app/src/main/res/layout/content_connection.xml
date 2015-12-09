@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:padding="5dp">
@@ -17,12 +17,15 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            >
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/test_toolbar"
-                android:contentDescription="@string/app_name"/>
+                android:src="@drawable/toolbar_logo"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                />
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
@@ -41,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/header_image"
                 android:scaleType="centerCrop"
-                android:minHeight="100dp"
+                android:minHeight="250dp"
                 android:layout_marginTop="0dp"/>
 
             <LinearLayout
@@ -74,6 +77,12 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:id="@+id/vpn_status"
                         />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/vpn_bytecount"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -82,7 +91,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
             <Spinner
                 android:layout_width="fill_parent"
@@ -90,14 +100,16 @@
                 android:id="@+id/input_spinner_vpn_location"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:spinnerMode="dialog"/>
+                android:spinnerMode="dialog"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="10dp">
 
             <Button
                 android:layout_width="wrap_content"

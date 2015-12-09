@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/testbg"
+    android:background="@drawable/setup_background"
     tools:context="online.privacy.privacyonline.SetupActivity">
 
     <include layout="@layout/content_setup"

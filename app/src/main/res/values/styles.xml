@@ -3,6 +3,9 @@
     <style name="AppTheme" parent="Base.Theme.AppCompat">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color</item>
+        <item name="android:textColorPrimary">@color/primary_text_color</item>
+        <item name="android:textColorPrimaryInverse">@color/primary_text_color_inverse</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

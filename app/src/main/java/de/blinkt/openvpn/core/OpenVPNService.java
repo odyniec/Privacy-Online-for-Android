@@ -877,8 +877,19 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         sendBroadcast(vpnstatus, permission.ACCESS_NETWORK_STATE);
     }
 
+    private void doSendBroadcastBytecount(long in, long out, long diffIn, long diffOut) {
+        Intent vpnByteCount = new Intent();
+        vpnByteCount.setAction("de.blinkt.openvpn.VPN_BYTECOUNT");
+        vpnByteCount.putExtra("in", humanReadableByteCount(in, false));
+        vpnByteCount.putExtra("out", humanReadableByteCount(out, false));
+        vpnByteCount.putExtra("diffin", humanReadableByteCount(diffIn / OpenVPNManagement.mBytecountInterval, true));
+        vpnByteCount.putExtra("diffout", humanReadableByteCount(diffOut / OpenVPNManagement.mBytecountInterval, true));
+        sendBroadcast(vpnByteCount);
+    }
+
     @Override
     public void updateByteCount(long in, long out, long diffIn, long diffOut) {
+        doSendBroadcastBytecount(in, out, diffIn, diffOut);
         if (mDisplayBytecount) {
             String netstat = String.format(getString(R.string.statusline_bytecount),
                     humanReadableByteCount(in, false),

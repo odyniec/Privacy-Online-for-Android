@@ -12,5 +12,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color</item>
+        <item name="android:textColorPrimary">@color/primary_text_color</item>
+        <item name="android:textColorPrimaryInverse">@color/primary_text_color_inverse</item>
     </style>
 </resources>

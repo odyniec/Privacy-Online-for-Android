@@ -1,5 +1,6 @@
 package online.privacy.privacyonline;
 
+import android.os.SystemClock;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -22,6 +23,7 @@ public class PrivacyOnlineApiRequest {
     public boolean verifyUserAccount(String username, String password) {
 
         // TODO - Remove this hacky temp code, and actually use the API remote call.
+        SystemClock.sleep(3000);
         return (username.equals("jamesr") && password.equals("lessthanthree"));
 
         /* TODO - Reinstate this code!

@@ -1,27 +1,63 @@
 [
   {
-    "label": "US - Seattle",
-    "hostname": "gateway.seattle.us.privacy.online",
-    "flag": "icon_usa.png",
-    "headerimage": "header_usa.jpg"
+    "label": "Australia - Sydney",
+    "hostname": "gateway.sydney.privacy.online",
+    "flag": "icon_australia.png",
+    "headerimage": "header_sydney.jpg"
   },
   {
-    "label": "Singapore",
-    "hostname": "gateway.singapore.privacy.online",
-    "flag": "icon_singapore.png",
-    "headerimage": "header_singapore.jpg"
+    "label": "Brazil - Sao Paulo",
+    "hostname": "gateway.saopaulo.privacy.online",
+    "flag": "icon_brazil.png",
+    "headerimage": "header_sao_paulo.jpg"
   },
   {
-    "label": "France",
-    "hostname": "gateway.france.privacy.online",
+    "label": "Canada - Montreal",
+    "hostname": "gateway.montreal.privacy.online",
+    "flag": "icon_canada.png",
+    "headerimage": "header_montreal.jpg"
+  },
+  {
+    "label": "France - Paris",
+    "hostname": "gateway.paris.privacy.online",
     "flag": "icon_france.png",
-    "headerimage": "header_france.jpg"
+    "headerimage": "header_paris.jpg"
   },
   {
-    "label": "London",
+    "label": "Germany - Frankfurt",
+    "hostname": "gateway.frankfurt.privacy.online",
+    "flag": "icon_germany.png",
+    "headerimage": "header_frankfurt.jpg"
+  },
+  {
+    "label": "India - New Delhi",
+    "hostname": "gateway.newdelhi.privacy.online",
+    "flag": "icon_india.png",
+    "headerimage": "header_new_delhi.jpg"
+  },
+  {
+    "label": "Japan - Tokyo",
+    "hostname": "gateway.tokyo.privacy.online",
+    "flag": "icon_japan.png",
+    "headerimage": "header_tokyo.jpg"
+  },
+  {
+    "label": "Netherlands - Amsterdam",
+    "hostname": "gateway.amsterdam.privacy.online",
+    "flag": "icon_netherlands.png",
+    "headerimage": "header_amsterdam.jpg"
+  },
+  {
+    "label": "UK - London",
     "hostname": "gateway.london.privacy.online",
-    "flag": "icon_united_kingdom.png",
+    "flag": "icon_uk.png",
     "headerimage": "header_london.jpg"
+  },
+  {
+    "label": "UK - Manchester",
+    "hostname": "gateway.manchester.privacy.online",
+    "flag": "icon_uk.png",
+    "headerimage": "header_manchester.jpg"
   },
   {
     "label": "Dev Test - US",
@@ -29,4 +65,52 @@
     "flag": "icon_devtest.png",
     "headerimage": "header_devtest.jpg"
   },
+  {
+    "label": "USA - Atlanta",
+    "hostname": "gateway.atlanta.privacy.online",
+    "flag": "icon_usa.png",
+    "headerimage": "header_atlanta.jpg"
+  },
+  {
+    "label": "USA - Chicago",
+    "hostname": "gateway.chicago.privacy.online",
+    "flag": "icon_usa.png",
+    "headerimage": "header_chicago.jpg"
+  },
+  {
+    "label": "USA - Dallas",
+    "hostname": "gateway.dallas.privacy.online",
+    "flag": "icon_usa.png",
+    "headerimage": "header_dallas.jpg"
+  },
+  {
+    "label": "USA - New York",
+    "hostname": "gateway.newyork.privacy.online",
+    "flag": "icon_usa.png",
+    "headerimage": "header_new_york.jpg"
+  },
+  {
+    "label": "USA - Salt Lake City",
+    "hostname": "gateway.slc.privacy.online",
+    "flag": "icon_usa.png",
+    "headerimage": "header_salt_lake_city.jpg"
+  },
+  {
+    "label": "USA - San Jose",
+    "hostname": "gateway.sanjose.privacy.online",
+    "flag": "icon_usa.png",
+    "headerimage": "header_san_jose.jpg"
+  },
+  {
+    "label": "USA - Seattle",
+    "hostname": "gateway.seattle.privacy.online",
+    "flag": "icon_usa.png",
+    "headerimage": "header_seattle.jpg"
+  },
+  {
+    "label": "USA - Washington DC",
+    "hostname": "gateway.washington.privacy.online",
+    "flag": "icon_usa.png",
+    "headerimage": "header_washington.jpg"
+  }
 ]

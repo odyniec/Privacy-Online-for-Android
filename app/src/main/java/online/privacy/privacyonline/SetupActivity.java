@@ -6,10 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -69,6 +73,8 @@ public class SetupActivity extends AppCompatActivity {
                 updatePreferences();
                 EditText inputTextUsername = (EditText) findViewById(R.id.input_text_username);
                 EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
+                clearErrorState(inputTextUsername);
+                clearErrorState(inputTextPassword);
 
                 Intent apiIntent = new Intent(contextSetup, PrivacyOnlineAPIService.class);
                 apiIntent.putExtra(PrivacyOnlineAPIService.PARAM_USERNAME, inputTextUsername.getText().toString());
@@ -177,10 +183,25 @@ public class SetupActivity extends AppCompatActivity {
                 EditText inputTextUsername = (EditText) findViewById(R.id.input_text_username);
                 EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
 
-                inputTextUsername.setBackgroundColor(Color.RED);
-                inputTextPassword.setBackgroundColor(Color.RED);
+                setErrorState(inputTextUsername);
+                setErrorState(inputTextPassword);
             }
         }
+
+    }
+
+    private void setErrorState(View view) {
+        ColorStateList stateList = ContextCompat.getColorStateList(activitySetup, R.color.input_text_error);
+        Drawable wrappedDrawable = DrawableCompat.wrap(view.getBackground());
+        DrawableCompat.setTintList(wrappedDrawable, stateList);
+        view.setBackgroundDrawable(wrappedDrawable);
+    }
+
+    private void clearErrorState(View view) {
+        ColorStateList stateList = ContextCompat.getColorStateList(activitySetup, R.color.input_text_normal);
+        Drawable wrappedDrawable = DrawableCompat.wrap(view.getBackground());
+        DrawableCompat.setTintList(wrappedDrawable, stateList);
+        view.setBackgroundDrawable(wrappedDrawable);
     }
 
     // Implement a receiver so we can use the APIService to check login details.

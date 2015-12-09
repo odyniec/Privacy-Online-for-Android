@@ -5,6 +5,9 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="header_image_width">400dp</dimen>
 
+    <dimen name="spinner_option_hostname">11sp</dimen>
+    <dimen name="spinner_option_label">15sp</dimen>
+
     <!-- Shit from de.blinkt.openvpn -->
     <dimen name="paddingItemsSidebarLog">20dp</dimen>
     <dimen name="stdpadding">8dp</dimen>

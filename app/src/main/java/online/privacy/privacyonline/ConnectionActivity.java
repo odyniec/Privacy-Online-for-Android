@@ -1,17 +1,12 @@
 package online.privacy.privacyonline;
 
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.media.Image;
-import android.net.VpnService;
 import android.os.Bundle;
-import android.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -46,8 +41,9 @@ public class ConnectionActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "p.o.connection";
     private Activity activityConnection = this;
-    private GetLocationListReceiver locationReceiver;
+//    private GetLocationListReceiver locationReceiver;
     private VPNStatusReceiver vpnStatusReceiver;
+    private VPNByteCountReceiver vpnByteCountReceiver;
 
     // This is online.privacy.VpnProfile, not de.blinkt.openvpn.VpnProfile, as I don't need the
     // profile management, nor half the guff in there.
@@ -55,9 +51,9 @@ public class ConnectionActivity extends AppCompatActivity {
     private VpnProfile openVPNProfile;
     private String vpnProfileName = "privacy-online";
     private File vpnCACertFile;
+    private String vpnStatus;
     private boolean headerImageExpanded = false;
-    private int headerImageHeightChange;
-    private int vpnLocationHeightChange;
+    private int headerTransitionChange = 0;
 
     private final int START_VPN_PROFILE = 100;
     private final int VPN_DISCONNECT    = 101;
@@ -199,14 +195,13 @@ public class ConnectionActivity extends AppCompatActivity {
 
         if (!headerImageExpanded) {
             int startHeight = view.getHeight();
-            headerImageHeightChange = (int) (startHeight * 0.5); // 50% bigger
-            ExpandAnimation expandAnimation = new ExpandAnimation(view, headerImageHeightChange, startHeight, 800);
+            headerTransitionChange = getHeaderTransitionChange(); // (int) (startHeight * 0.5); // 50% bigger
+            ExpandAnimation expandAnimation = new ExpandAnimation(view, headerTransitionChange, startHeight, 800);
             expandAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
                     headerImageExpanded = true;
-                    vpnLocationHeightChange = vpnLocation.getHeight();
-                    ShrinkAnimation shrinkVpnSpinner = new ShrinkAnimation(vpnLocation, vpnLocationHeightChange, vpnLocationHeightChange, 800);
+                    ShrinkAnimation shrinkVpnSpinner = new ShrinkAnimation(vpnLocation, headerTransitionChange, headerTransitionChange, 800);
                     vpnLocation.startAnimation(shrinkVpnSpinner);
                 }
                 @Override
@@ -221,7 +216,7 @@ public class ConnectionActivity extends AppCompatActivity {
 
         } else {
             int startHeight = view.getHeight();
-            ShrinkAnimation shrinkAnimation = new ShrinkAnimation(view, headerImageHeightChange, startHeight, 1000);
+            ShrinkAnimation shrinkAnimation = new ShrinkAnimation(view, headerTransitionChange, startHeight, 1000);
             shrinkAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
@@ -229,7 +224,7 @@ public class ConnectionActivity extends AppCompatActivity {
 
                     // This Kludge is apparently required, because animating from 0 fails in a fiery ball of death.
                     vpnLocation.getLayoutParams().height = 1;
-                    ExpandAnimation expandVpnSpinner = new ExpandAnimation(vpnLocation, (vpnLocationHeightChange-1), 1, 800);
+                    ExpandAnimation expandVpnSpinner = new ExpandAnimation(vpnLocation, (headerTransitionChange-1), 1, 800);
                     vpnLocation.startAnimation(expandVpnSpinner);
 
                     PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
@@ -245,6 +240,16 @@ public class ConnectionActivity extends AppCompatActivity {
         }
     }
 
+    private int getHeaderTransitionChange() {
+
+        // If there isn't a value assigned to headerTransitionChange, then we need to get the height
+        // of the location selection spinner, as the idea is to slide out to hide that.
+        if (headerTransitionChange == 0) {
+            Spinner vpnLocation = (Spinner) findViewById(R.id.input_spinner_vpn_location);
+            headerTransitionChange = vpnLocation.getHeight();
+        }
+        return headerTransitionChange;
+    }
 
     @Override
     public void onStart() {
@@ -261,6 +266,13 @@ public class ConnectionActivity extends AppCompatActivity {
         vpnStatusFilter.addCategory(Intent.CATEGORY_DEFAULT);
         vpnStatusReceiver = new VPNStatusReceiver();
         registerReceiver(vpnStatusReceiver, vpnStatusFilter);
+
+        // And the ByteCount Broadcast.
+        IntentFilter vpnByteCountFilter = new IntentFilter(VPNByteCountReceiver.ACTION);
+        vpnByteCountFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        vpnByteCountReceiver = new VPNByteCountReceiver();
+        registerReceiver(vpnByteCountReceiver, vpnByteCountFilter);
+
 /*
         // Register the listener for the Spinner content update.
         IntentFilter locationFilter = new IntentFilter(ConnectionActivity.GetLocationListReceiver.API_RESPONSE);
@@ -281,6 +293,7 @@ public class ConnectionActivity extends AppCompatActivity {
         super.onStop();
 //        unregisterReceiver(locationReceiver);
         unregisterReceiver(vpnStatusReceiver);
+        unregisterReceiver(vpnByteCountReceiver);
     }
 
     @Override
@@ -397,6 +410,17 @@ public class ConnectionActivity extends AppCompatActivity {
         vpnStatus.setText(status);
     }
 
+    private void updateByteCountDisplay(String in, String out, String diffIn, String diffOut) {
+        LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
+        if (infoArea.getVisibility() != View.VISIBLE) {
+            return; // Do nothing if we're not visible.
+        }
+
+        String byteCount = String.format("Up: %1$s/s %2$s Down: %3$ss/s %4$s", diffIn, in, diffOut, out);
+        TextView vpnByteCount = (TextView) findViewById(R.id.vpn_bytecount);
+        vpnByteCount.setText(byteCount);
+    }
+
     private class startOpenVpnThread extends Thread {
         @Override
         public void run() {
@@ -405,7 +429,7 @@ public class ConnectionActivity extends AppCompatActivity {
 
         }
     }
-
+/*
     // Implement a receiver so we can use the APIService to check login details.
     public class GetLocationListReceiver extends BroadcastReceiver {
 
@@ -439,7 +463,7 @@ public class ConnectionActivity extends AppCompatActivity {
             });
         }
     }
-
+*/
 
     public class VPNStatusReceiver extends BroadcastReceiver {
 
@@ -447,12 +471,32 @@ public class ConnectionActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String vpnStatus = intent.getStringExtra("detailstatus");
+            String status = intent.getStringExtra("status");
+            Log.e("ConnectionActivity", "VPN Status: "+status);
+            vpnStatus = intent.getStringExtra("detailstatus");
+            Log.e("ConnectionActivity", "VPN Status Detail: "+vpnStatus);
             updateConnectionStatusText(getString(VpnStatus.getLocalizedState(vpnStatus)));
 
             if (vpnStatus.equals("CONNECTED")) {
                 slideHeaderImage(false, null);
             }
+        }
+    }
+
+    public class VPNByteCountReceiver extends BroadcastReceiver {
+
+        public static final String ACTION = "de.blinkt.openvpn.VPN_BYTECOUNT";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!vpnStatus.equals("CONNECTED")) {
+                return;
+            }
+            String in = intent.getStringExtra("in");
+            String out = intent.getStringExtra("out");
+            String diffIn = intent.getStringExtra("diffin");
+            String diffOut = intent.getStringExtra("diffout");
+            updateByteCountDisplay(in, out, diffIn, diffOut);
         }
     }
 }
