@@ -4,15 +4,17 @@
     <color name="colorPrimaryDark">#64ae11</color>
     <color name="greyLight">#aaaaaa</color>
     <color name="white">#FFFFFF</color>
+    <color name="white90">#E6FFFFFF</color>
     <color name="black">#000000</color>
     <color name="setup_background_border">#FFD6D4D1</color>
-    <color name="setup_background_color">#E6FFFFFF</color>
+    <color name="setup_background_color">@color/white90</color>
     <color name="toolbar_background">#FF303030</color>
     <color name="connection_background">#FFE2E2E2</color>
 
     <color name="primary_text_color">#FF231F20</color>
     <color name="primary_text_color_inverse">#FFFFFFFF</color>
     <color name="secondary_text_color">#FF9A9A9A</color>
+    <color name="secondary_text_color_inverse">#FFFFFF</color>
     <color name="secondary_text_material_dark">#FFFFFF</color>
 
     <color name="errorRed">#AAF34235</color>

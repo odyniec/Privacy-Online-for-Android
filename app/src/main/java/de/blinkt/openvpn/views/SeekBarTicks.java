@@ -45,7 +45,8 @@ public class SeekBarTicks extends SeekBar {
 
         int tickColor = a.getColor(0, android.R.color.black);
         mTickPaint = new Paint();
-        mTickPaint.setColor( context.getResources().getColor(tickColor));
+//        mTickPaint.setColor( context.getResources().getColor(tickColor));
+        mTickPaint.setColor( context.getResources().getColor(android.R.color.black));
         a.recycle();
     }
 

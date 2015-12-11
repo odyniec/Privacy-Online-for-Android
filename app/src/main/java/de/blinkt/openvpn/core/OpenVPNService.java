@@ -41,6 +41,7 @@ import java.util.Vector;
 //import de.blinkt.openvpn.BuildConfig;
 //import online.privacy.privacyonline.R;
 import online.privacy.privacyonline.BuildConfig;
+import online.privacy.privacyonline.ConnectionActivity;
 import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.activities.DisconnectVPN;
@@ -147,14 +148,14 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         android.app.Notification.Builder nbuilder = new Notification.Builder(this);
 
         if (mProfile != null)
-            nbuilder.setContentTitle(getString(R.string.notifcation_title, mProfile.mName));
+            nbuilder.setContentTitle(getString(R.string.notifcation_title));
         else
             nbuilder.setContentTitle(getString(R.string.notifcation_title_notconnect));
 
         nbuilder.setContentText(msg);
         nbuilder.setOnlyAlertOnce(true);
         nbuilder.setOngoing(true);
-        nbuilder.setContentIntent(getLogPendingIntent());
+        nbuilder.setContentIntent(getConnectionPendingIntent());
         nbuilder.setSmallIcon(icon);
 
 
@@ -243,14 +244,13 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     }
 
-    PendingIntent getLogPendingIntent() {
-        // Let the configure Button show the Log
-//        Intent intent = new Intent(getBaseContext(), LogWindow.class);
+    PendingIntent getConnectionPendingIntent() {
+        // Let the configure Button re-open the app.
+//        Intent intent = new Intent(getBaseContext(), ConnectionActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//        PendingIntent startLW = PendingIntent.getActivity(this, 0, intent, 0);
+//        PendingIntent startCA = PendingIntent.getActivity(this, 0, intent, 0);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//        return startLW;
-        Log.e("OpenVPNService", "LogWindow called, and probably shouldn't have been");
+//        return startCA;
         return null;
     }
 
@@ -617,7 +617,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         mLocalIPv6 = null;
         mDomain = null;
 
-        builder.setConfigureIntent(getLogPendingIntent());
+        builder.setConfigureIntent(getConnectionPendingIntent());
 
         try {
             //Debug.stopMethodTracing();
@@ -852,7 +852,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
                 // with a notifcation
                 return;
             } else if (level == LEVEL_CONNECTED) {
-                mDisplayBytecount = true;
+                mDisplayBytecount = false;
                 mConnecttime = System.currentTimeMillis();
                 lowpriority = true;
             } else {

@@ -41,10 +41,10 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/header_image_height"
                 android:id="@+id/header_image"
                 android:scaleType="centerCrop"
-                android:minHeight="250dp"
+                android:minHeight="@dimen/header_image_height"
                 android:layout_marginTop="0dp"/>
 
             <LinearLayout

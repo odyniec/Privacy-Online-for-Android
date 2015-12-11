@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">6dp</dimen>
+    <dimen name="activity_vertical_margin">6dp</dimen>
+    <dimen name="fab_margin">6dp</dimen>
+    <dimen name="header_image_width">400dp</dimen>
+
+    <dimen name="setup_box_margin_top">15dp</dimen>
+    <dimen name="setup_box_margin_left">15dp</dimen>
+    <dimen name="setup_box_margin_right">15dp</dimen>
+    <dimen name="setup_box_margin_bottom">15dp</dimen>
+
+    <dimen name="spinner_option_hostname">11sp</dimen>
+    <dimen name="spinner_option_label">15sp</dimen>
+
+    <dimen name="header_image_height">150dp</dimen>
+</resources>

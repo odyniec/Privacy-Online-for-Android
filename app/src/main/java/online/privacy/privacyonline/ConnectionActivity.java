@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,12 +55,36 @@ public class ConnectionActivity extends AppCompatActivity {
     private String vpnStatus;
     private boolean headerImageExpanded = false;
     private int headerTransitionChange = 0;
+    private boolean authFailed = false;
 
     private final int START_VPN_PROFILE = 100;
     private final int VPN_DISCONNECT    = 101;
 
+    /**
+     * Nasty-Fucking-Hack-Time!!!!one
+     *
+     * The AppCompat theme doesn't let you see the menu text color differently to the toolbar
+     * action item widgets, so to prevent a shitty menu with white-on-white, we'll pop the
+     * soft menu if the hardware menu key is pressed.
+     */
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent e) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_MENU:
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().openOptionsMenu();
+                    return true;
+                }
+        }
+
+        return super.onKeyUp(keyCode, e);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Log.i("ConnectionActivity", "onCreate() Called");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connection);
         Toolbar customToolBar = (Toolbar) findViewById(R.id.toolbar_connection);
@@ -73,10 +98,6 @@ public class ConnectionActivity extends AppCompatActivity {
         // Get the VPN Profile, or create one if we don't have one.
         profileManager = ProfileManager.getInstance(this);
         openVPNProfile = profileManager.getProfileByName(vpnProfileName);
-        if (openVPNProfile == null) {
-            PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
-            utility.createVPNProfile(this, vpnProfileName);
-        }
 
         // Populate the Location list.
         VPNLocations vpnLocations = new VPNLocations(this);
@@ -108,7 +129,11 @@ public class ConnectionActivity extends AppCompatActivity {
         headerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                slideHeaderImage(false, null);
+                if (headerImageExpanded) {
+                    slideHeaderImage(false);
+                } else {
+                    slideHeaderImage(true);
+                }
             }
         });
 
@@ -119,7 +144,7 @@ public class ConnectionActivity extends AppCompatActivity {
         connectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchConnectionButtons(connectionButton, disconnectButton);
+                switchConnectionButtons(false);
 
                 SharedPreferences preferences
                         = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
@@ -129,6 +154,10 @@ public class ConnectionActivity extends AppCompatActivity {
                 Spinner vpnLocationSpinner = (Spinner) findViewById(R.id.input_spinner_vpn_location);
                 VPNLocation vpnServer = (VPNLocation) vpnLocationSpinner.getSelectedItem();
 
+                if (openVPNProfile == null) {
+                    PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+                    utility.createVPNProfile(activityConnection, vpnProfileName);
+                }
                 openVPNProfile.mCaFilename = vpnCACertFile.getPath();
                 openVPNProfile.mUsername = username;
                 openVPNProfile.mPassword = password;
@@ -143,6 +172,7 @@ public class ConnectionActivity extends AppCompatActivity {
                 profileManager.saveProfileList(activityConnection);
                 profileManager.saveProfile(activityConnection, openVPNProfile);
 
+                authFailed = false;
                 Intent intent = new Intent(activityConnection, LaunchVPN.class);
                 intent.putExtra(LaunchVPN.EXTRA_KEY, openVPNProfile.getUUID().toString());
                 intent.setAction(Intent.ACTION_MAIN);
@@ -162,12 +192,24 @@ public class ConnectionActivity extends AppCompatActivity {
 
     }
 
-    private void switchConnectionButtons(Button buttonToHide, Button buttonToShow) {
+    private void switchConnectionButtons(boolean showConnect) {
         Log.i("ConnectionActivity", "Dis/Connect button clicked");
-        buttonToHide.setEnabled(false);
-        buttonToHide.setVisibility(View.GONE);
-        buttonToShow.setEnabled(true);
-        buttonToShow.setVisibility(View.VISIBLE);
+
+        final Button connectionButton = (Button) findViewById(R.id.button_connection);
+        final Button disconnectButton = (Button) findViewById(R.id.button_disconnect);
+
+        if (showConnect) {
+            disconnectButton.setEnabled(false);
+            disconnectButton.setVisibility(View.GONE);
+            connectionButton.setEnabled(true);
+            connectionButton.setVisibility(View.VISIBLE);
+
+        } else {
+            connectionButton.setEnabled(false);
+            connectionButton.setVisibility(View.GONE);
+            disconnectButton.setEnabled(true);
+            disconnectButton.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -175,25 +217,17 @@ public class ConnectionActivity extends AppCompatActivity {
      * Toggles the state of the header imeage. Goes from greyscale "small", to coloured big.
      * Note: Also hides the selection spinner when it slides out, and reveals it when it slides in.
      */
-    private void slideHeaderImage(boolean forceState, String forcedState) {
+    // TODO - Fix this so that a cancelled connection attempt doesn't slide out the image anyway.
+    private void slideHeaderImage(boolean slideToOpen) {
         final ImageView view = (ImageView) findViewById(R.id.header_image);
         final Spinner vpnLocation = (Spinner) findViewById(R.id.input_spinner_vpn_location);
 
-        if (forceState) {
-            switch (forcedState) {
-                case "closed":
-                    if (!headerImageExpanded) {
-                        return; // If it's already closed, do nothing.
-                    }
-                    headerImageExpanded = true;
-                    break;
-                case "open":
-                    headerImageExpanded = false;
-                    break;
-            }
-        }
+        if (slideToOpen) {
 
-        if (!headerImageExpanded) {
+            if (headerImageExpanded) {
+                return;
+            }
+
             int startHeight = view.getHeight();
             headerTransitionChange = getHeaderTransitionChange(); // (int) (startHeight * 0.5); // 50% bigger
             ExpandAnimation expandAnimation = new ExpandAnimation(view, headerTransitionChange, startHeight, 800);
@@ -215,6 +249,11 @@ public class ConnectionActivity extends AppCompatActivity {
             view.startAnimation(expandAnimation);
 
         } else {
+
+            if (!headerImageExpanded) {
+                return;
+            }
+
             int startHeight = view.getHeight();
             ShrinkAnimation shrinkAnimation = new ShrinkAnimation(view, headerTransitionChange, startHeight, 1000);
             shrinkAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -254,6 +293,7 @@ public class ConnectionActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        Log.i("ConnectionActivity", "onStart() Called");
 
         // Check for settings, and spew the set-up activity if we don't have any.
         if (!havePreferences()) {
@@ -299,15 +339,20 @@ public class ConnectionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("ConnectionActivity", "onResume() called");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.i("ConnectionActivity", "onPause() called");
     }
 
     @Override
-    protected void onDestroy() { super.onDestroy(); }
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("ConnectionActivity", "onDestroy() called");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -335,6 +380,11 @@ public class ConnectionActivity extends AppCompatActivity {
     }
 
     private void unpackCAFile() {
+
+        // Check to see if we have already unpacked the CA File. If so, then we need not bother.
+        if (vpnCACertFile.exists()) {
+            return;
+        }
 
         // So we can't use a file in the .apk as a CA file for our VPN connection profile.
         // We'll unpack it here to the cache directory and pass that to the VpnProfile.
@@ -388,9 +438,9 @@ public class ConnectionActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Button connectionButton = (Button) findViewById(R.id.button_connection);
                 Button disconnectButton = (Button) findViewById(R.id.button_disconnect);
-                switchConnectionButtons(disconnectButton, connectionButton);
+                switchConnectionButtons(true);
 
-                slideHeaderImage(true, "closed");
+                slideHeaderImage(false);
 
                 LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
                 infoArea.setVisibility(View.GONE);
@@ -405,6 +455,8 @@ public class ConnectionActivity extends AppCompatActivity {
         LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
         if (infoArea.getVisibility() != View.VISIBLE) {
             infoArea.setVisibility(View.VISIBLE);
+            TextView vpnByteCount = (TextView) findViewById(R.id.vpn_bytecount);
+            vpnByteCount.setText(null);
         }
         TextView vpnStatus = (TextView) findViewById(R.id.vpn_status);
         vpnStatus.setText(status);
@@ -416,7 +468,7 @@ public class ConnectionActivity extends AppCompatActivity {
             return; // Do nothing if we're not visible.
         }
 
-        String byteCount = String.format("Up: %1$s/s %2$s Down: %3$ss/s %4$s", diffIn, in, diffOut, out);
+        String byteCount = String.format("Up: %1$s/s %2$s\nDown: %3$ss/s %4$s", diffIn, in, diffOut, out);
         TextView vpnByteCount = (TextView) findViewById(R.id.vpn_bytecount);
         vpnByteCount.setText(byteCount);
     }
@@ -474,11 +526,21 @@ public class ConnectionActivity extends AppCompatActivity {
             String status = intent.getStringExtra("status");
             Log.e("ConnectionActivity", "VPN Status: "+status);
             vpnStatus = intent.getStringExtra("detailstatus");
-            Log.e("ConnectionActivity", "VPN Status Detail: "+vpnStatus);
-            updateConnectionStatusText(getString(VpnStatus.getLocalizedState(vpnStatus)));
+            Log.e("ConnectionActivity", "VPN Status Detail: " + vpnStatus);
+
+            if (vpnStatus.equals("AUTH_FAILED")) {
+                authFailed = true;
+                updateConnectionStatusText(getString(VpnStatus.getLocalizedState(vpnStatus)));
+                switchConnectionButtons(true);
+            }
+
+            // Only update this if we haven't had an authfailure.
+            if (!authFailed) {
+                updateConnectionStatusText(getString(VpnStatus.getLocalizedState(vpnStatus)));
+            }
 
             if (vpnStatus.equals("CONNECTED")) {
-                slideHeaderImage(false, null);
+                slideHeaderImage(true);
             }
         }
     }

@@ -11,9 +11,9 @@
     <include layout="@layout/content_setup"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
-             android:layout_marginLeft="@dimen/setup_box_margin_left"
-             android:layout_marginRight="@dimen/setup_box_margin_right"
-             android:layout_marginTop="@dimen/setup_box_margin_top"
-             android:layout_marginBottom="@dimen/setup_box_margin_bottom"/>
+             android:layout_marginLeft="@dimen/setup_box_margin_left_landscape"
+             android:layout_marginRight="@dimen/setup_box_margin_right_landscape"
+             android:layout_marginTop="@dimen/setup_box_margin_top_landscape"
+             android:layout_marginBottom="@dimen/setup_box_margin_bottom_landscape"/>
 
 </FrameLayout>

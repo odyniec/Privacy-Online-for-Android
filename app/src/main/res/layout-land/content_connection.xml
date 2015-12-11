@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_connection"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_toolbar"
+        android:textColor="@color/white"
+        android:theme="@style/poToolbar">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/toolbar_logo"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                />
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="@dimen/header_image_width"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="@dimen/header_image_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/header_image_height_landscape"
+                    android:id="@+id/header_image"
+                    android:scaleType="centerCrop"
+                    android:minHeight="@dimen/header_image_height"
+                    android:layout_marginTop="0dp"/>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/background_setup"
+                        android:padding="10dp"
+                        android:id="@+id/info_area_status"
+                        android:visibility="gone"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="VPN STATUS"
+                            android:id="@+id/label_vpn_status"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:id="@+id/vpn_status"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:id="@+id/vpn_bytecount"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+
+                <Spinner
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/input_spinner_vpn_location"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:spinnerMode="dialog"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONNECT VPN"
+                android:id="@+id/button_connection"
+                android:textColor="@color/white"
+                android:background="@drawable/button_privacyonline"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:enabled="true"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DISCONNECT"
+                android:id="@+id/button_disconnect"
+                android:enabled="true"
+                style="?attr/borderlessButtonStyle"
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

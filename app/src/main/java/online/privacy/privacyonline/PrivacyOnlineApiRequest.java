@@ -23,8 +23,9 @@ public class PrivacyOnlineApiRequest {
     public boolean verifyUserAccount(String username, String password) {
 
         // TODO - Remove this hacky temp code, and actually use the API remote call.
-        SystemClock.sleep(3000);
-        return (username.equals("jamesr") && password.equals("lessthanthree"));
+//        SystemClock.sleep(3000);
+//        return (username.equals("jamesr") && password.equals("lessthanthree"));
+        return true;
 
         /* TODO - Reinstate this code!
         Log.i(LOG_TAG, "Attempting to Verify User Account");

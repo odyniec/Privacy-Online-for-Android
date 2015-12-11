@@ -1,9 +1,13 @@
 <resources>
 
-    <style name="AppTheme" parent="Base.Theme.AppCompat">
+    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/primary_text_color</item>
         <item name="android:textColorSecondary">@color/secondary_text_color</item>
+        <item name="android:textColorSecondaryInverse">@color/secondary_text_color_inverse</item>
         <item name="android:textColorPrimary">@color/primary_text_color</item>
         <item name="android:textColorPrimaryInverse">@color/primary_text_color_inverse</item>
     </style>
@@ -11,8 +15,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="Base.ThemeOverlay.AppCompat.Light" />
-    <style name="AppTheme.PopupOverlay" parent="Base.ThemeOverlay.AppCompat.Light" />
     <style name="AppTheme.poButton" parent="@android:style/Widget.Button">
         <item name="android:layout_width">160sp</item>
         <item name="android:layout_height">40sp</item>
@@ -20,7 +22,8 @@
         <item name="android:textColor">@color/secondary_text_material_dark</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
     </style>
-    <style name="poToolbar" parent="Theme.AppCompat.Light">
+    <!--<style name="poToolbar" parent="Theme.AppCompat.Light">-->
+    <style name="poToolbar" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="android:gravity">center</item>
         <item name="android:textColorPrimary">@color/black</item>
         <item name="android:textColorPrimaryInverse">@color/white</item>
