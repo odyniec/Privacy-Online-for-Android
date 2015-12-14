@@ -446,6 +446,10 @@ public class VpnStatus {
 
     }
 
+    // Give access to the last state var to other activities.
+    public static String getVpnStatus() {
+        return mLaststate;
+    }
 
     public synchronized static void removeStateListener(StateListener sl) {
         stateListener.remove(sl);
