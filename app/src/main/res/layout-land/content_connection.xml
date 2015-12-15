@@ -52,44 +52,14 @@
                     android:minHeight="@dimen/header_image_height"
                     android:layout_marginTop="0dp"/>
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center">
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/background_setup"
-                        android:padding="10dp"
-                        android:id="@+id/info_area_status"
-                        android:visibility="gone"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="VPN STATUS"
-                            android:id="@+id/label_vpn_status"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:id="@+id/vpn_status"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:id="@+id/vpn_bytecount"/>
-                    </LinearLayout>
-                </LinearLayout>
+                <include
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/status_box"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginLeft="@dimen/status_box_margin_left"
+                    android:layout_marginRight="@dimen/status_box_margin_right"
+                    android:layout_marginBottom="@dimen/status_box_margin_bottom"/>
 
             </FrameLayout>
 

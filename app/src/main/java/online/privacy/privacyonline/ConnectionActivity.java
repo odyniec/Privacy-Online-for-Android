@@ -257,7 +257,7 @@ public class ConnectionActivity extends AppCompatActivity {
         // Get the VPN status, if it's "not connected", then do nothing - all other statuses are
         // worthy of the UI being in the "Active" mode.
         vpnStatus = VpnStatus.getVpnStatus();
-        Log.e("ConnectionActivity", "VPN Status: "+vpnStatus);
+        Log.e("ConnectionActivity", "VPN Status: " + vpnStatus);
         if (   vpnStatus.equals("DISCONNECTED")
             || vpnStatus.equals("EXITING")
             || vpnStatus.equals("NOPROCESS")) {
@@ -368,8 +368,7 @@ public class ConnectionActivity extends AppCompatActivity {
                 headerImageView.setGreyScale();
                 headerImageView.slideClosed(findViewById(R.id.input_spinner_vpn_location));
 
-                LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
-                infoArea.setVisibility(View.GONE);
+                hideStatusBox();
 
                 Toast toast = Toast.makeText(activityConnection, "VPN Disconnected", Toast.LENGTH_LONG);
                 toast.show();
@@ -378,31 +377,46 @@ public class ConnectionActivity extends AppCompatActivity {
     }
 
     private void showStatusBox() {
-        LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
-        if (infoArea.getVisibility() != View.VISIBLE) {
-            infoArea.setVisibility(View.VISIBLE);
-            TextView vpnByteCount = (TextView) findViewById(R.id.vpn_bytecount);
-            vpnByteCount.setText(null);
+        LinearLayout statusBox = (LinearLayout) findViewById(R.id.status_box);
+        if (statusBox.getVisibility() != View.VISIBLE) {
+            statusBox.setVisibility(View.VISIBLE);
         }
-        TextView statusText = (TextView) findViewById(R.id.vpn_status);
-        statusText.setText( VpnStatus.getLocalizedState(vpnStatus) );
+        setByteCountText("0", "0", "0", "0");
+        TextView statusText = (TextView) findViewById(R.id.status_connection_state);
+        if (statusText.getText() == null || statusText.getText().toString().equals("")) {
+            statusText.setText(VpnStatus.getLocalizedState(vpnStatus));
+        }
+    }
+
+    private void hideStatusBox() {
+        LinearLayout statusBox = (LinearLayout) findViewById(R.id.status_box);
+        statusBox.setVisibility(View.GONE);
     }
 
     private void updateConnectionStatusText(String status) {
         showStatusBox();
-        TextView vpnStatus = (TextView) findViewById(R.id.vpn_status);
+        TextView vpnStatus = (TextView) findViewById(R.id.status_connection_state);
         vpnStatus.setText(status);
     }
 
-    private void updateByteCountDisplay(String in, String out, String diffIn, String diffOut) {
-        LinearLayout infoArea = (LinearLayout) findViewById(R.id.info_area_status);
-        if (infoArea.getVisibility() != View.VISIBLE) {
+    private void setByteCountText(String down, String diffDown, String up, String diffUp) {
+        TextView dataInfoDownDiff  = (TextView) findViewById(R.id.status_data_down_diff);
+        TextView dataInfoDownTotal = (TextView) findViewById(R.id.status_data_down_total);
+        TextView dataInfoUpDiff    = (TextView) findViewById(R.id.status_data_up_diff);
+        TextView dataInfoUpTotal   = (TextView) findViewById(R.id.status_data_up_total);
+
+        dataInfoDownDiff.setText(diffDown + "/s");
+        dataInfoDownTotal.setText(down);
+        dataInfoUpDiff.setText(diffUp + "/s");
+        dataInfoUpTotal.setText(up);
+    }
+
+    private void updateByteCountDisplay(String down, String up, String diffDown, String diffUp) {
+        LinearLayout statusBox = (LinearLayout) findViewById(R.id.status_box);
+        if (statusBox.getVisibility() != View.VISIBLE) {
             return; // Do nothing if we're not visible.
         }
-
-        String byteCount = String.format("Up: %1$s/s %2$s\nDown: %3$ss/s %4$s", diffIn, in, diffOut, out);
-        TextView vpnByteCount = (TextView) findViewById(R.id.vpn_bytecount);
-        vpnByteCount.setText(byteCount);
+        setByteCountText(down, diffDown, up, diffUp);
     }
 
     private class startOpenVpnThread extends Thread {
@@ -450,11 +464,11 @@ public class ConnectionActivity extends AppCompatActivity {
             if (!vpnStatus.equals("CONNECTED")) {
                 return;
             }
-            String in = intent.getStringExtra("in");
-            String out = intent.getStringExtra("out");
-            String diffIn = intent.getStringExtra("diffin");
-            String diffOut = intent.getStringExtra("diffout");
-            updateByteCountDisplay(in, out, diffIn, diffOut);
+            String down = intent.getStringExtra("in");
+            String up = intent.getStringExtra("out");
+            String diffDown = intent.getStringExtra("diffin");
+            String diffUp = intent.getStringExtra("diffout");
+            updateByteCountDisplay(down, up, diffDown, diffUp);
         }
     }
 

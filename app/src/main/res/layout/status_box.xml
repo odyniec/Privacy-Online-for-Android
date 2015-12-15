@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:background="@drawable/background_setup"
+              android:visibility="visible"
+              android:id="@+id/status_box"
+              android:paddingLeft="@dimen/status_box_padding_horizontal"
+              android:paddingTop="@dimen/status_box_padding_vertical"
+              android:paddingRight="@dimen/status_box_padding_horizontal"
+              android:paddingBottom="@dimen/status_box_padding_vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VPN STATUS"
+            android:id="@+id/textView"
+            style="@style/AppTheme.statusBoxTitle"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bottom_border"
+        android:layout_marginBottom="@dimen/status_box_divider_bottom_margin">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/status_connection_state"
+            style="@style/AppTheme.statusBoxStatus"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:paddingBottom="5dp"
+            android:singleLine="false"
+            android:maxLines="1"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center|center_horizontal"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/status_box_up_icon"
+            android:src="@drawable/ic_data_up"
+            android:layout_marginLeft="@dimen/status_box_data_text_margin_horizontal"
+            android:layout_marginRight="@dimen/status_box_data_text_margin_horizontal"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/status_data_up_diff"
+            android:layout_marginLeft="@dimen/status_box_data_text_margin_horizontal"
+            android:layout_marginRight="@dimen/status_box_data_text_margin_horizontal"
+            style="@style/AppTheme.statusBoxDataInfo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/status_data_up_total"
+            android:layout_marginLeft="@dimen/status_box_data_text_margin_horizontal"
+            android:layout_marginRight="@dimen/status_box_data_text_margin_horizontal"
+            style="@style/AppTheme.statusBoxDataInfo"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/status_box_down_icon"
+            android:src="@drawable/ic_data_down"
+            android:layout_marginLeft="@dimen/status_box_down_icon_margin_left"
+            android:layout_marginRight="@dimen/status_box_data_text_margin_horizontal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/status_data_down_diff"
+            android:layout_marginLeft="@dimen/status_box_data_text_margin_horizontal"
+            android:layout_marginRight="@dimen/status_box_data_text_margin_horizontal"
+            style="@style/AppTheme.statusBoxDataInfo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/status_data_down_total"
+            android:layout_marginLeft="@dimen/status_box_data_text_margin_horizontal"
+            android:layout_marginRight="@dimen/status_box_data_text_margin_horizontal"
+            style="@style/AppTheme.statusBoxDataInfo"/>
+    </LinearLayout>
+</LinearLayout>

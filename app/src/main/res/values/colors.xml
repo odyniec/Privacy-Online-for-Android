@@ -11,6 +11,10 @@
     <color name="toolbar_background">#FF303030</color>
     <color name="connection_background">#FFE2E2E2</color>
 
+    <color name="status_box_divider">#FFCBC9C9</color>
+    <color name="status_box_primary_text">#FF9A9A9A</color> <!-- Title: Toboto bold 16px / up/down: Roboto Light 16px -->
+    <color name="status_box_secondary_text">#FF231F20</color> <!-- Connected: #231f20 38px Roboto Light -->
+
     <color name="primary_text_color">#FF231F20</color>
     <color name="primary_text_color_inverse">#FFFFFFFF</color>
     <color name="secondary_text_color">#FF9A9A9A</color>
