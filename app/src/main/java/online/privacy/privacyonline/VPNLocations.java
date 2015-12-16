@@ -21,7 +21,7 @@ public class VPNLocations {
 
     private Context context;
     private final JSONArray locations;
-    private final String assetFileName = "locations.json";
+    private final String assetFileName = "locations_dev.json";
 
     public VPNLocations(Context context) {
         this.context = context;
@@ -30,7 +30,7 @@ public class VPNLocations {
 
     public ArrayList<VPNLocation> getArrayList() {
         ArrayList<VPNLocation> vpnLocations = new ArrayList<>(locations.length());
-        for (int i = 0; i < (locations.length()-1); i++) {
+        for (int i = 0; i < (locations.length()); i++) {
             try {
                 JSONObject jsonLocation = (JSONObject) locations.get(i);
                 vpnLocations.add(

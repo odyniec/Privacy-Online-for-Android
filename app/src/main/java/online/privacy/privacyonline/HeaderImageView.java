@@ -199,6 +199,12 @@ public class HeaderImageView extends ImageView {
         this.startAnimation(shrinkAnimation);
     }
 
+    public void setClosed(View viewToReveal) {
+        int startHeight = this.getHeight();
+        this.getLayoutParams().height = (startHeight - changedHeight);
+        viewToReveal.getLayoutParams().height = changedHeight;
+        setGreyScale();
+    }
 
     // Hence follows: A bunch of private shit that no-one outside of this view class needs care about.
 

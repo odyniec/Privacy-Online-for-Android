@@ -35,7 +35,6 @@ public class SetupActivity extends AppCompatActivity {
     final private Activity activitySetup = this;
 
     private VerifyUserAccountReceiver verifyReceiver;
-    private GetLocationListReceiver locationReceiver;
     private ProfileManager profileManager;
     private VpnProfile openVPNProfile;
     private String vpnProfileName = "privacy-online";
@@ -70,7 +69,6 @@ public class SetupActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updatePreferences();
                 EditText inputTextUsername = (EditText) findViewById(R.id.input_text_username);
                 EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
                 clearErrorState(inputTextUsername);
@@ -95,11 +93,6 @@ public class SetupActivity extends AppCompatActivity {
         verifyFilter.addCategory(Intent.CATEGORY_DEFAULT);
         verifyReceiver = new VerifyUserAccountReceiver();
         registerReceiver(verifyReceiver, verifyFilter);
-
-        IntentFilter locationFilter = new IntentFilter(GetLocationListReceiver.API_RESPONSE);
-        locationFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        locationReceiver = new GetLocationListReceiver();
-        registerReceiver(locationReceiver, locationFilter);
 
         // Populate the Location list.
         VPNLocations vpnLocations = new VPNLocations(this);
@@ -128,7 +121,6 @@ public class SetupActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(locationReceiver);
         unregisterReceiver(verifyReceiver);
     }
 
@@ -174,9 +166,10 @@ public class SetupActivity extends AppCompatActivity {
             Log.i(LOG_TAG, "Received Service Broadcast");
             boolean checkResult = intent.getBooleanExtra(PrivacyOnlineAPIService.CHECK_RESULT, false);
 
-            // If the details were good, launch the ConnectionActivity Activity.
+            // If the details were good, save the details and launch the ConnectionActivity Activity.
             if (checkResult) {
                 Log.i(LOG_TAG, "User Account verified");
+                updatePreferences();
                 finish();
             } else {
                 Log.i(LOG_TAG, "User Account verification failed");
@@ -202,45 +195,5 @@ public class SetupActivity extends AppCompatActivity {
         Drawable wrappedDrawable = DrawableCompat.wrap(view.getBackground());
         DrawableCompat.setTintList(wrappedDrawable, stateList);
         view.setBackgroundDrawable(wrappedDrawable);
-    }
-
-    // Implement a receiver so we can use the APIService to check login details.
-    public class GetLocationListReceiver extends BroadcastReceiver {
-
-        public static final String API_RESPONSE =
-                "online.privacy.privacyonline.intent.action.RESPONSE_GET_LOCATION";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.i(LOG_TAG, "Received Get Location Service Broadcast");
-            ArrayList<VPNLocation> locationList
-                    = intent.getParcelableArrayListExtra(PrivacyOnlineAPIService.CHECK_RESULT);
-            // Stop the App crashing if we can't get stuff from the API
-            // TODO - Connectivity checking, and graceful handling.
-            if (locationList == null) {
-                locationList = new ArrayList<>();
-            }
-
-            final VPNLocationAdapter locationAdapter
-                    = new VPNLocationAdapter(context, R.layout.spinner_layout_full, locationList);
-
-            PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
-            utility.updateSpinnerValues(activitySetup, R.id.input_spinner_default_vpn_location,
-                    locationAdapter, new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                            SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
-                            final SharedPreferences.Editor preferencesEditor = preferences.edit();
-                            ;
-                            VPNLocation location = locationAdapter.getItem(position);
-                            preferencesEditor.putString("default_vpn_location", location.getHostname());
-                            preferencesEditor.apply();
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapter) {
-                        }
-                    });
-        }
     }
 }

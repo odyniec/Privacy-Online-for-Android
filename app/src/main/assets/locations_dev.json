@@ -60,6 +60,18 @@
     "headerimage": "header_manchester.jpg"
   },
   {
+    "label": "Dev Test - US",
+    "hostname": "node.vpn-test.dev.uk2.net",
+    "flag": "icon_devtest.png",
+    "headerimage": "header_devtest.jpg"
+  },
+  {
+    "label": "Dev Test - Singapore",
+    "hostname": "node2.vpn-test.dev.uk2.net",
+    "flag": "icon_devtest.png",
+    "headerimage": "header_devtest.jpg"
+  },
+  {
     "label": "USA - Atlanta",
     "hostname": "gateway.atlanta.privacy.online",
     "flag": "icon_usa.png",

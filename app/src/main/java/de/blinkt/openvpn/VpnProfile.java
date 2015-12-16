@@ -120,7 +120,7 @@ public class VpnProfile implements Serializable, Cloneable {
     public boolean mUseDefaultRoute = true;
     public boolean mUsePull = true;
     public String mCustomRoutes;
-    public boolean mCheckRemoteCN = true;
+    public boolean mCheckRemoteCN = false;
     public boolean mExpectTLSCert = false;
     public String mRemoteCN = "";
     public String mPassword = "";

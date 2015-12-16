@@ -105,36 +105,16 @@ public class ConnectionActivity extends AppCompatActivity {
         // Get the VPN Profile, or create one if we don't have one.
         profileManager = ProfileManager.getInstance(this);
         openVPNProfile = profileManager.getProfileByName(vpnProfileName);
+        if (openVPNProfile == null) {
+            poUtility.createVPNProfile(activityConnection, vpnProfileName);
+            openVPNProfile = profileManager.getProfileByName(vpnProfileName);
+        }
 
         // create an in-memory object for the header image so it can track it's own expaned/collapsed
         // animation state.
         headerImageView = (HeaderImageView) findViewById(R.id.header_image);
 
-        // Populate the Location list.
-        VPNLocations vpnLocations = new VPNLocations(this);
-        ArrayList<VPNLocation> locationList = vpnLocations.getArrayList();
-        final VPNLocationAdapter locationAdapter
-                = new VPNLocationAdapter(this, R.layout.spinner_layout_full, locationList);
-        PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
-        utility.updateSpinnerValues(activityConnection, R.id.input_spinner_vpn_location,
-                locationAdapter, new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        VPNLocation vpnLocation = locationAdapter.getItem(position);
-                        headerImageView.changeImageToAsset(vpnLocation.getHeaderImage());
-
-                        // If the VPN is connected, update the status to reflect that.
-                        if (vpnIsConnected()) {
-                            switchConnectionButtons(false);
-                            headerImageView.slideOpen(findViewById(R.id.input_spinner_vpn_location));
-                            showStatusBox();
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapter) {
-                    }
-                });
+        updateLocationSpinner();
 
         // Wire up the Dis/Connect buttons.
         final Button connectionButton = (Button) findViewById(R.id.button_connection);
@@ -152,14 +132,12 @@ public class ConnectionActivity extends AppCompatActivity {
                 Spinner vpnLocationSpinner = (Spinner) findViewById(R.id.input_spinner_vpn_location);
                 VPNLocation vpnServer = (VPNLocation) vpnLocationSpinner.getSelectedItem();
 
-                if (openVPNProfile == null) {
-                    poUtility.createVPNProfile(activityConnection, vpnProfileName);
-                }
                 openVPNProfile.mCaFilename = vpnCACertFile.getPath();
                 openVPNProfile.mUsername = username;
                 openVPNProfile.mPassword = password;
                 openVPNProfile.mCipher = "AES-256-CBC";
                 openVPNProfile.mAuth = "SHA256";
+                openVPNProfile.mCheckRemoteCN = false;
 
                 Connection conn = new Connection();
                 conn.mServerName = vpnServer.getHostname();
@@ -190,6 +168,35 @@ public class ConnectionActivity extends AppCompatActivity {
 
     }
 
+    private void updateLocationSpinner() {
+        // Populate the Location list.
+        VPNLocations vpnLocations = new VPNLocations(this);
+        ArrayList<VPNLocation> locationList = vpnLocations.getArrayList();
+        final VPNLocationAdapter locationAdapter
+                = new VPNLocationAdapter(this, R.layout.spinner_layout_full, locationList);
+        PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+        utility.updateSpinnerValues(activityConnection, R.id.input_spinner_vpn_location,
+                locationAdapter, new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                        VPNLocation vpnLocation = locationAdapter.getItem(position);
+                        headerImageView.changeImageToAsset(vpnLocation.getHeaderImage());
+
+                        // If the VPN is connected, update the status to reflect that.
+                        if (vpnIsConnected()) {
+                            switchConnectionButtons(false);
+                            headerImageView.slideOpen(findViewById(R.id.input_spinner_vpn_location));
+                            showStatusBox();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapter) {
+                    }
+                });
+    }
+
+
     private void switchConnectionButtons(boolean showConnect) {
         final Button connectionButton = (Button) findViewById(R.id.button_connection);
         final Button disconnectButton = (Button) findViewById(R.id.button_disconnect);
@@ -218,6 +225,9 @@ public class ConnectionActivity extends AppCompatActivity {
         if (!havePreferences()) {
             Intent intent = new Intent(this, SetupActivity.class);
             startActivity(intent);
+        }
+        if (!vpnIsConnected()) {
+            updateLocationSpinner();
         }
     }
 
@@ -366,7 +376,8 @@ public class ConnectionActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 switchConnectionButtons(true);
                 headerImageView.setGreyScale();
-                headerImageView.slideClosed(findViewById(R.id.input_spinner_vpn_location));
+                //headerImageView.slideClosed(findViewById(R.id.input_spinner_vpn_location));
+                headerImageView.setClosed(findViewById(R.id.input_spinner_vpn_location));
 
                 hideStatusBox();
 

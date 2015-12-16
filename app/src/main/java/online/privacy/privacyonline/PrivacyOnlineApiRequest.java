@@ -16,6 +16,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class PrivacyOnlineApiRequest {
 
     private static final String LOG_TAG = "p.o.api.request";
@@ -24,10 +26,9 @@ public class PrivacyOnlineApiRequest {
 
         // TODO - Remove this hacky temp code, and actually use the API remote call.
 //        SystemClock.sleep(3000);
-//        return (username.equals("jamesr") && password.equals("lessthanthree"));
-        return true;
-
-        /* TODO - Reinstate this code!
+        return (username.equals("jamesr") && password.equals("demo"));
+//        return true;
+/*
         Log.i(LOG_TAG, "Attempting to Verify User Account");
         JSONObject responseData;
         try {
@@ -46,7 +47,7 @@ public class PrivacyOnlineApiRequest {
             Log.e(LOG_TAG, ioe.toString());
             return false;
         }
-        */
+*/
     }
 
     public ArrayList<VPNLocation> getLocationList() {
@@ -78,8 +79,7 @@ public class PrivacyOnlineApiRequest {
         Log.i(LOG_TAG, "Attempting to verify with data payload: " + jsonPayload);
         InputStream  inputStream  = null;
         OutputStream outputStream = null;
-        String       apiUrl       = "http://polaris:3000";
-        //String       apiUrl       = "https://controller3.vpn-test.dev.uk2.net:3000";
+        String       apiUrl       = "https://api.privacy.online";
         String       apiKey       = "914B021A-8DE2-11E5-A61C-C0D88CCA4EEA";
         String       keyString    = "?key=" + apiKey;
 
@@ -88,7 +88,7 @@ public class PrivacyOnlineApiRequest {
 
         try {
             URL url = new URL(apiUrl + endPoint + keyString);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             // Sec 5 second connect/read timeouts
             connection.setReadTimeout(5000);
             connection.setConnectTimeout(5000);

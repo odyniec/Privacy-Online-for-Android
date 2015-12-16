@@ -5,7 +5,7 @@
               android:layout_height="wrap_content"
               android:gravity="center"
               android:background="@drawable/background_setup"
-              android:visibility="visible"
+              android:visibility="gone"
               android:id="@+id/status_box"
               android:paddingLeft="@dimen/status_box_padding_horizontal"
               android:paddingTop="@dimen/status_box_padding_vertical"

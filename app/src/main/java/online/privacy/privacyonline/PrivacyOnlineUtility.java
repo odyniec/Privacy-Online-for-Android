@@ -34,17 +34,17 @@ public class PrivacyOnlineUtility {
         final String currentDefaultLocation = preferences.getString("default_vpn_location", "");
         Log.i(LOG_TAG, "Default VPN Location: " + currentDefaultLocation);
 
-        final Spinner defaultVPNLocationSpinner = (Spinner) activity.findViewById(spinnerID);
-        defaultVPNLocationSpinner.setAdapter(locationAdapter);
+        final Spinner vpnLocationSpinner = (Spinner) activity.findViewById(spinnerID);
+        vpnLocationSpinner.setAdapter(locationAdapter);
 
         // Set the current selected item to be the default preference.
         if (!currentDefaultLocation.equals("")) {
             int currentDefaultItemPosition
                     = locationAdapter.getEntryLocationByHostname(currentDefaultLocation);
-            defaultVPNLocationSpinner.setSelection(currentDefaultItemPosition);
+            vpnLocationSpinner.setSelection(currentDefaultItemPosition);
         }
 
-        defaultVPNLocationSpinner.setOnItemSelectedListener(onItemSelectedListener);
+        vpnLocationSpinner.setOnItemSelectedListener(onItemSelectedListener);
     }
 
     public void createVPNProfile(Context context, String name) {
