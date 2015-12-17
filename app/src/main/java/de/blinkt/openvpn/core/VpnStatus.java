@@ -121,10 +121,10 @@ public class VpnStatus {
     }
 
     // keytool -printcert -jarfile de.blinkt.openvpn_85.apk
-    public static final byte[] officalkey = {-58, -42, -44, -106, 90, -88, -87, -88, -52, -124, 84, 117, 66, 79, -112, -111, -46, 86, -37, 109};
-    public static final byte[] officaldebugkey = {-99, -69, 45, 71, 114, -116, 82, 66, -99, -122, 50, -70, -56, -111, 98, -35, -65, 105, 82, 43};
-    public static final byte[] amazonkey = {-116, -115, -118, -89, -116, -112, 120, 55, 79, -8, -119, -23, 106, -114, -85, -56, -4, 105, 26, -57};
-    public static final byte[] fdroidkey = {-92, 111, -42, -46, 123, -96, -60, 79, -27, -31, 49, 103, 11, -54, -68, -27, 17, 2, 121, 104};
+    //public static final byte[] officalkey = {-58, -42, -44, -106, 90, -88, -87, -88, -52, -124, 84, 117, 66, 79, -112, -111, -46, 86, -37, 109};
+    //public static final byte[] officaldebugkey = {-99, -69, 45, 71, 114, -116, 82, 66, -99, -122, 50, -70, -56, -111, 98, -35, -65, 105, 82, 43};
+    //public static final byte[] amazonkey = {-116, -115, -118, -89, -116, -112, 120, 55, 79, -8, -119, -23, 106, -114, -85, -56, -4, 105, 26, -57};
+    //public static final byte[] fdroidkey = {-92, 111, -42, -46, 123, -96, -60, 79, -27, -31, 49, 103, 11, -54, -68, -27, 17, 2, 121, 104};
 
 
     private static ConnectionStatus mLastLevel = ConnectionStatus.LEVEL_NOTCONNECTED;
@@ -222,7 +222,7 @@ public class VpnStatus {
                 } else {
                     if (c != null) {
                         if (mRessourceId == R.string.mobile_info)
-                            return getMobileInfoString(c);
+                            return "";// getMobileInfoString(c);
                         if (mArgs == null)
                             return c.getString(mRessourceId);
                         else
@@ -254,6 +254,7 @@ public class VpnStatus {
             return mLevel;
         }
 
+        /*
         // The lint is wrong here
         @SuppressLint("StringFormatMatches")
         private String getMobileInfoString(Context c) {
@@ -294,8 +295,8 @@ public class VpnStatus {
             argsext[argsext.length - 2] = version;
 
             return c.getString(R.string.mobile_info, argsext);
-
         }
+        */
 
         public long getLogtime() {
             return logtime;

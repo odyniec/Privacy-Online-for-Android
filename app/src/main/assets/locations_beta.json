@@ -1,49 +1,49 @@
 [
   {
     "label": "France - Paris",
-    "hostname": "gateway.paris.privacy.online",
+    "hostname": "paris.privacy.online",
     "flag": "icon_france.png",
     "headerimage": "header_paris.jpg"
   },
   {
     "label": "Germany - Frankfurt",
-    "hostname": "gateway.frankfurt.privacy.online",
+    "hostname": "frankfurt.privacy.online",
     "flag": "icon_germany.png",
     "headerimage": "header_frankfurt.jpg"
   },
   {
     "label": "India - New Delhi",
-    "hostname": "gateway.newdelhi.privacy.online",
+    "hostname": "newdelhi.privacy.online",
     "flag": "icon_india.png",
     "headerimage": "header_new_delhi.jpg"
   },
   {
     "label": "Japan - Tokyo",
-    "hostname": "gateway.tokyo.privacy.online",
+    "hostname": "tokyo.privacy.online",
     "flag": "icon_japan.png",
     "headerimage": "header_tokyo.jpg"
   },
   {
     "label": "UK - London",
-    "hostname": "gateway.london.privacy.online",
+    "hostname": "london.privacy.online",
     "flag": "icon_uk.png",
     "headerimage": "header_london.jpg"
   },
   {
     "label": "UK - Manchester",
-    "hostname": "gateway.manchester.privacy.online",
+    "hostname": "manchester.privacy.online",
     "flag": "icon_uk.png",
     "headerimage": "header_manchester.jpg"
   },
   {
     "label": "USA - New York",
-    "hostname": "gateway.newyork.privacy.online",
+    "hostname": "newyork.privacy.online",
     "flag": "icon_usa.png",
     "headerimage": "header_new_york.jpg"
   },
   {
     "label": "USA - Salt Lake City",
-    "hostname": "gateway.slc.privacy.online",
+    "hostname": "slc.privacy.online",
     "flag": "icon_usa.png",
     "headerimage": "header_salt_lake_city.jpg"
   }

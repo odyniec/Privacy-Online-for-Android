@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import java.io.Serializable;
 
 public class Connection implements Serializable, Cloneable {
-    public String mServerName = "openvpn.blinkt.de";
+    public String mServerName = "";
     public String mServerPort = "1194";
     public boolean mUseUdp = true;
     public String mCustomConfiguration="";
@@ -18,7 +18,7 @@ public class Connection implements Serializable, Cloneable {
     public boolean mEnabled=true;
     public int mConnectTimeout = 0;
 
-    private static final long serialVersionUID = 92031902903829089L;
+    // private static final long serialVersionUID = 92031902903829089L;
 
 
     public String getConnectionBlock() {

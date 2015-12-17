@@ -21,7 +21,7 @@ public class VPNLocations {
 
     private Context context;
     private final JSONArray locations;
-    private final String assetFileName = "locations_dev.json";
+    private final String assetFileName = "locations_beta.json";
 
     public VPNLocations(Context context) {
         this.context = context;

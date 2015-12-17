@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -375,12 +376,7 @@ public class ConnectionActivity extends AppCompatActivity {
         } else if (requestCode == VPN_DISCONNECT) {
             if (resultCode == Activity.RESULT_OK) {
                 switchConnectionButtons(true);
-                headerImageView.setGreyScale();
-                //headerImageView.slideClosed(findViewById(R.id.input_spinner_vpn_location));
-                headerImageView.setClosed(findViewById(R.id.input_spinner_vpn_location));
-
-                hideStatusBox();
-
+                hideStatusBoxAndCloseHeader();
                 Toast toast = Toast.makeText(activityConnection, "VPN Disconnected", Toast.LENGTH_LONG);
                 toast.show();
             }
@@ -399,9 +395,29 @@ public class ConnectionActivity extends AppCompatActivity {
         }
     }
 
-    private void hideStatusBox() {
-        LinearLayout statusBox = (LinearLayout) findViewById(R.id.status_box);
-        statusBox.setVisibility(View.GONE);
+    private void hideStatusBoxAndCloseHeader() {
+        final LinearLayout statusBox = (LinearLayout) findViewById(R.id.status_box);
+
+        Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                statusBox.setVisibility(View.GONE);
+                headerImageView.setGreyScale();
+                headerImageView.slideClosed(findViewById(R.id.input_spinner_vpn_location));
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        statusBox.startAnimation(fadeOut);
     }
 
     private void updateConnectionStatusText(String status) {

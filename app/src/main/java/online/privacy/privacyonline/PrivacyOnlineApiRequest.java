@@ -26,9 +26,9 @@ public class PrivacyOnlineApiRequest {
 
         // TODO - Remove this hacky temp code, and actually use the API remote call.
 //        SystemClock.sleep(3000);
-        return (username.equals("jamesr") && password.equals("demo"));
+//        return (username.equals("jamesr") && password.equals("demo"));
 //        return true;
-/*
+
         Log.i(LOG_TAG, "Attempting to Verify User Account");
         JSONObject responseData;
         try {
@@ -47,7 +47,7 @@ public class PrivacyOnlineApiRequest {
             Log.e(LOG_TAG, ioe.toString());
             return false;
         }
-*/
+
     }
 
     public ArrayList<VPNLocation> getLocationList() {
