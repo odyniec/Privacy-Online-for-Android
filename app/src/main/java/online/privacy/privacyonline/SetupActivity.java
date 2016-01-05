@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class SetupActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonSave = (Button) findViewById(R.id.button_save);
+        final Button buttonSave = (Button) findViewById(R.id.button_save);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +74,8 @@ public class SetupActivity extends AppCompatActivity {
                 EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
                 clearErrorState(inputTextUsername);
                 clearErrorState(inputTextPassword);
+
+                setWorkingState(true);
 
                 Intent apiIntent = new Intent(contextSetup, PrivacyOnlineAPIService.class);
                 apiIntent.putExtra(PrivacyOnlineAPIService.PARAM_USERNAME, inputTextUsername.getText().toString());
@@ -166,6 +169,9 @@ public class SetupActivity extends AppCompatActivity {
             Log.i(LOG_TAG, "Received Service Broadcast");
             boolean checkResult = intent.getBooleanExtra(PrivacyOnlineAPIService.CHECK_RESULT, false);
 
+            // Update the progressbar/button as we got a response.
+            setWorkingState(false);
+
             // If the details were good, save the details and launch the ConnectionActivity Activity.
             if (checkResult) {
                 Log.i(LOG_TAG, "User Account verified");
@@ -181,6 +187,19 @@ public class SetupActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void setWorkingState(boolean isWorking) {
+        Button buttonSave = (Button) findViewById(R.id.button_save);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_save);
+
+        if (isWorking) {
+            buttonSave.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            buttonSave.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setErrorState(View view) {
