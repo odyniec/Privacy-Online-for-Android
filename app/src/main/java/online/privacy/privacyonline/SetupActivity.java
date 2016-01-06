@@ -16,10 +16,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
@@ -49,10 +51,24 @@ public class SetupActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
 
         final EditText usernameInput = (EditText) findViewById(R.id.input_text_username);
-        usernameInput.setText(preferences.getString("username", ""));
-
         final EditText passwordInput = (EditText) findViewById(R.id.input_password_password);
+
+        usernameInput.setText(preferences.getString("username", ""));
+        usernameInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (   (event.getAction() == KeyEvent.ACTION_DOWN)
+                    && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    usernameInput.clearFocus();
+                    passwordInput.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         passwordInput.setText(preferences.getString("password", ""));
+
 
         // Ugh, apparently we can't define text on buttons to have the underlined property from
         // within the XML, so we'll do it here we have to set the intent chooser here anyway.
@@ -74,6 +90,7 @@ public class SetupActivity extends AppCompatActivity {
                 EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
                 clearErrorState(inputTextUsername);
                 clearErrorState(inputTextPassword);
+                setErrorInfoVisibility(View.INVISIBLE);
 
                 setWorkingState(true);
 
@@ -184,6 +201,7 @@ public class SetupActivity extends AppCompatActivity {
 
                 setErrorState(inputTextUsername);
                 setErrorState(inputTextPassword);
+                setErrorInfoVisibility(View.VISIBLE);
             }
         }
 
@@ -202,6 +220,15 @@ public class SetupActivity extends AppCompatActivity {
         }
     }
 
+    private void setErrorInfoVisibility(int visibility) {
+        GridLayout errorInfo = (GridLayout) findViewById(R.id.credential_error_info);
+        errorInfo.setVisibility(visibility);
+    }
+
+
+    // View.setBackgroundDrawable is deprecated from api16, it's now just setBackground(Drawable)
+    // but we can't use that because we're using api14 as a min.
+    @SuppressWarnings("deprecation")
     private void setErrorState(View view) {
         ColorStateList stateList = ContextCompat.getColorStateList(activitySetup, R.color.input_text_error);
         Drawable wrappedDrawable = DrawableCompat.wrap(view.getBackground());
@@ -209,6 +236,9 @@ public class SetupActivity extends AppCompatActivity {
         view.setBackgroundDrawable(wrappedDrawable);
     }
 
+    // View.setBackgroundDrawable is deprecated from api16, it's now just setBackground(Drawable)
+    // but we can't use that because we're using api14 as a min.
+    @SuppressWarnings("deprecation")
     private void clearErrorState(View view) {
         ColorStateList stateList = ContextCompat.getColorStateList(activitySetup, R.color.input_text_normal);
         Drawable wrappedDrawable = DrawableCompat.wrap(view.getBackground());

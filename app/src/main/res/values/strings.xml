@@ -7,7 +7,7 @@
     <string name="title_activity_login">Privacy Online</string>
     <string name="privacy_online_signup">https://privacy.online/signup</string>
     <string name="settings_save">Save</string>
-
+    <string name="credential_error">Incorrect Username or Password</string>
 
     <!-- These strings should not be visible to the user -->
     <string name="state_user_vpn_permission" translatable="false">Waiting for user permission to use VPN API</string>
