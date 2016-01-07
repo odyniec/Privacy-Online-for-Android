@@ -3,11 +3,31 @@
     <string name="privacyonline_preferences">online.privacy.privacyonline.PREFERENCES</string>
 
     <string name="app_name">Privacy Online</string>
+    <string name="app_name_full">Privacy Online for Android</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Privacy Online</string>
     <string name="privacy_online_signup">https://privacy.online/signup</string>
     <string name="settings_save">Save</string>
     <string name="credential_error">Incorrect Username or Password</string>
+
+    <string name="about_heading_privacyonline">privacy.online is a UK2GROUP company</string>
+    <string name="about_heading_openvpn_for_android">OpenVPN for Android</string>
+    <string name="about_heading_openvpn">OpenVPN</string>
+    <string name="about_heading_lzo">LZO</string>
+    <string name="about_heading_openssl">OpenSSL</string>
+    <string name="about_heading_bouncycastle">Bouncy Castle Crypto APIs</string>
+
+    <string name="about_text_hsi_address">517 W. 100 N., Suite 225\nProvidence, UT 84332\nToll Free Phone: 800.222.2165\nInternational Phone: 435.755.3433\nFAX: 435.755.3449</string>
+    <string name="about_text_sourcecode">The source code for Privacy Online for Android is freely available on <a href="https://github.com/UK2Group">GitHub</a>.</string>
+    <string name="about_text_openvpn_for_android">Privacy Online for Android\'s OpenVPN back-end service code is based upon "OpenVPN for Android" by Arne Schwabe, in accordance with the GPLv2 Licensing. You can find his project on <a href="https://github.com/schwabe/ics-openvpn">GitHub</a>.</string>
+    <string name="about_text_openvpn">Copyright &#169; 2002&#8211;2010 OpenVPN Technologies, Inc.\nOpenVPN is a trademark of OpenVPN Technologies, Inc.</string>
+    <string name="about_text_lzo">Copyright &#169; 1996&#8211;2011 Markus Franz Xaver Johannes Oberhumer.</string>
+    <string name="about_text_openssl">This product includes software developed by the OpenSSL Project for use\nin the OpenSSL Toolkit. Copyright &#169; 1995&#8211;2008 The OpenSSL Project. All rights reserved.\n\nThis product includes cryptographic software written by Eric Young Copyright &#169; 1995&#8211;1998 Eric Young. All rights reserved.</string>
+    <string name="about_text_bouncycastle">Coptyright &#169; 2000&#8211;2012 The Legion Of The Bouncy Castle. (http://www.bouncycastle.org)</string>
+
+
+
+
 
     <!-- These strings should not be visible to the user -->
     <string name="state_user_vpn_permission" translatable="false">Waiting for user permission to use VPN API</string>
@@ -15,16 +35,14 @@
     <string name="state_user_vpn_password_cancelled" translatable="false">VPN password input dialog cancelled</string>
     <string name="state_user_vpn_permission_cancelled" translatable="false">VPN API permission dialog cancelled</string>
 
-    <string name="opevpn_copyright" translatable="false">Copyright © 2002–2010 OpenVPN Technologies, Inc. &lt;sales@openvpn.net>\n
-
-          "OpenVPN" is a trademark of OpenVPN Technologies, Inc.\n</string>
+    <string name="opevpn_copyright" translatable="false">Copyright © 2002–2010 OpenVPN Technologies, Inc. &lt;sales@openvpn.net>\n"OpenVPN" is a trademark of OpenVPN Technologies, Inc.\n</string>
     <string name="defaultserver" translatable="false">openvpn.uni-paderborn.de</string>
     <string name="defaultport" translatable="false">1194</string>
     <string name="copyright_file_dialog" translatable="false">File Dialog based on work by Alexander Ponomarev</string>
     <string name="lzo_copyright" translatable="false">Copyright © 1996 – 2011 Markus Franz Xaver Johannes Oberhumer</string>
     <string name="copyright_openssl" translatable="false">        This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit\n
         Copyright © 1998-2008 The OpenSSL Project. All rights reserved.\n\n
-        This product includes cryptographic software written by Eric Young (eay@cryptsoft.com)\n
+        \This product includes cryptographic software written by Eric Young (eay@cryptsoft.com)\n
         Copyright © 1995-1998 Eric Young (eay@cryptsoft.com) All rights reserved.</string>
     <string name="openvpn" translatable="false">OpenVPN</string>
     <string name="file_dialog" translatable="false">File Dialog</string>
@@ -106,7 +124,7 @@
     <string name="title_cancel">Disconnect VPN</string>
     <string name="cancel_connection_query">Do you wish to disconnect the VPN, or cancel the connection attempt?</string>
     <string name="remove_vpn">Remove VPN</string>
-    <string name="check_remote_tlscert">Checks whether the server uses a certificate with TLS Server extensions (--remote-cert-tls server)</string>
+    <string name="check_remote_tlscert">Checks whether the server uses a certificate with TLS Server extensions (&#8211;&#8211;remote&#8211;cert&#8211;tls server)</string>
     <string name="check_remote_tlscert_title">Expect TLS server certificate</string>
     <string name="remote_tlscn_check_summary">Checks the Remote Server Certificate Subject DN</string>
     <string name="remote_tlscn_check_title">Certificate Hostname Check</string>

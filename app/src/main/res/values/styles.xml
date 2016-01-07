@@ -53,6 +53,21 @@
         <item name="android:color">@color/status_box_primary_text</item>
         <item name="android:textColor">@color/status_box_primary_text</item>
     </style>
+    <style name="AppTheme.aboutPageText">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/about_text_size</item>
+        <item name="android:color">@color/about_text</item>
+        <item name="android:textColor">@color/about_text</item>
+        <item name="android:layout_marginTop">@dimen/about_text_body_container_margin_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/about_text_body_container_margin_horizontal</item>
+        <item name="android:layout_marginRight">@dimen/about_text_body_container_margin_horizontal</item>
+        <item name="android:layout_marginBottom">@dimen/about_text_body_container_margin_vertical</item>
+    </style>
+    <style name="AppTheme.aboutPageHeading" parent="AppTheme.aboutPageText">
+        <item name="android:textAlignment">center</item>
+    </style>
+
 
     <style name="logWindowStatusText">
         <item name="android:paddingLeft">@dimen/paddingItemsSidebarLog</item>

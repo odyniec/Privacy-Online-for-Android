@@ -45,7 +45,11 @@
                   android:label="@string/openvpn_log"
                   android:launchMode="singleTask" />
 
-        <activity android:name="online.privacy.privacyonline.AboutActivity"></activity>
+        <activity
+            android:name="online.privacy.privacyonline.AboutActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
 
         <service
             android:name=".PrivacyOnlineAPIService"

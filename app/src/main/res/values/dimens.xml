@@ -39,6 +39,16 @@
 
     <dimen name="connect_button_margin_top">10dp</dimen>
 
+    <dimen name="about_subtitle_size">15sp</dimen>
+    <dimen name="about_text_size">12sp</dimen>
+    <dimen name="about_divider_margin_vertical">15dp</dimen>
+    <dimen name="about_logo_margin_bottom">6dp</dimen>
+    <dimen name="about_logo_margin_top">20dp</dimen>
+    <dimen name="about_text_body_container_margin_horizontal">25dp</dimen>
+    <dimen name="about_text_body_container_margin_vertical">5dp</dimen>
+    <dimen name="about_text_body_container_padding_top">5dp</dimen>
+    <dimen name="about_text_body_container_padding_bottom">10dp</dimen>
+
     <!-- Stuff from de.blinkt.openvpn -->
     <dimen name="paddingItemsSidebarLog">20dp</dimen>
     <dimen name="stdpadding">8dp</dimen>
