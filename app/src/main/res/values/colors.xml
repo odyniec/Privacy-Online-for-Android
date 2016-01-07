@@ -1,30 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#64ae11</color>
-    <color name="colorPrimaryDark">#64ae11</color>
-    <color name="greyLight">#aaaaaa</color>
-    <color name="white">#FFFFFF</color>
+    <color name="colorPrimary">#FF64ae11</color>
+    <color name="colorPrimaryDark">#FF64ae11</color>
+    <color name="greyLight">#FFAAAAAA</color>
+    <color name="white">#FFFFFFFF</color>
     <color name="white90">#E6FFFFFF</color>
     <color name="black">#000000</color>
     <color name="setup_background_border">#FFD6D4D1</color>
     <color name="setup_background_color">@color/white90</color>
     <color name="toolbar_background">#FF303030</color>
+
     <color name="connection_background">#FFE2E2E2</color>
 
     <color name="status_box_divider">#FFCBC9C9</color>
-    <color name="status_box_primary_text">#FF9A9A9A</color> <!-- Title: Toboto bold 16px / up/down: Roboto Light 16px -->
+    <color name="status_box_primary_text">#FF9A9A9A</color> <!-- Title: Roboto bold 16px / up/down: Roboto Light 16px -->
     <color name="status_box_secondary_text">#FF231F20</color> <!-- Connected: #231f20 38px Roboto Light -->
 
     <color name="primary_text_color">#FF231F20</color>
     <color name="primary_text_color_inverse">#FFFFFFFF</color>
     <color name="secondary_text_color">#FF9A9A9A</color>
-    <color name="secondary_text_color_inverse">#FFFFFF</color>
-    <color name="secondary_text_material_dark">#FFFFFF</color>
+    <color name="secondary_text_color_inverse">#FFFFFFFF</color>
+    <color name="secondary_text_material_dark">#FFFFFFFF</color>
 
     <color name="errorRed">#AAF34235</color>
     <color name="errorRedHighlight">#FFF34235</color>
 
     <color name="signupLinkText">#FF2B3A45</color>
+
+    <color name="about_background">@color/connection_background</color>
+    <color name="about_header_text">#FF231F20</color> <!-- Header 14px Roboto #231f20 -->
+    <color name="about_text">#FF231F20</color> <!-- 12px Roboto #231f20 -->
+    <color name="about_link">#FF64AE11</color> <!-- hyper link #64ae11 -->
+    <color name="about_subtitle">#FF9A9A9A</color> <!-- 15px Roboto #9a9a9a -->
+    <color name="about_divider_top">#FFC6C6C6</color> <!-- Divider- #c6c6c6 and #ffffff -->
+    <color name="about_divider_bottom">@color/white</color>
+
+
 
     <!-- Indigo -->
     <!-- OpenVPN colours #203155, #C66D0D -->
