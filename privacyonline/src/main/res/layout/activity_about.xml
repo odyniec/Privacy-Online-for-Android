@@ -18,9 +18,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/about_logo"
-            android:background="@drawable/about_logo"
             android:layout_marginBottom="@dimen/about_logo_margin_bottom"
-            android:layout_marginTop="@dimen/about_logo_margin_top"/>
+            android:layout_marginTop="@dimen/about_logo_margin_top"
+            android:src="@drawable/about_logo"
+            android:scaleType="center"/>
 
         <TextView
             android:layout_width="wrap_content"
