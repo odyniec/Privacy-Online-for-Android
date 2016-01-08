@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PrivacyOnline.iml" filepath="$PROJECT_DIR$/PrivacyOnline.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/privacyonline/privacyonline.iml" filepath="$PROJECT_DIR$/privacyonline/privacyonline.iml" />
     </modules>
   </component>
 </project>
