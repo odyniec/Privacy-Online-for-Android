@@ -1,6 +1,6 @@
 [submodule "app/openvpn"]
-	path = app/openvpn
+	path = privacyonline/openvpn
 	url = git@github.com:schwabe/openvpn.git
 [submodule "app/openssl"]
-	path = app/openssl
+	path = privacyonline/openssl
 	url = git@github.com:schwabe/platform_external_openssl.git
