@@ -294,7 +294,7 @@
     <string name="state_noprocess">Not running</string>
     <string name="state_resolve">Resolving host names</string>
     <string name="state_tcp_connect">Connecting (TCP)</string>
-    <string name="state_auth_failed">Authentication failed</string>
+    <string name="state_auth_failed">Auth Failed</string>
     <string name="state_nonetwork">Waiting for network</string>
     <string name="state_not_connected">Disconnected</string>
     <string name="statusline_bytecount">↓%2$s/s %1$s - ↑%4$s/s %3$s</string>

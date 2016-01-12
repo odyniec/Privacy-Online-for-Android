@@ -1,6 +1,8 @@
 package online.privacy.privacyonline;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ColorMatrix;
@@ -23,20 +25,43 @@ import java.io.InputStream;
 public class HeaderImageView extends ImageView {
 
     // Member vars
-    private int changedHeight = 0;
-    private boolean isExpanded;
+    private Activity activity; // This View's Activity.
+
+    /**
+     * companionViewId
+     *
+     * This is the Android Resource ID of the view that will disappear when the header expands.
+     */
+    private int companionViewId = 0;
+
+    /**
+     * changedHeight
+     *
+     * The height of the companion view as displayed. This will act as a benchmark for the
+     * animations to know how far to grow/shrink.
+     */
+    private int heightChange = 0;
+
+    /**
+     * isExpanded
+     *
+     * Indicates the current status of the view.
+     */
+    private boolean isExpanded = false;
 
 
     // Constructors that override the ImageView ones. These are here so that we can act as a
     // bona fide ImageView and so the Android Studio design preview junk works.
-    public HeaderImageView(Context context) {
-        super(context);
+    public HeaderImageView(Context context) { super(context);
+        this.activity = (Activity) context;
     }
     public HeaderImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.activity = (Activity) context;
     }
     public HeaderImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.activity = (Activity) context;
     }
 
     /**
@@ -64,11 +89,17 @@ public class HeaderImageView extends ImageView {
      *
      * @param assetFile
      */
-    public void changeImageToAsset(final String assetFile) {
+    public void changeImageToAsset(final String assetFile, boolean vpnIsConnected) {
         final HeaderImageView us = this;
 
         if (us.getDrawable() == null) {
             this.setImageToAsset(assetFile);
+            return;
+        }
+
+        if (vpnIsConnected) {
+            this.setImageToAsset(assetFile);
+            this.unsetGreyScale();
             return;
         }
 
@@ -80,7 +111,7 @@ public class HeaderImageView extends ImageView {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                setImageToAsset(assetFile);
+                us.setImageToAsset(assetFile);
                 us.startAnimation(getAnimations().fadeIn);
             }
 
@@ -129,26 +160,28 @@ public class HeaderImageView extends ImageView {
      * Increases the image height in amount equal to the height of the specified view object, using
      * an animated transition.
      *
-     * @param viewToCrush
      */
-    public void slideOpen(final View viewToCrush) {
-
+    public void slideOpen() {
+        loadExpandedState();
         if (isExpanded) {
             return;
         }
 
-        int heightToGrow = viewToCrush.getHeight();
-        int startHeight = this.getHeight();
+        final View viewToCrush = this.activity.findViewById(this.companionViewId);
+        int startHeight   = this.getHeight();
+        this.heightChange = getCompanionViewHeight();
 
         // Store the staring height in a state machine so we can slide back to our original height.
-        this.changedHeight  = heightToGrow;
+        //int heightToGrow = viewToCrush.getHeight();
+        //this.heightChange  = heightToGrow;
 
-        ExpandAnimation expandAnimation = new ExpandAnimation(this, heightToGrow, startHeight, 800);
+        ExpandAnimation expandAnimation = new ExpandAnimation(this, this.heightChange, startHeight, 800);
         expandAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 isExpanded = true;
-                ShrinkAnimation shrinkVpnSpinner = new ShrinkAnimation(viewToCrush, changedHeight, changedHeight, 800);
+                saveExpandedState();
+                ShrinkAnimation shrinkVpnSpinner = new ShrinkAnimation(viewToCrush, heightChange, heightChange, 800);
                 viewToCrush.startAnimation(shrinkVpnSpinner);
             }
 
@@ -173,27 +206,31 @@ public class HeaderImageView extends ImageView {
      *
      * Also expands the given view to return it to it's previous state.
      *
-     * @param viewToReveal
      */
-    public void slideClosed(final View viewToReveal) {
+    public void slideClosed() {
 
         // Don't do it if we're already closed.
+        loadExpandedState();
+        loadHeightChange();
+
         if (!isExpanded) {
             return;
         }
 
+        final View viewToReveal = this.activity.findViewById(this.companionViewId);
         int startHeight = this.getHeight();
 
-        ShrinkAnimation shrinkAnimation = new ShrinkAnimation(this, changedHeight, startHeight, 1000);
+        ShrinkAnimation shrinkAnimation = new ShrinkAnimation(this, heightChange, startHeight, 1000);
         shrinkAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 isExpanded = false;
+                saveExpandedState();
                 setGreyScale();
 
                  // This Kludge is apparently required, because animating from 0 fails in a fiery ball of death.
                 viewToReveal.getLayoutParams().height = 1;
-                ExpandAnimation expandVpnSpinner = new ExpandAnimation(viewToReveal, (changedHeight - 1), 1, 800);
+                ExpandAnimation expandVpnSpinner = new ExpandAnimation(viewToReveal, (heightChange - 1), 1, 800);
                 viewToReveal.startAnimation(expandVpnSpinner);
             }
 
@@ -210,12 +247,84 @@ public class HeaderImageView extends ImageView {
 
     public void setClosed(View viewToReveal) {
         int startHeight = this.getHeight();
-        this.getLayoutParams().height = (startHeight - changedHeight);
-        viewToReveal.getLayoutParams().height = changedHeight;
-        setGreyScale();
+        this.getLayoutParams().height = (startHeight - this.heightChange);
+        viewToReveal.getLayoutParams().height = this.heightChange;
+        this.setGreyScale();
+    }
+
+    public void setOpen(View viewToCrush) {
+        loadHeightChange();
+        int otherViewHeight = this.heightChange;
+        this.getLayoutParams().height = this.getLayoutParams().height + otherViewHeight;
+        viewToCrush.getLayoutParams().height = 0;
+        this.unsetGreyScale();
+    }
+
+
+    /**
+     * setCompanionView
+     *
+     * Used to pre-configure the HeaderImageView. Tells it which view resource should be manipulated
+     * along with the image itself. Also stores the height of said companion view, so we have an
+     * animation parameter.
+     *
+     * @param viewResourceId
+     */
+    public void setCompanionView(int viewResourceId) {
+        this.companionViewId = viewResourceId;
     }
 
     // Hence follows: A bunch of private shit that no-one outside of this view class needs care about.
+
+    // Because this instance doesn't persist across activities, we need to store the state in
+    // sharedpreferences as that persists.
+    private SharedPreferences getOurPreferences() {
+        return this.activity.getSharedPreferences(
+                this.activity.getString(R.string.privacyonline_preferences), Context.MODE_PRIVATE);
+    }
+
+    private void saveHeightChange() {
+        SharedPreferences preferences = getOurPreferences();
+        int storedHeightChange = preferences.getInt("header-height-change", 0);
+        if (storedHeightChange == 0) {
+            SharedPreferences.Editor prefsEditor = preferences.edit();
+            prefsEditor.putInt("header-height-change", this.heightChange);
+            prefsEditor.apply();
+        }
+    }
+
+    private void saveExpandedState() {
+        SharedPreferences preferences = getOurPreferences();
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        prefsEditor.putBoolean("header-is-expanded", this.isExpanded);
+        prefsEditor.apply();
+    }
+
+    // Likewise, we need to pull the stored state,
+    private void loadHeightChange() {
+        SharedPreferences preferences = getOurPreferences();
+        int storedHeightChange = preferences.getInt("header-height-change", 0);
+        if (storedHeightChange != 0) {
+            this.heightChange = storedHeightChange;
+        }
+    }
+
+    private void loadExpandedState() {
+        SharedPreferences preferences = getOurPreferences();
+        this.isExpanded = preferences.getBoolean("header-is-expanded", false);
+    }
+
+    private int getCompanionViewHeight() {
+        this.loadHeightChange();
+        if (this.heightChange != 0) {
+            return this.heightChange;
+        }
+
+        this.heightChange = this.activity.findViewById(this.companionViewId).getHeight();
+        this.saveHeightChange();
+        return this.heightChange;
+    }
+
 
     private Bitmap getBitmapFromAsset(String assetFileName) {
         Bitmap bitmap = null;

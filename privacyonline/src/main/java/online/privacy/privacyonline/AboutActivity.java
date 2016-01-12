@@ -4,6 +4,8 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;

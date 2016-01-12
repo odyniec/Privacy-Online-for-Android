@@ -27,7 +27,7 @@
                          <ImageView
                              android:layout_width="234dp"
                              android:layout_height="111dp"
-                             android:id="@+id/imageView"
+                             android:id="@+id/setup_logo"
                              android:src="@drawable/setup_logo"
                              />
 

@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
@@ -101,7 +102,6 @@ public class SetupActivity extends AppCompatActivity {
                 startService(apiIntent);
             }
         });
-
     }
 
     @Override
@@ -121,7 +121,7 @@ public class SetupActivity extends AppCompatActivity {
                 = new VPNLocationAdapter(this, R.layout.spinner_layout_full, locationList);
         PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
         utility.updateSpinnerValues(activitySetup, R.id.input_spinner_default_vpn_location,
-                locationAdapter, new AdapterView.OnItemSelectedListener() {
+                locationAdapter, false, new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                         SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);

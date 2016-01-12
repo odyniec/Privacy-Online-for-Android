@@ -111,8 +111,11 @@ public class VPNLocationAdapter extends ArrayAdapter<VPNLocation> {
             TextView label    = (TextView)  row.findViewById(R.id.location_label);
             TextView hostname = (TextView)  row.findViewById(R.id.location_hostname);
 
-            PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
-            flag.setImageBitmap( utility.getBitmapFromAsset(context, item.getFlag()) );
+            flag.setImageResource(
+                context.getResources().getIdentifier(
+                    item.getFlag(), "drawable", context.getPackageName()
+                )
+            );
             label.setText(item.getLabel());
             hostname.setText(item.getHostname());
         }

@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,7 +18,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,6 +38,8 @@ import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
 import de.blinkt.openvpn.core.Connection;
+
+
 
 //
 // TODO - Connectivity checking, and graceful handling.
@@ -116,11 +115,13 @@ public class ConnectionActivity extends AppCompatActivity {
             openVPNProfile = profileManager.getProfileByName(vpnProfileName);
         }
 
-        // create an in-memory object for the header image so it can track it's own expaned/collapsed
-        // animation state.
-        headerImageView = (HeaderImageView) findViewById(R.id.header_image);
-
+        // Setup the location spinner with the available locations.
         updateLocationSpinner();
+
+        // create an in-memory object for the header image so it can track it's own expaned/collapsed
+        // animation state, and tell it which view it'll be working with.
+        headerImageView = (HeaderImageView) findViewById(R.id.header_image);
+        headerImageView.setCompanionView(R.id.input_spinner_vpn_location);
 
         // Wire up the Dis/Connect buttons.
         final Button connectionButton = (Button) findViewById(R.id.button_connection);
@@ -171,54 +172,16 @@ public class ConnectionActivity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-    private void updateLocationSpinner() {
-        // Populate the Location list.
-        VPNLocations vpnLocations = new VPNLocations(this);
-        ArrayList<VPNLocation> locationList = vpnLocations.getArrayList();
-        final VPNLocationAdapter locationAdapter
-                = new VPNLocationAdapter(this, R.layout.spinner_layout_full, locationList);
-        PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
-        utility.updateSpinnerValues(activityConnection, R.id.input_spinner_vpn_location,
-                locationAdapter, new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        VPNLocation vpnLocation = locationAdapter.getItem(position);
-                        headerImageView.changeImageToAsset(vpnLocation.getHeaderImage());
-
-                        // If the VPN is connected, update the status to reflect that.
-                        if (vpnIsConnected()) {
-                            switchConnectionButtons(false);
-                            headerImageView.slideOpen(findViewById(R.id.input_spinner_vpn_location));
-                            showStatusBox();
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapter) {
-                    }
-                });
-    }
-
-
-    private void switchConnectionButtons(boolean showConnect) {
-        final Button connectionButton = (Button) findViewById(R.id.button_connection);
-        final Button disconnectButton = (Button) findViewById(R.id.button_disconnect);
-
-        if (showConnect) {
-            disconnectButton.setEnabled(false);
-            disconnectButton.setVisibility(View.GONE);
-            connectionButton.setEnabled(true);
-            connectionButton.setVisibility(View.VISIBLE);
-
-        } else {
-            connectionButton.setEnabled(false);
-            connectionButton.setVisibility(View.GONE);
-            disconnectButton.setEnabled(true);
-            disconnectButton.setVisibility(View.VISIBLE);
+        // If the VPN is connected, update the status to reflect that.
+        if (vpnIsConnected()) {
+            switchConnectionButtons(false);
+            headerImageView.setOpen(findViewById(R.id.input_spinner_vpn_location));
+            showStatusBox();
         }
+
+        //SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.privacyonline_preferences), Context.MODE_PRIVATE);
+        //String defaultHeaderImage
+        //setImageToAsset();
     }
 
 
@@ -324,6 +287,32 @@ public class ConnectionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == START_VPN_PROFILE) {
+            if (resultCode == Activity.RESULT_OK) {
+                new startOpenVpnThread().start();
+
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // User does not want us to start, so we just vanish
+                VpnStatus.updateStateString("USER_VPN_PERMISSION_CANCELLED", "", R.string.state_user_vpn_permission_cancelled,
+                        VpnStatus.ConnectionStatus.LEVEL_NOTCONNECTED);
+                finish();
+            }
+
+        } else if (requestCode == VPN_DISCONNECT) {
+            if (resultCode == Activity.RESULT_OK) {
+                switchConnectionButtons(true);
+                hideStatusBoxAndCloseHeader();
+                Toast toast = Toast.makeText(activityConnection, "VPN Disconnected", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
+
+
     private void unpackCAFile() {
 
         // Check to see if we have already unpacked the CA File. If so, then we need not bother.
@@ -363,28 +352,42 @@ public class ConnectionActivity extends AppCompatActivity {
         return !(locationDefault.equals("") || username.equals("") || password.equals(""));
     }
 
-    @Override
-    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void updateLocationSpinner() {
+        // Populate the Location list.
+        VPNLocations vpnLocations = new VPNLocations(this);
+        ArrayList<VPNLocation> locationList = vpnLocations.getArrayList();
+        final VPNLocationAdapter locationAdapter
+                = new VPNLocationAdapter(this, R.layout.spinner_layout_full, locationList);
+        PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
+        utility.updateSpinnerValues(activityConnection, R.id.input_spinner_vpn_location,
+                locationAdapter, vpnIsConnected(), new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                        VPNLocation vpnLocation = locationAdapter.getItem(position);
+                        headerImageView.changeImageToAsset(vpnLocation.getHeaderImage(), vpnIsConnected());
+                    }
 
-        if (requestCode == START_VPN_PROFILE) {
-            if (resultCode == Activity.RESULT_OK) {
-                new startOpenVpnThread().start();
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapter) {
+                    }
+                });
+    }
 
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // User does not want us to start, so we just vanish
-                VpnStatus.updateStateString("USER_VPN_PERMISSION_CANCELLED", "", R.string.state_user_vpn_permission_cancelled,
-                        VpnStatus.ConnectionStatus.LEVEL_NOTCONNECTED);
-                finish();
-            }
+    private void switchConnectionButtons(boolean showConnect) {
+        final Button connectionButton = (Button) findViewById(R.id.button_connection);
+        final Button disconnectButton = (Button) findViewById(R.id.button_disconnect);
 
-        } else if (requestCode == VPN_DISCONNECT) {
-            if (resultCode == Activity.RESULT_OK) {
-                switchConnectionButtons(true);
-                hideStatusBoxAndCloseHeader();
-                Toast toast = Toast.makeText(activityConnection, "VPN Disconnected", Toast.LENGTH_LONG);
-                toast.show();
-            }
+        if (showConnect) {
+            disconnectButton.setEnabled(false);
+            disconnectButton.setVisibility(View.GONE);
+            connectionButton.setEnabled(true);
+            connectionButton.setVisibility(View.VISIBLE);
+
+        } else {
+            connectionButton.setEnabled(false);
+            connectionButton.setVisibility(View.GONE);
+            disconnectButton.setEnabled(true);
+            disconnectButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -413,7 +416,7 @@ public class ConnectionActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 statusBox.setVisibility(View.GONE);
-                headerImageView.slideClosed(findViewById(R.id.input_spinner_vpn_location));
+                headerImageView.slideClosed();
             }
 
             @Override
@@ -450,6 +453,7 @@ public class ConnectionActivity extends AppCompatActivity {
         setByteCountText(down, diffDown, up, diffUp);
     }
 
+
     private class startOpenVpnThread extends Thread {
         @Override
         public void run() {
@@ -458,6 +462,7 @@ public class ConnectionActivity extends AppCompatActivity {
 
         }
     }
+
     public class VPNStatusReceiver extends BroadcastReceiver {
 
         public static final String ACTION = "de.blinkt.openvpn.VPN_STATUS";
@@ -481,9 +486,9 @@ public class ConnectionActivity extends AppCompatActivity {
             }
 
             if (vpnStatus.equals("CONNECTED")) {
-                headerImageView.slideOpen(findViewById(R.id.input_spinner_vpn_location));
+                headerImageView.slideOpen();
             } else if (vpnStatus.equals("NOPROCESS")) {
-                headerImageView.slideClosed(findViewById(R.id.input_spinner_vpn_location));
+                headerImageView.slideClosed();
             }
         }
     }

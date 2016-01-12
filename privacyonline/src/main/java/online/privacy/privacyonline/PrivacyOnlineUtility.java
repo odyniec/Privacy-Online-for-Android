@@ -25,6 +25,7 @@ public class PrivacyOnlineUtility {
     public void updateSpinnerValues(Activity activity,
                                     int spinnerID,
                                     VPNLocationAdapter locationAdapter,
+                                    boolean vpnIsConnected,
                                     AdapterView.OnItemSelectedListener onItemSelectedListener) {
         Context context = activity.getApplicationContext();
 
@@ -38,7 +39,7 @@ public class PrivacyOnlineUtility {
         vpnLocationSpinner.setAdapter(locationAdapter);
 
         // Set the current selected item to be the default preference.
-        if (!currentDefaultLocation.equals("")) {
+        if (!currentDefaultLocation.equals("") && !vpnIsConnected) {
             int currentDefaultItemPosition
                     = locationAdapter.getEntryLocationByHostname(currentDefaultLocation);
             vpnLocationSpinner.setSelection(currentDefaultItemPosition);
@@ -54,16 +55,5 @@ public class PrivacyOnlineUtility {
         profileManager.addProfile(openVPNProfile);
         profileManager.saveProfileList(context);
         profileManager.saveProfile(context, openVPNProfile);
-    }
-
-    public Bitmap getBitmapFromAsset(Context context, String assetFileName) {
-        Bitmap bitmap = null;
-        try {
-            InputStream assetFileStream = context.getAssets().open(assetFileName);
-            bitmap = BitmapFactory.decodeStream(assetFileStream);
-        } catch (IOException ioe) {
-            Log.e("PrivacyOnlineUtility","Unable to read image: " + assetFileName);
-        }
-        return bitmap;
     }
 }

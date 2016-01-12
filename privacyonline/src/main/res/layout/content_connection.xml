@@ -25,7 +25,7 @@
                 android:src="@drawable/toolbar_logo"
                 android:contentDescription="@string/app_name"
                 android:scaleType="fitCenter"
-                />
+                android:id="@+id/connection_logo"/>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
