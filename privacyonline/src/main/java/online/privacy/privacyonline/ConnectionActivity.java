@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import de.blinkt.openvpn.LaunchVPN;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.activities.DisconnectVPN;
-import de.blinkt.openvpn.core.OpenVPNManagement;
-import de.blinkt.openvpn.core.OpenVPNService;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
@@ -175,13 +173,9 @@ public class ConnectionActivity extends AppCompatActivity {
         // If the VPN is connected, update the status to reflect that.
         if (vpnIsConnected()) {
             switchConnectionButtons(false);
-            headerImageView.setOpen(findViewById(R.id.input_spinner_vpn_location));
+            headerImageView.setOpen();
             showStatusBox();
         }
-
-        //SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.privacyonline_preferences), Context.MODE_PRIVATE);
-        //String defaultHeaderImage
-        //setImageToAsset();
     }
 
 
@@ -195,9 +189,9 @@ public class ConnectionActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SetupActivity.class);
             startActivity(intent);
         }
-        if (!vpnIsConnected()) {
-            updateLocationSpinner();
-        }
+        //if (!vpnIsConnected()) {
+        //    updateLocationSpinner();
+        //}
     }
 
     @Override
@@ -223,29 +217,6 @@ public class ConnectionActivity extends AppCompatActivity {
         vpnByteCountReceiver = new VPNByteCountReceiver();
         registerReceiver(vpnByteCountReceiver, vpnByteCountFilter);
     }
-
-
-    /**
-     *  When the app is re-opened from the notification bar, or rotated, the activity is effectively
-     *  restarted. So we need to know whether the VPN is connected or not, and from that set the UI
-     *  accordingly so we don't crash in a horrible ball of fire trying to update invisible elements,
-     *  and ensure that we present the disconnect button so the VPN can be stopped.
-     */
-    private boolean vpnIsConnected() {
-
-        // Get the VPN status, if it's "not connected", then do nothing - all other statuses are
-        // worthy of the UI being in the "Active" mode.
-        vpnStatus = VpnStatus.getVpnStatus();
-        Log.e("ConnectionActivity", "VPN Status: " + vpnStatus);
-        if (   vpnStatus.equals("DISCONNECTED")
-            || vpnStatus.equals("EXITING")
-            || vpnStatus.equals("NOPROCESS")) {
-                return false;
-        }
-
-        return true;
-    }
-
 
     @Override
     protected void onPause() {
@@ -312,6 +283,26 @@ public class ConnectionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *  When the app is re-opened from the notification bar, or rotated, the activity is effectively
+     *  restarted. So we need to know whether the VPN is connected or not, and from that set the UI
+     *  accordingly so we don't crash in a horrible ball of fire trying to update invisible elements,
+     *  and ensure that we present the disconnect button so the VPN can be stopped.
+     */
+    private boolean vpnIsConnected() {
+
+        // Get the VPN status, if it's "not connected", then do nothing - all other statuses are
+        // worthy of the UI being in the "Active" mode.
+        vpnStatus = VpnStatus.getVpnStatus();
+        Log.e("ConnectionActivity", "VPN Status: " + vpnStatus);
+        if (   vpnStatus.equals("DISCONNECTED")
+                || vpnStatus.equals("EXITING")
+                || vpnStatus.equals("NOPROCESS")) {
+            return false;
+        }
+
+        return true;
+    }
 
     private void unpackCAFile() {
 
@@ -472,7 +463,7 @@ public class ConnectionActivity extends AppCompatActivity {
             String status = intent.getStringExtra("status");
             Log.e("ConnectionActivity", "VPN Status: "+status);
             vpnStatus = intent.getStringExtra("detailstatus");
-            Log.e("ConnectionActivity", "VPN Status Detail: " + vpnStatus);
+            Log.i("ConnectionActivity", "VPN Status Detail: " + vpnStatus);
 
             if (vpnStatus.equals("AUTH_FAILED")) {
                 authFailed = true;

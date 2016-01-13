@@ -245,19 +245,39 @@ public class HeaderImageView extends ImageView {
         this.startAnimation(shrinkAnimation);
     }
 
-    public void setClosed(View viewToReveal) {
+    /**
+     * setClosed
+     *
+     * Sets the HeaderImageView to the slid-in, greyscaled configuration. No animation takes place.
+     *
+     */
+    public void setClosed() {
+
         int startHeight = this.getHeight();
         this.getLayoutParams().height = (startHeight - this.heightChange);
-        viewToReveal.getLayoutParams().height = this.heightChange;
         this.setGreyScale();
+
+        View viewToReveal = this.activity.findViewById(this.companionViewId);
+        viewToReveal.getLayoutParams().height = this.heightChange;
     }
 
-    public void setOpen(View viewToCrush) {
+    /**
+     * setOpen
+     *
+     * Sets the HeaderImageView to the slid-out, non-greyscaled configuration. No animation takes
+     * place.
+     *
+     */
+    public void setOpen() {
+        Log.e("HeaderImageView", "setOpen called()");
         loadHeightChange();
+
+        this.unsetGreyScale();
         int otherViewHeight = this.heightChange;
         this.getLayoutParams().height = this.getLayoutParams().height + otherViewHeight;
+
+        View viewToCrush = this.activity.findViewById(this.companionViewId);
         viewToCrush.getLayoutParams().height = 0;
-        this.unsetGreyScale();
     }
 
 
@@ -273,6 +293,21 @@ public class HeaderImageView extends ImageView {
     public void setCompanionView(int viewResourceId) {
         this.companionViewId = viewResourceId;
     }
+
+
+    /**
+     * clearExpandedState
+     *
+     * If - for whatever reason - the app is killed while connected, the state will be wrong.
+     * We need to clear this state onDestroy. So implement a call for that here.
+     *
+     */
+    public void clearExpandedState() {
+        this.isExpanded = false;
+        saveExpandedState();
+    }
+
+
 
     // Hence follows: A bunch of private shit that no-one outside of this view class needs care about.
 

@@ -39,7 +39,7 @@ public class PrivacyOnlineUtility {
         vpnLocationSpinner.setAdapter(locationAdapter);
 
         // Set the current selected item to be the default preference.
-        if (!currentDefaultLocation.equals("") && !vpnIsConnected) {
+        if (!currentDefaultLocation.equals("") || !vpnIsConnected) {
             int currentDefaultItemPosition
                     = locationAdapter.getEntryLocationByHostname(currentDefaultLocation);
             vpnLocationSpinner.setSelection(currentDefaultItemPosition);
