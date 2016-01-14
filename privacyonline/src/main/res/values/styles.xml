@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/primary_text_color</item>
+        <item name="android:textColorLink">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/secondary_text_color</item>
         <item name="android:textColorSecondaryInverse">@color/secondary_text_color_inverse</item>
         <item name="android:textColorPrimary">@color/primary_text_color</item>
@@ -14,6 +15,8 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@color/primary_text_color</item>
+        <item name="android:textColorLink">@color/colorPrimary</item>
     </style>
     <style name="AppTheme.poButton" parent="@android:style/Widget.Button">
         <item name="android:layout_width">160sp</item>

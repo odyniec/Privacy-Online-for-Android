@@ -402,6 +402,8 @@ public class VpnStatus {
             return R.string.state_auth_failed;
         else if (state.equals("NONETWORK"))
             return R.string.state_nonetwork;
+        else if (state.equals("USERPAUSE"))
+            return R.string.state_userpause;
         else
             Log.e("VpnStatus", "Unknown VPN Status: "+state);
             return R.string.unknown_state;

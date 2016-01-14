@@ -329,7 +329,7 @@
     <string name="save_password">Save Password</string>
     <string name="pauseVPN">Pause VPN</string>
     <string name="resumevpn">Resume VPN</string>
-    <string name="state_userpause">VPN pause requested by user</string>
+    <string name="state_userpause">VPN paused</string>
     <string name="state_screenoff">VPN paused - screen off</string>
     <string name="device_specific">Device specifics Hacks</string>
     <string name="cannotparsecert">Cannot display certificate information</string>

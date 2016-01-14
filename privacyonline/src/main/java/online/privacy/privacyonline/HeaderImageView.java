@@ -25,7 +25,8 @@ import java.io.InputStream;
 public class HeaderImageView extends ImageView {
 
     // Member vars
-    private Activity activity; // This View's Activity.
+    private Activity activity;
+    private Context  context;
 
     /**
      * companionViewId
@@ -54,28 +55,30 @@ public class HeaderImageView extends ImageView {
     // bona fide ImageView and so the Android Studio design preview junk works.
     public HeaderImageView(Context context) { super(context);
         this.activity = (Activity) context;
+        this.context  = context;
     }
     public HeaderImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.activity = (Activity) context;
+        this.context  = context;
     }
     public HeaderImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.activity = (Activity) context;
+        this.context  = context;
     }
 
     /**
      * setImageToAsset - Set this view's src asset bitmap image to the specified file.
      *
      * Takes a filename that exists in the Android Assets folder for this app, and changes this
-     * "ImageView" src to it. Also sets this image to grey-scale.
+     * "ImageView" src to it.
      *
      * @param assetFile
      */
 
     public void setImageToAsset(String assetFile) {
         this.setImageBitmap(getBitmapFromAsset(assetFile));
-        this.setGreyScale();
     }
 
     /**
@@ -93,13 +96,20 @@ public class HeaderImageView extends ImageView {
         final HeaderImageView us = this;
 
         if (us.getDrawable() == null) {
+
+            if (vpnIsConnected) {
+                this.unsetGreyScale();
+            } else {
+                this.setGreyScale();
+            }
+
             this.setImageToAsset(assetFile);
             return;
         }
 
         if (vpnIsConnected) {
-            this.setImageToAsset(assetFile);
             this.unsetGreyScale();
+            this.setImageToAsset(assetFile);
             return;
         }
 
@@ -129,6 +139,16 @@ public class HeaderImageView extends ImageView {
      */
     public boolean getIsExpanded() {
         return isExpanded;
+    }
+
+    /**
+     * setIsExpanded
+     *
+     * public setter for the isExpanded state member.
+     */
+    public void setIsExpanded(boolean isExpanded) {
+        this.isExpanded = isExpanded;
+        saveExpandedState();
     }
 
     /**
@@ -306,7 +326,6 @@ public class HeaderImageView extends ImageView {
         this.isExpanded = false;
         saveExpandedState();
     }
-
 
 
     // Hence follows: A bunch of private shit that no-one outside of this view class needs care about.

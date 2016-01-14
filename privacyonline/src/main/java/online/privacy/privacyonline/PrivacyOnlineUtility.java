@@ -39,10 +39,22 @@ public class PrivacyOnlineUtility {
         vpnLocationSpinner.setAdapter(locationAdapter);
 
         // Set the current selected item to be the default preference.
+        Log.i(LOG_TAG, "vpnIsConnected: "+vpnIsConnected);
         if (!currentDefaultLocation.equals("") || !vpnIsConnected) {
             int currentDefaultItemPosition
                     = locationAdapter.getEntryLocationByHostname(currentDefaultLocation);
             vpnLocationSpinner.setSelection(currentDefaultItemPosition);
+        }
+
+        if (vpnIsConnected) {
+
+            // If we've been relaunched from the StatusBar Notification's PendingIntent, then
+            // we need to set the location to where ever we're connected too, as it forces a reset
+            // of the app.
+            VpnProfile openVPNProfile = ProfileManager.getLastConnectedProfile(activity, false);
+            String server = openVPNProfile.mServerName;
+            Log.e(LOG_TAG, "Restarted from notification, setting image to location: "+server);
+            vpnLocationSpinner.setSelection(locationAdapter.getEntryLocationByHostname(server));
         }
 
         vpnLocationSpinner.setOnItemSelectedListener(onItemSelectedListener);

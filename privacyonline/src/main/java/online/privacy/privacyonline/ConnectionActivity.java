@@ -137,9 +137,11 @@ public class ConnectionActivity extends AppCompatActivity {
                 Spinner vpnLocationSpinner = (Spinner) findViewById(R.id.input_spinner_vpn_location);
                 VPNLocation vpnServer = (VPNLocation) vpnLocationSpinner.getSelectedItem();
 
+                openVPNProfile.mName = "PrivacyOnline";
                 openVPNProfile.mCaFilename = vpnCACertFile.getPath();
                 openVPNProfile.mUsername = username;
                 openVPNProfile.mPassword = password;
+                openVPNProfile.mServerName = vpnServer.getHostname();
                 openVPNProfile.mCipher = "AES-256-CBC";
                 openVPNProfile.mAuth = "SHA256";
                 openVPNProfile.mCheckRemoteCN = false;
@@ -149,6 +151,7 @@ public class ConnectionActivity extends AppCompatActivity {
                 openVPNProfile.mConnections[0] = conn;
 
                 profileManager.addProfile(openVPNProfile);
+                ProfileManager.setConnectedVpnProfile(activityConnection, openVPNProfile);
                 profileManager.saveProfileList(activityConnection);
                 profileManager.saveProfile(activityConnection, openVPNProfile);
 
@@ -172,9 +175,17 @@ public class ConnectionActivity extends AppCompatActivity {
 
         // If the VPN is connected, update the status to reflect that.
         if (vpnIsConnected()) {
+            Log.e(LOG_TAG, "VPN is connected, restoring connected state.");
             switchConnectionButtons(false);
             headerImageView.setOpen();
             showStatusBox();
+
+        } else {
+            // If we're not connected, we need to make sure that the HeaderImageView knows it.
+            // An unexpected exit while connected may cause it to think we're connected, which
+            // would negate the slideOpen() call.
+            headerImageView.setIsExpanded(false);
+
         }
     }
 
@@ -478,7 +489,7 @@ public class ConnectionActivity extends AppCompatActivity {
 
             if (vpnStatus.equals("CONNECTED")) {
                 headerImageView.slideOpen();
-            } else if (vpnStatus.equals("NOPROCESS")) {
+            } else if (status.equals("LEVEL_NOTCONNECTED")) {
                 headerImageView.slideClosed();
             }
         }
