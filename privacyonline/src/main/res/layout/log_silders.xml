@@ -67,7 +67,7 @@
     <CheckBox
         tools:checked="true"
         android:id="@+id/clearlogconnect"
-        android:text="@string/clear_log_on_connect"
+        android:text="clear log on connect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>

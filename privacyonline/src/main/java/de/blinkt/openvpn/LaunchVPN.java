@@ -15,24 +15,18 @@ import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 
 import java.io.IOException;
 
-//import de.blinkt.openvpn.activities.LogWindow;
 import de.blinkt.openvpn.activities.LogWindow;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
 import de.blinkt.openvpn.core.VpnStatus.ConnectionStatus;
 import online.privacy.privacyonline.R;
+
+//import de.blinkt.openvpn.activities.LogWindow;
 
 /**
  * This Activity actually handles two stages of a launcher shortcut's life cycle.
@@ -238,7 +232,7 @@ public class LaunchVPN extends Activity {
 	}
 
 	void showConfigErrorDialog(int vpnok) {
-		AlertDialog.Builder d = new AlertDialog.Builder(this);
+		AlertDialog.Builder d = new AlertDialog.Builder(this, R.style.PrivacyOnlineAlertDialog);
 		d.setTitle(R.string.config_error_found);
 		d.setMessage(vpnok);
 		d.setPositiveButton(android.R.string.ok, new OnClickListener() {

@@ -5,6 +5,7 @@
         <item name="windowNoTitle">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="android:textColorLink">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/secondary_text_color</item>
@@ -70,6 +71,10 @@
     </style>
     <style name="AppTheme.aboutPageHeading" parent="AppTheme.aboutPageText">
         <item name="android:textAlignment">center</item>
+    </style>
+    <style name="PrivacyOnlineAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
     </style>
 
 

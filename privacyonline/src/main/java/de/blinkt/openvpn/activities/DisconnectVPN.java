@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
 import android.os.IBinder;
+import android.view.ContextThemeWrapper;
 
 import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.core.OpenVPNService;
@@ -66,13 +67,12 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
      */
 
     private void showDisconnectDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.PrivacyOnlineAlertDialog);
         builder.setTitle(R.string.title_cancel);
         builder.setMessage(R.string.cancel_connection_query);
+        builder.setPositiveButton(android.R.string.yes, this);
         builder.setNegativeButton(android.R.string.no, this);
-        builder.setPositiveButton(android.R.string.yes,this);
         builder.setOnCancelListener(this);
-
         builder.show();
     }
 
