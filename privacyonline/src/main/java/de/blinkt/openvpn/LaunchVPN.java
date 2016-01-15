@@ -19,14 +19,12 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import de.blinkt.openvpn.activities.LogWindow;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
 import de.blinkt.openvpn.core.VpnStatus.ConnectionStatus;
 import online.privacy.privacyonline.R;
 
-//import de.blinkt.openvpn.activities.LogWindow;
 
 /**
  * This Activity actually handles two stages of a launcher shortcut's life cycle.
@@ -106,7 +104,6 @@ public class LaunchVPN extends Activity {
 				VpnStatus.logError(R.string.shortcut_profile_notfound);
 				// show Log window to display error
                 Log.e("LaunchVPN","No profile to connect with");
-				showLogWindow();
 				finish();
 				return;
 			}
@@ -201,34 +198,14 @@ public class LaunchVPN extends Activity {
 
 		if(requestCode==START_VPN_PROFILE) {
 			if(resultCode == Activity.RESULT_OK) {
-				int needpw = mSelectedProfile.needUserPWInput(false);
-				if(needpw !=0) {
-					VpnStatus.updateStateString("USER_VPN_PASSWORD", "", R.string.state_user_vpn_password,
-                            ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
-					askForPW(needpw);
-				} else {
-					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);        
-					boolean showLogWindow = prefs.getBoolean("showlogwindow", true);
-                    showLogWindow = false;
-					if(!mhideLog && showLogWindow)
-						showLogWindow();
-					new startOpenVpnThread().start();
-				}
+                new startOpenVpnThread().start();
 			} else if (resultCode == Activity.RESULT_CANCELED) {
 				// User does not want us to start, so we just vanish
 				VpnStatus.updateStateString("USER_VPN_PERMISSION_CANCELLED", "", R.string.state_user_vpn_permission_cancelled,
                         ConnectionStatus.LEVEL_NOTCONNECTED);
-
 				finish();
 			}
 		}
-	}
-	void showLogWindow() {
-//        Log.e("LaunchVPN", "showLogWindow() called - probably shouldn't have been");
-		Intent startLW = new Intent(getBaseContext(),LogWindow.class);
-		startLW.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		startActivity(startLW);
-
 	}
 
 	void showConfigErrorDialog(int vpnok) {
@@ -278,7 +255,6 @@ public class LaunchVPN extends Activity {
 				// an official Sony Xperia Arc S image triggers this exception
                 Log.e("LaunchVPN", getString(R.string.no_vpn_support_image));
 				VpnStatus.logError(R.string.no_vpn_support_image);
-				showLogWindow();
 			}
 		} else {
 			onActivityResult(START_VPN_PROFILE, Activity.RESULT_OK, null);

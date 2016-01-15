@@ -200,9 +200,6 @@ public class ConnectionActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SetupActivity.class);
             startActivity(intent);
         }
-        //if (!vpnIsConnected()) {
-        //    updateLocationSpinner();
-        //}
     }
 
     @Override
@@ -511,43 +508,4 @@ public class ConnectionActivity extends AppCompatActivity {
             updateByteCountDisplay(down, up, diffDown, diffUp);
         }
     }
-
-
-
-
-/*
-    // Implement a receiver so we can use the APIService to check login details.
-    public class GetLocationListReceiver extends BroadcastReceiver {
-
-        public static final String API_RESPONSE =
-                "online.privacy.privacyonline.intent.action.RESPONSE_GET_LOCATION";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.i(LOG_TAG, "Received Get Location Service Broadcast");
-            ArrayList<VPNLocation> locationList
-                    = intent.getParcelableArrayListExtra(PrivacyOnlineAPIService.CHECK_RESULT);
-            // Stop the App crashing if we can't get stuff from the API
-            if (locationList == null) {
-                locationList = new ArrayList<>();
-            }
-
-            final VPNLocationAdapter locationAdapter
-                    = new VPNLocationAdapter(context, android.R.layout.simple_spinner_item, locationList);
-
-            PrivacyOnlineUtility utility = new PrivacyOnlineUtility();
-            utility.updateSpinnerValues(activityConnection, R.id.input_spinner_vpn_location,
-                    locationAdapter, new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapter) {
-                }
-            });
-        }
-    }
-*/
-
 }

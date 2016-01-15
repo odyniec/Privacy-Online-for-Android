@@ -38,14 +38,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Vector;
 
-//import de.blinkt.openvpn.BuildConfig;
-//import online.privacy.privacyonline.R;
 import online.privacy.privacyonline.BuildConfig;
 import online.privacy.privacyonline.ConnectionActivity;
 import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.activities.DisconnectVPN;
-//import de.blinkt.openvpn.activities.LogWindow;
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
 import de.blinkt.openvpn.core.VpnStatus.ConnectionStatus;
 import de.blinkt.openvpn.core.VpnStatus.StateListener;
@@ -420,12 +417,7 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
         registerDeviceStateReceiver(mManagement);
 
-
         ProfileManager.setConnectedVpnProfile(this, mProfile);
-        /* TODO: At the moment we have no way to handle asynchronous PW input
-         * Fixing will also allow to handle challenge/response authentication */
-        if (mProfile.needUserPWInput(true) != 0)
-            return START_NOT_STICKY;
 
         return START_STICKY;
     }

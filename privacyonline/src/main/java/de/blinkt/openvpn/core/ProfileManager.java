@@ -166,7 +166,6 @@ public class ProfileManager {
                 if (vp == null || vp.mName == null || vp.getUUID() == null)
                     continue;
 
-                vp.upgradeProfile();
                 profiles.put(vp.getUUID().toString(), vp);
 
             } catch (IOException | ClassNotFoundException e) {

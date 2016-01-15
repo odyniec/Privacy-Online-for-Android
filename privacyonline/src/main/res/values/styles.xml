@@ -76,18 +76,4 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:colorAccent">@color/colorPrimary</item>
     </style>
-
-
-    <style name="logWindowStatusText">
-        <item name="android:paddingLeft">@dimen/paddingItemsSidebarLog</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-    </style>
-
-    <style name="logWindowStatusTitle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
 </resources>

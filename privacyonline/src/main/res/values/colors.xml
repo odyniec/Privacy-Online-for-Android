@@ -34,17 +34,4 @@
     <color name="about_subtitle">#FF9A9A9A</color> <!-- 15px Roboto #9a9a9a -->
     <color name="about_divider_top">#FFC6C6C6</color> <!-- Divider- #c6c6c6 and #ffffff -->
     <color name="about_divider_bottom">@color/white</color>
-
-
-
-    <!-- Indigo -->
-    <!-- OpenVPN colours #203155, #C66D0D -->
-<!--    <color name="primary">#3F51B5</color>      <!- -500-->
-<!--    <color name="primary_dark">#303F9F</color> <!- -700-->
-    <color name="accent">#FFA726</color>       <!-- Orange 400 -->
-    <color name="gelb">#ffff00</color>
-    <color name="rot">#ff0000</color>
-    <color name="switchbar">@android:color/darker_gray</color>
-    <color name="background_tab_pressed">#1AFFFF</color>
-    <color name="accent_material_light">#64ae11</color>
 </resources>

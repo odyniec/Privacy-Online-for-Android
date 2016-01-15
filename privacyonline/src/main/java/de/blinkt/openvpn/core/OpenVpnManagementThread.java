@@ -509,9 +509,7 @@ public class OpenVpnManagementThread implements Runnable, OpenVPNManagement {
         // or  ">PASSWORD:Verification Failed: '%s' ['%s']"
         String needed;
 
-
         try {
-
             int p1 = argument.indexOf('\'');
             int p2 = argument.indexOf('\'', p1 + 1);
             needed = argument.substring(p1 + 1, p2);
@@ -526,9 +524,7 @@ public class OpenVpnManagementThread implements Runnable, OpenVPNManagement {
 
         String pw = null;
 
-        if (needed.equals("Private Key")) {
-            pw = mProfile.getPasswordPrivateKey();
-        } else if (needed.equals("Auth")) {
+        if (needed.equals("Auth")) {
             String usercmd = String.format("username '%s' %s\n",
                     needed, VpnProfile.openVpnEscape(mProfile.mUsername));
             managmentCommand(usercmd);

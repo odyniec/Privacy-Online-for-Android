@@ -41,11 +41,6 @@
         <activity android:name="de.blinkt.openvpn.activities.DisconnectVPN"
                   android:theme="@style/AppTheme"/>
 
-        <activity android:name="de.blinkt.openvpn.activities.LogWindow"
-                  android:allowTaskReparenting="true"
-                  android:label="@string/openvpn_log"
-                  android:launchMode="singleTask" />
-
         <activity
             android:name="online.privacy.privacyonline.AboutActivity"
             android:theme="@style/AppTheme.NoActionBar">
