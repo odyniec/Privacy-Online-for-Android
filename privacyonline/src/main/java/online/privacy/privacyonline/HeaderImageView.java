@@ -78,7 +78,11 @@ public class HeaderImageView extends ImageView {
      */
 
     public void setImageToAsset(String assetFile) {
-        this.setImageBitmap(getBitmapFromAsset(assetFile));
+        this.setImageResource(
+            context.getResources().getIdentifier(
+                assetFile, "drawable", context.getPackageName()
+            )
+        );
     }
 
     /**
@@ -377,18 +381,6 @@ public class HeaderImageView extends ImageView {
         this.heightChange = this.activity.findViewById(this.companionViewId).getHeight();
         this.saveHeightChange();
         return this.heightChange;
-    }
-
-
-    private Bitmap getBitmapFromAsset(String assetFileName) {
-        Bitmap bitmap = null;
-        try {
-            InputStream assetFileStream = getContext().getAssets().open(assetFileName);
-            bitmap = BitmapFactory.decodeStream(assetFileStream);
-        } catch (IOException ioe) {
-            Log.e("HeaderImage", "Unable to read image: " + assetFileName);
-        }
-        return bitmap;
     }
 
     private Animations getAnimations() {
