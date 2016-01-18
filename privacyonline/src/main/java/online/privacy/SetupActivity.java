@@ -1,5 +1,32 @@
 package online.privacy;
-
+/**
+ * SetupActivity
+ *
+ * Configuration UI activity for the Privacy Online for Android app.
+ *
+ * Takes the username / password credentials for the Privacy Online account and validates them
+ * against the Privacy Online API. As well as the default VPN location to use.
+ *
+ * Stores preferences using Android's builtin preferences manager which is private to this app.
+ *
+ * Copyright © 2016, privacy.online
+ * All rights reserved.
+ *
+ * This file is part of Privacy Online for Android.
+ *
+ * Privacy Online for Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Privacy Online for Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,7 +34,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -22,9 +48,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -39,10 +63,6 @@ public class SetupActivity extends AppCompatActivity {
     final private Activity activitySetup = this;
 
     private VerifyUserAccountReceiver verifyReceiver;
-    private ProfileManager profileManager;
-    private VpnProfile openVPNProfile;
-    private String vpnProfileName = "privacy-online";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,12 +159,6 @@ public class SetupActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        unregisterReceiver(verifyReceiver);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
     }
@@ -155,10 +169,17 @@ public class SetupActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(verifyReceiver);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
+    // Private method to handle storing the supplied preferences.
     private void updatePreferences() {
         SharedPreferences preferences = getSharedPreferences(getString(R.string.privacyonline_preferences), MODE_PRIVATE);
         final SharedPreferences.Editor preferencesEditor = preferences.edit();
@@ -174,39 +195,7 @@ public class SetupActivity extends AppCompatActivity {
         preferencesEditor.apply();
     }
 
-
-    // Implement a receiver so we can use the APIService to check login details.
-    public class VerifyUserAccountReceiver extends BroadcastReceiver {
-
-        public static final String API_RESPONSE =
-                "online.privacy.privacyonline.intent.action.RESPONSE_VERIFY_ACCOUNT";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.i(LOG_TAG, "Received Service Broadcast");
-            boolean checkResult = intent.getBooleanExtra(PrivacyOnlineAPIService.CHECK_RESULT, false);
-
-            // Update the progressbar/button as we got a response.
-            setWorkingState(false);
-
-            // If the details were good, save the details and launch the ConnectionActivity Activity.
-            if (checkResult) {
-                Log.i(LOG_TAG, "User Account verified");
-                updatePreferences();
-                finish();
-            } else {
-                Log.i(LOG_TAG, "User Account verification failed");
-                EditText inputTextUsername = (EditText) findViewById(R.id.input_text_username);
-                EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
-
-                setErrorState(inputTextUsername);
-                setErrorState(inputTextPassword);
-                setErrorInfoVisibility(View.VISIBLE);
-            }
-        }
-
-    }
-
+    // Used to change the UI. This gives the user indication that the button was pressed.
     private void setWorkingState(boolean isWorking) {
         Button buttonSave = (Button) findViewById(R.id.button_save);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_save);
@@ -220,6 +209,7 @@ public class SetupActivity extends AppCompatActivity {
         }
     }
 
+    // Updates the visibility of the Error info container.
     private void setErrorInfoVisibility(int visibility) {
         GridLayout errorInfo = (GridLayout) findViewById(R.id.credential_error_info);
         errorInfo.setVisibility(visibility);
@@ -244,5 +234,41 @@ public class SetupActivity extends AppCompatActivity {
         Drawable wrappedDrawable = DrawableCompat.wrap(view.getBackground());
         DrawableCompat.setTintList(wrappedDrawable, stateList);
         view.setBackgroundDrawable(wrappedDrawable);
+    }
+
+
+    /**
+     * VerifyUserAccountReceiver
+     *
+     * Public sub-class responsible for handling the result Broadcast from the PrivacyOnlineAPIService
+     * service.
+     */
+    public class VerifyUserAccountReceiver extends BroadcastReceiver {
+
+        public static final String API_RESPONSE =
+                "online.privacy.privacyonline.intent.action.RESPONSE_VERIFY_ACCOUNT";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean checkResult = intent.getBooleanExtra(PrivacyOnlineAPIService.CHECK_RESULT, false);
+
+            // Update the progressbar/button as we got a response.
+            setWorkingState(false);
+
+            // If the details were good, save the details and launch the ConnectionActivity Activity.
+            if (checkResult) {
+                Log.i(LOG_TAG, "User Account verified");
+                updatePreferences();
+                finish();
+            } else {
+                Log.i(LOG_TAG, "User Account verification failed");
+                EditText inputTextUsername = (EditText) findViewById(R.id.input_text_username);
+                EditText inputTextPassword = (EditText) findViewById(R.id.input_password_password);
+
+                setErrorState(inputTextUsername);
+                setErrorState(inputTextPassword);
+                setErrorInfoVisibility(View.VISIBLE);
+            }
+        }
     }
 }

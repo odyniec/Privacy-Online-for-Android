@@ -1,27 +1,53 @@
 package online.privacy;
-
+/**
+ * PrivacyOnlineUtility
+ *
+ * Utility class containing common code that is used in more that one Activity.
+ *
+ * Copyright © 2016, privacy.online
+ * All rights reserved.
+ *
+ * This file is part of Privacy Online for Android.
+ *
+ * Privacy Online for Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Privacy Online for Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.core.ProfileManager;
 
-/**
- * PrivacyOnlineUtility - Class holding common code used in more than one location.
- */
 public class PrivacyOnlineUtility {
 
     final private String LOG_TAG = "p.o.utility";
 
+    /**
+     * updateSpinnerValues - Common method for populating the Spinner UI elements with VPN locations
+     *
+     * Takes the Android resource view Id and an Adapted array of locations, along with a listener
+     * to handle events, and sets up the common Spinner element.
+     *
+     * @param activity Activity context for the spinner view.
+     * @param spinnerID Android resource view ID of the Spinner view element.
+     * @param locationAdapter ArrayAdapter<VPNLocation> list of VPN locations that can be connected to.
+     * @param vpnIsConnected boolean indication of whether the VPN is currently connected.
+     * @param onItemSelectedListener OnItemSeletedListener implementation to attach to the Spinner.
+     */
     public void updateSpinnerValues(Activity activity,
                                     int spinnerID,
                                     VPNLocationAdapter locationAdapter,
@@ -60,6 +86,14 @@ public class PrivacyOnlineUtility {
         vpnLocationSpinner.setOnItemSelectedListener(onItemSelectedListener);
     }
 
+    /**
+     * createVPNProfile - Create a VPN Profile using the ProfileManager.
+     *
+     * Creates a new VpnProfile instance within the ProfileManager for use in connecting the VPN.
+     *
+     * @param context Activity context for ProfileManager
+     * @param name The name to give to this profile instance.
+     */
     public void createVPNProfile(Context context, String name) {
         ProfileManager profileManager = ProfileManager.getInstance(context);
         VpnProfile openVPNProfile = new VpnProfile(name);

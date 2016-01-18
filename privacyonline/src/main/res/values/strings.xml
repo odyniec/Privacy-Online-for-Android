@@ -1,5 +1,5 @@
 <resources>
-    <string name="privacyonline_preferences">online.privacy.privacyonline.PREFERENCES</string>
+    <string name="privacyonline_preferences">online.privacy.PREFERENCES</string>
 
     <string name="app_name">Privacy Online</string>
     <string name="app_name_full">Privacy Online for Android</string>

@@ -1,15 +1,34 @@
 package online.privacy;
-
+/**
+ * PrivacyOnlineAPIService
+ *
+ * Network service implementation that handles HTTPS requests to the Privacy Online API
+ * in the background on a worker thread, allowing the UI thread freedom.
+ *
+ * Copyright © 2016, privacy.online
+ * All rights reserved.
+ *
+ * This file is part of Privacy Online for Android.
+ *
+ * Privacy Online for Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Privacy Online for Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- */
 public class PrivacyOnlineAPIService extends IntentService {
 
     private static final String LOG_TAG = "p.o.api.service";

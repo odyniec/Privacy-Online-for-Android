@@ -1,6 +1,28 @@
 package online.privacy;
-
-import android.os.SystemClock;
+/**
+ * PrivacyOnlineApiRequest
+ *
+ * HTTPS API interface class. Talks to the Privacy Online API over HTTPS.
+ * Used to verify user credentials.
+ *
+ * Copyright © 2016, privacy.online
+ * All rights reserved.
+ *
+ * This file is part of Privacy Online for Android.
+ *
+ * Privacy Online for Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Privacy Online for Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,7 +34,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -22,16 +43,24 @@ public class PrivacyOnlineApiRequest {
 
     private static final String LOG_TAG = "p.o.api.request";
 
+    /**
+     * verifyUserAccount - Check user credentials against the Privacy Online API.
+     *
+     * Uses HTTPS to verify the supplied credentials against the Privacy Online user account
+     * API. Returns true/false indicating whether or not the supplied credentials are valid.
+     *
+     * @param username String username for account.
+     * @param password String password for account.
+     * @return boolean validity of account credentials.
+     */
     public boolean verifyUserAccount(String username, String password) {
 
-        Log.i(LOG_TAG, "Attempting to Verify User Account");
         JSONObject responseData;
         try {
             JSONObject requestData = new JSONObject();
             requestData.put("username", username);
             requestData.put("password", password);
             responseData = makeAPIRequest("PUT", "/user/verify", requestData.toString());
-            Log.i(LOG_TAG, "Response data: " + responseData.get("ok"));
             return (responseData.getString("ok").equals("1"));
 
         } catch (JSONException je) {
@@ -45,8 +74,16 @@ public class PrivacyOnlineApiRequest {
 
     }
 
+    /**
+     * getLocationList() - Acquire the list of locations available for VPN connections.
+     *
+     * Retrieves a list of the currently available VPN locations from the Privacy Online API.
+     *
+     * *Not Currently Used*
+     *
+     * @return ArrayList<VPNLocation>
+     */
     public ArrayList<VPNLocation> getLocationList() {
-        Log.i(LOG_TAG, "Attempting to get location list.");
         JSONObject responseData;
         ArrayList<VPNLocation> locationList;
         try {
@@ -69,6 +106,7 @@ public class PrivacyOnlineApiRequest {
         }
     }
 
+    // Private worker method that actually communicates with the Privacy Online API.
     private JSONObject makeAPIRequest(String method, String endPoint, String jsonPayload)
             throws IOException, JSONException {
         Log.i(LOG_TAG, "Attempting to verify with data payload: " + jsonPayload);
@@ -123,13 +161,11 @@ public class PrivacyOnlineApiRequest {
         }
     }
 
+    // Util method for reading the IO stream in a buffered manner.
     private String readInputStream(InputStream inputStream, int contentLength) throws IOException {
         Reader reader = new InputStreamReader(inputStream, "UTF-8");
         char[] buffer = new char[contentLength];
         reader.read(buffer);
         return new String(buffer);
     }
-
 }
-
-

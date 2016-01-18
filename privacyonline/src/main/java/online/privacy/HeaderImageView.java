@@ -1,26 +1,39 @@
 package online.privacy;
-
+/**
+ * HeaderImageView
+ *
+ * Custom extended ImageView used to display / manage the "Header" image on the main
+ * ConnectionActivity screen. Encapsulated the logic for keeping state etc to this one view, rather
+ * than having it strewn all over the other code in multiple places.
+ *
+ * Copyright © 2016, privacy.online
+ * All rights reserved.
+ *
+ * This file is part of Privacy Online for Android.
+ *
+ * Privacy Online for Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Privacy Online for Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-/**
- * Let's see if we can encapsulate the header image controls into a Customer ImageView class.
- * Let that manage it's own state etc.
- */
 
 public class HeaderImageView extends ImageView {
 
@@ -50,7 +63,6 @@ public class HeaderImageView extends ImageView {
      */
     private boolean isExpanded = false;
 
-
     // Constructors that override the ImageView ones. These are here so that we can act as a
     // bona fide ImageView and so the Android Studio design preview junk works.
     public HeaderImageView(Context context) { super(context);
@@ -74,9 +86,8 @@ public class HeaderImageView extends ImageView {
      * Takes a filename that exists in the Android Assets folder for this app, and changes this
      * "ImageView" src to it.
      *
-     * @param assetFile
+     * @param assetFile Asset file name
      */
-
     public void setImageToAsset(String assetFile) {
         this.setImageResource(
             context.getResources().getIdentifier(
@@ -94,7 +105,7 @@ public class HeaderImageView extends ImageView {
      * If this ImageView currently has no Drawable, no animation takes place, instead setImageToAsset
      * is invoked alone to set the image in the first instance.
      *
-     * @param assetFile
+     * @param assetFile Asset file name
      */
     public void changeImageToAsset(final String assetFile, boolean vpnIsConnected) {
         final HeaderImageView us = this;
@@ -137,9 +148,10 @@ public class HeaderImageView extends ImageView {
     }
 
     /**
-     * getIsExpanded = public accessor for the isExpanded state member.
+     * getIsExpanded
      *
-     * @return
+     * public accessor for the isExpanded state member.
+     *
      */
     public boolean getIsExpanded() {
         return isExpanded;
@@ -194,10 +206,6 @@ public class HeaderImageView extends ImageView {
         final View viewToCrush = this.activity.findViewById(this.companionViewId);
         int startHeight   = this.getHeight();
         this.heightChange = getCompanionViewHeight();
-
-        // Store the staring height in a state machine so we can slide back to our original height.
-        //int heightToGrow = viewToCrush.getHeight();
-        //this.heightChange  = heightToGrow;
 
         ExpandAnimation expandAnimation = new ExpandAnimation(this, this.heightChange, startHeight, 800);
         expandAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -276,7 +284,6 @@ public class HeaderImageView extends ImageView {
      *
      */
     public void setClosed() {
-
         int startHeight = this.getHeight();
         this.getLayoutParams().height = (startHeight - this.heightChange);
         this.setGreyScale();
@@ -293,7 +300,6 @@ public class HeaderImageView extends ImageView {
      *
      */
     public void setOpen() {
-        Log.e("HeaderImageView", "setOpen called()");
         loadHeightChange();
 
         this.unsetGreyScale();
@@ -312,7 +318,7 @@ public class HeaderImageView extends ImageView {
      * along with the image itself. Also stores the height of said companion view, so we have an
      * animation parameter.
      *
-     * @param viewResourceId
+     * @param viewResourceId Android ID of the view to control in addition to the Header.
      */
     public void setCompanionView(int viewResourceId) {
         this.companionViewId = viewResourceId;

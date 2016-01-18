@@ -498,9 +498,7 @@ public class ConnectionActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String status = intent.getStringExtra("status");
-            Log.e("ConnectionActivity", "VPN Status: "+status);
             vpnStatus = intent.getStringExtra("detailstatus");
-            Log.i("ConnectionActivity", "VPN Status Detail: " + vpnStatus);
 
             if (vpnStatus.equals("AUTH_FAILED")) {
                 authFailed = true;
