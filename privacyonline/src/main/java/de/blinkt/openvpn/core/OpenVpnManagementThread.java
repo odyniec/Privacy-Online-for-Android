@@ -28,10 +28,8 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Vector;
 
-//import de.blinkt.openvpn.BuildConfig;
-//import online.privacy.privacyonline.R;
-import online.privacy.privacyonline.BuildConfig;
-import online.privacy.privacyonline.R;
+import online.privacy.BuildConfig;
+import online.privacy.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.core.VpnStatus.ConnectionStatus;
 

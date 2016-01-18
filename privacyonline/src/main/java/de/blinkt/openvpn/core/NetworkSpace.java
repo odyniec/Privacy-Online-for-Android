@@ -19,8 +19,7 @@ import java.util.PriorityQueue;
 import java.util.TreeSet;
 import java.util.Vector;
 
-//import de.blinkt.openvpn.BuildConfig;
-import online.privacy.privacyonline.BuildConfig;
+import online.privacy.BuildConfig;
 
 public class NetworkSpace {
 

@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2012-2014 Arne Schwabe
  * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
+ *
  */
 
 package de.blinkt.openvpn.core;
@@ -15,14 +16,13 @@ import android.net.NetworkInfo.State;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
-//import online.privacy.privacyonline.R;
-import online.privacy.privacyonline.R;
-import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
-
 import java.util.LinkedList;
-import java.util.Objects;
+
+import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
+import online.privacy.R;
 
 import static de.blinkt.openvpn.core.OpenVPNManagement.pauseReason;
+
 
 public class DeviceStateReceiver extends BroadcastReceiver implements ByteCountListener, OpenVPNManagement.PausedStateCallback {
     private final Handler mDisconnectHandler;

@@ -38,9 +38,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Vector;
 
-import online.privacy.privacyonline.BuildConfig;
-import online.privacy.privacyonline.ConnectionActivity;
-import online.privacy.privacyonline.R;
+import online.privacy.BuildConfig;
+import online.privacy.ConnectionActivity;
+import online.privacy.R;
 import de.blinkt.openvpn.VpnProfile;
 import de.blinkt.openvpn.activities.DisconnectVPN;
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;

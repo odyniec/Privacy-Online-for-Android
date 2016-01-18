@@ -21,7 +21,7 @@ import java.util.Vector;
 import de.blinkt.openvpn.VpnProfile;
 
 // Integrate this lib with PrivacyOnline App.
-import online.privacy.privacyonline.R;
+import online.privacy.R;
 
 
 public class VPNLaunchHelper {

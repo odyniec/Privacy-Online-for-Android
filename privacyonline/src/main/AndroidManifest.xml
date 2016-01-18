@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="online.privacy.privacyonline">
+          package="online.privacy">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         android:versionCode="102">
         <activity
-            android:name="online.privacy.privacyonline.ConnectionActivity"
+            android:name="online.privacy.ConnectionActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="online.privacy.privacyonline.SetupActivity"
+            android:name="online.privacy.SetupActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
@@ -42,7 +42,7 @@
                   android:theme="@style/AppTheme"/>
 
         <activity
-            android:name="online.privacy.privacyonline.AboutActivity"
+            android:name="online.privacy.AboutActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
@@ -51,7 +51,7 @@
             android:name=".PrivacyOnlineAPIService"
             android:exported="false">
             <intent-filter>
-                <action android:name="online.privacy.privacyonline.PrivacyOnlineAPIService" />
+                <action android:name="online.privacy.PrivacyOnlineAPIService" />
             </intent-filter>
         </service>
 

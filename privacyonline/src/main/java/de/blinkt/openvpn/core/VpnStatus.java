@@ -5,36 +5,23 @@
 
 package de.blinkt.openvpn.core;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.util.Arrays;
 import java.util.FormatFlagsConversionMismatchException;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.UnknownFormatConversionException;
 import java.util.Vector;
 
-//import online.privacy.privacyonline.R;
-import online.privacy.privacyonline.R;
+import online.privacy.R;
 
 public class VpnStatus {
 

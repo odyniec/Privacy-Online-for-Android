@@ -7,13 +7,16 @@ package de.blinkt.openvpn.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.view.ContextThemeWrapper;
 
-import online.privacy.privacyonline.R;
 import de.blinkt.openvpn.core.OpenVPNService;
 import de.blinkt.openvpn.core.ProfileManager;
+import online.privacy.R;
 
 /**
  * Created by arne on 13.10.13.
