@@ -72,10 +72,11 @@
                 android:layout_height="match_parent"
                 android:id="@+id/about_text_body_container"
                 android:paddingTop="@dimen/about_text_body_container_padding_top"
-                android:paddingBottom="@dimen/about_text_body_container_padding_bottom">
+                android:paddingBottom="@dimen/about_text_body_container_padding_bottom"
+                android:gravity="center_horizontal">
 
                 <TextView
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/about_heading_privacyonline"
                     android:text="@string/about_heading_privacyonline"
@@ -83,14 +84,14 @@
                     />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/about_text_hsi_address"
                     android:text="@string/about_text_hsi_address"
                     style="@style/AppTheme.aboutPageText"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/about_text_sourcecode"
                     android:text="@string/about_text_sourcecode"
@@ -98,7 +99,7 @@
                     style="@style/AppTheme.aboutPageText"/>
 
                 <TextView
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/about_heading_openvpn_for_android"
@@ -106,7 +107,7 @@
                     style="@style/AppTheme.aboutPageHeading"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/about_text_openvpn_for_android"
@@ -114,7 +115,7 @@
                     style="@style/AppTheme.aboutPageText"/>
 
                 <TextView
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/about_heading_openvpn"
@@ -122,7 +123,7 @@
                     style="@style/AppTheme.aboutPageHeading"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/about_text_openvpn"
@@ -130,7 +131,7 @@
                     style="@style/AppTheme.aboutPageText"/>
 
                 <TextView
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/about_heading_lzo"
@@ -138,7 +139,7 @@
                     style="@style/AppTheme.aboutPageHeading"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/about_text_lzo"
@@ -146,7 +147,7 @@
                     style="@style/AppTheme.aboutPageText"/>
 
                 <TextView
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/about_heading_openssl"
@@ -154,29 +155,13 @@
                     style="@style/AppTheme.aboutPageHeading"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/about_text_openssl"
                     android:id="@+id/about_text_openssl"
                     style="@style/AppTheme.aboutPageText"/>
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/about_heading_bouncycastle"
-                    android:id="@+id/about_heading_bouncycastle"
-                    style="@style/AppTheme.aboutPageHeading"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/about_text_bouncycastle"
-                    android:id="@+id/about_text_bouncycastle"
-                    style="@style/AppTheme.aboutPageText"
-                    android:autoLink="web"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

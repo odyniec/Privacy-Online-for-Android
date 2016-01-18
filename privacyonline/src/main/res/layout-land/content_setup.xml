@@ -18,7 +18,7 @@
                          android:layout_height="fill_parent"
                          android:weightSum="1"
                          android:alpha="0.95"
-            >
+                         android:gravity="center_vertical">
 
                          <LinearLayout
                          android:orientation="vertical"
@@ -131,7 +131,7 @@
                     android:layout_column="0"
                     android:textSize="@dimen/setup_error_text_size"
                     android:textColor="@color/errorRed"
-                    android:layout_marginLeft="@dimen/setup_error_text_margin_left"
+                    android:layout_marginLeft="@dimen/setup_error_text_landscape_margin_left"
                     android:layout_gravity="center_vertical|right"/>
 
                 <ImageView

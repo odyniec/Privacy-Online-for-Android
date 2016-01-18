@@ -14,7 +14,6 @@
     <string name="about_heading_openvpn">OpenVPN</string>
     <string name="about_heading_lzo">LZO</string>
     <string name="about_heading_openssl">OpenSSL</string>
-    <string name="about_heading_bouncycastle">Bouncy Castle Crypto APIs</string>
 
     <string name="about_text_hsi_address">517 W. 100 N., Suite 225\nProvidence, UT 84332\nToll Free Phone: 800.222.2165\nInternational Phone: 435.755.3433\nFAX: 435.755.3449</string>
     <string name="about_text_sourcecode">The source code for Privacy Online for Android is freely available on <a href="https://github.com/UK2Group">GitHub</a>.</string>
@@ -22,8 +21,6 @@
     <string name="about_text_openvpn">Copyright &#169; 2002&#8211;2010 OpenVPN Technologies, Inc.\nOpenVPN is a trademark of OpenVPN Technologies, Inc.</string>
     <string name="about_text_lzo">Copyright &#169; 1996&#8211;2011 Markus Franz Xaver Johannes Oberhumer.</string>
     <string name="about_text_openssl">This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. Copyright &#169; 1995&#8211;2008 The OpenSSL Project. All rights reserved.\n\nThis product includes cryptographic software written by Eric Young Copyright &#169; 1995&#8211;1998 Eric Young. All rights reserved.</string>
-    <string name="about_text_bouncycastle">Coptyright &#169; 2000&#8211;2012 The Legion Of The Bouncy Castle. (http://www.bouncycastle.org)</string>
-
 
     <string name="unknown_state" translatable="false">Unknown state</string>
     <string name="no_keystore_cert_selected">You must select a User certificate</string>
