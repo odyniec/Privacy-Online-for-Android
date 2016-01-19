@@ -1,7 +1,5 @@
 package online.privacy;
 /**
- * ConnectionAcvitity
- *
  * This is the MAIN launch point of the Privacy Online for Android App.
  * It handles selection of OpenVPN endpoint and starting the OpenVPN service.
  *
@@ -26,6 +24,8 @@ package online.privacy;
  *
  * You should have received a copy of the GNU General Public License
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author James Ronan <jim@dev.uk2.net>
  */
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -89,7 +89,7 @@ public class ConnectionActivity extends AppCompatActivity {
     private final int START_VPN_PROFILE = 100;
     private final int VPN_DISCONNECT    = 101;
 
-    /**
+    /*
      * Nasty-Fucking-Hack-Time!!!!one
      *
      * The AppCompat theme doesn't let you see the menu text color differently to the toolbar
@@ -306,7 +306,7 @@ public class ConnectionActivity extends AppCompatActivity {
         }
     }
 
-    /**
+    /*
      *  When the app is re-opened from the notification bar, or rotated, the activity is effectively
      *  restarted. So we need to know whether the VPN is connected or not, and from that set the UI
      *  accordingly so we don't crash in a horrible ball of fire trying to update invisible elements,
@@ -484,9 +484,7 @@ public class ConnectionActivity extends AppCompatActivity {
     }
 
     /**
-     * VPNStatusReceiver
-     *
-     * Public sub-class that handles the Broadcast's from the OpenVPN Status code.
+     * Public sub-class that handles the Broadcasts from the OpenVPN Status code.
      *
      * Used to update the UI with the current status of the VPN connection. Including the text and
      * HeaderImageView animation state.
@@ -521,9 +519,7 @@ public class ConnectionActivity extends AppCompatActivity {
 
 
     /**
-     * VPNByteCountReceiver
-     *
-     * Public sub-class responsible for receiving and handling the Broadcast's from the OpenVPN
+     * Public sub-class responsible for receiving and handling the Broadcasts from the OpenVPN
      * Status code.
      *
      * Updates the StatusBox UI with the current tracked data up/down statistics.

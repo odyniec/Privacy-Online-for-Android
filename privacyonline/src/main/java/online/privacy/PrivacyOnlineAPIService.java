@@ -1,9 +1,9 @@
 package online.privacy;
 /**
- * PrivacyOnlineAPIService
+ * Network service implementation that handles requests to Privacy Online.
  *
- * Network service implementation that handles HTTPS requests to the Privacy Online API
- * in the background on a worker thread, allowing the UI thread freedom.
+ * Manages requests to the Privacy Online HTTPS API in the background on a worker thread,
+ * allowing the UI thread freedom.
  *
  * Copyright © 2016, privacy.online
  * All rights reserved.
@@ -22,6 +22,8 @@ package online.privacy;
  *
  * You should have received a copy of the GNU General Public License
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author James Ronan <jim@dev.uk2.net>
  */
 import android.app.IntentService;
 import android.content.Context;

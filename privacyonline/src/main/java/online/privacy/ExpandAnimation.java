@@ -1,7 +1,5 @@
 package online.privacy;
 /**
- * ExpandAnimation
- *
  * Custom animation definition used for animating the "Header" image on the main ConnectionActivity.
  *
  * Copyright © 2016, privacy.online
@@ -21,6 +19,8 @@ package online.privacy;
  *
  * You should have received a copy of the GNU General Public License
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author James Ronan <jim@dev.uk2.net>
  */
 import android.view.View;
 import android.view.animation.Animation;

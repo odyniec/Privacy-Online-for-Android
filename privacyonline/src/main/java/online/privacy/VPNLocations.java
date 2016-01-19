@@ -1,5 +1,30 @@
 package online.privacy;
-
+/**
+ * Collection handler for sets of VPNLocation objects.
+ *
+ * Loads the list of locations from the specified locations JSON file, and provides them as an
+ * ArrayList.
+ *
+ * Copyright © 2016, privacy.online
+ * All rights reserved.
+ *
+ * This file is part of Privacy Online for Android.
+ *
+ * Privacy Online for Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Privacy Online for Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author James Ronan <jim@dev.uk2.net>
+ */
 import android.content.Context;
 import android.util.Log;
 
@@ -11,12 +36,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-/**
- * Data representation of the embedded VPN Location list.
- */
 public class VPNLocations {
 
     private Context context;

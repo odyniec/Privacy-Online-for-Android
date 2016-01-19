@@ -1,9 +1,9 @@
 package online.privacy;
 /**
- * PrivacyOnlineApiRequest
+ * HTTPS API communication class.
  *
- * HTTPS API interface class. Talks to the Privacy Online API over HTTPS.
- * Used to verify user credentials.
+ * Talks to the Privacy Online API over HTTPS using JSON payloads.
+ * Used to verify user credentials and obtain available VPN location node lists.
  *
  * Copyright © 2016, privacy.online
  * All rights reserved.
@@ -22,6 +22,8 @@ package online.privacy;
  *
  * You should have received a copy of the GNU General Public License
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author James Ronan <jim@dev.uk2.net>
  */
 import android.content.Context;
 import android.util.Log;
@@ -50,14 +52,12 @@ public class PrivacyOnlineApiRequest {
     }
 
     /**
-     * verifyUserAccount - Check user credentials against the Privacy Online API.
-     *
      * Uses HTTPS to verify the supplied credentials against the Privacy Online user account
      * API. Returns true/false indicating whether or not the supplied credentials are valid.
      *
-     * @param username String username for account.
-     * @param password String password for account.
-     * @return boolean validity of account credentials.
+     * @param  username Username for account.
+     * @param  password Password for account.
+     * @return boolean  Validity of account credentials.
      */
     public boolean verifyUserAccount(String username, String password) {
 
@@ -81,13 +81,11 @@ public class PrivacyOnlineApiRequest {
     }
 
     /**
-     * getLocationList() - Acquire the list of locations available for VPN connections.
-     *
      * Retrieves a list of the currently available VPN locations from the Privacy Online API.
      *
      * *Not Currently Used*
      *
-     * @return ArrayList<VPNLocation>
+     * @return ArrayList of VPNLocations
      */
     public ArrayList<VPNLocation> getLocationList() {
         JSONObject responseData;

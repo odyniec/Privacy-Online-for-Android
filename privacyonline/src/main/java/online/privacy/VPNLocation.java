@@ -1,10 +1,9 @@
 package online.privacy;
 /**
- * VPNLocation
+ * Parcelable data class that represents a single VPN location endpoint.
  *
- * Parcelable data class that represents a single VPN location endpoint. Loaded with the
- * data stored in the locations JSON file, provides accessors for the hostname, header image and flag
- * icon assets, as allows them to be passed around in a Parcelable manner.
+ * Loaded with the data stored in the locations JSON file, provides accessors for the hostname,
+ * header image and flag icon assets, as allows them to be passed around in a Parcelable manner.
  *
  * Copyright © 2016, privacy.online
  * All rights reserved.
@@ -23,6 +22,8 @@ package online.privacy;
  *
  * You should have received a copy of the GNU General Public License
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author James Ronan <jim@dev.uk2.net>
  */
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -47,8 +48,6 @@ public class VPNLocation implements Parcelable {
     }
 
     /**
-     * setHostname - Setter for the Hostname member.
-     *
      * Sets the hostname for this instance of VPNLocation.
      *
      * @param hostname Hostname of the endpoint location.
@@ -58,21 +57,18 @@ public class VPNLocation implements Parcelable {
     }
 
     /**
-     * setLabel - Setter for the Label member.
+     * Sets the human-readable label for this VPNLocation.
      *
-     * Sets the human readable label for this VPNLocation
-     *
-     * @param label Human readable label for this endpoing location.
+     * @param label Human-readable label for this endpoint location.
      */
     public void setLabel(String label) {
         this._label = label;
     }
 
     /**
-     * setFlag - Setter for the flag member.
+     * Sets the flag member of this VPNLocations.
      *
-     * Sets the flag member of this VPNLocations. Flag member is the asset filename of the Android
-     * drawable to use, sans the file extension.
+     * Flag member is the asset filename of the Android drawable to use, sans the file extension.
      *
      * @param flagFile Flag asset filename, sans file type extension.
      */
@@ -81,10 +77,10 @@ public class VPNLocation implements Parcelable {
     }
 
     /**
-     * setHeaderImage - Setter for the HeaderImage member.
+     * Sets the HeaderImage of this VPNLocation.
      *
-     * Sets the HeaderImage of this VPNLocation. HeaderImage member is the asset filename of the
-     * Android drawable to use, sans the file extension.
+     * HeaderImage member is the asset filename of the Android drawable to use, sans the file
+     * extension.
      *
      * @param headerImageFile HeaderImage asset filename, sans file type extension.
      */
@@ -93,8 +89,6 @@ public class VPNLocation implements Parcelable {
     }
 
     /**
-     * getHostname - Getter for the Hostname member.
-     *
      * Returns the Hostname member of this VPNLocation.
      *
      * @return Hostname of this endpoint location.
@@ -104,22 +98,31 @@ public class VPNLocation implements Parcelable {
     }
 
     /**
-     * getLabel - Getter for the Label member.
+     * Returns the Label member of this VPNLocation.
      *
-     * Returns the Label member of this VPNLocation
-     *
-     * @return Human readable Label of this endpoint location.
+     * @return Human-readable Label of this endpoint location.
      */
-    public String getLabel() {
-        return this._label;
-    }
+    public String getLabel() { return this._label; }
+
+    /**
+     * Returns the Flag Icon member of this VPNLocation.
+     *
+     * @return Flag Icon asset filename for this endpoint location, sans file extension
+     */
     public String getFlag() {
         return this._flag;
     }
+
+    /**
+     * Returns the HeaderImage member of this VPNLocation.
+     *
+     * @return Header Image asset filename for this endpoint location, sans the file extension.
+     */
     public String getHeaderImage() {
         return this._headerImage;
     }
 
+    // implemented method from the Parcelable Interface.
     public static final Parcelable.Creator<VPNLocation> CREATOR
             = new Parcelable.Creator<VPNLocation>() {
 
@@ -131,6 +134,7 @@ public class VPNLocation implements Parcelable {
         }
     };
 
+    // Allow the Parcelable stuff to load a location.
     private VPNLocation(Parcel in) {
         this._hostname    = in.readString();
         this._label       = in.readString();
@@ -138,10 +142,12 @@ public class VPNLocation implements Parcelable {
         this._headerImage = in.readString();
     }
 
+    // implemented method from the Parcelable Interface.
     public int describeContents() {
         return 0;
     }
 
+    // implemented method from the Parcelable Interface.
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(this._hostname);
         out.writeString(this._label);

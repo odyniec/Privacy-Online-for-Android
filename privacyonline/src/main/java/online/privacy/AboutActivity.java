@@ -1,7 +1,5 @@
 package online.privacy;
 /**
- * AboutActivity
- *
  * Simple UI activity for displaying relevant info on licencing for the different libs used within
  * the Privacy Online for Android app.
  *
@@ -22,6 +20,8 @@ package online.privacy;
  *
  * You should have received a copy of the GNU General Public License
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author James Ronan <jim@dev.uk2.net>
  */
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

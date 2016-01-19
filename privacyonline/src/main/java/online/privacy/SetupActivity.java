@@ -1,7 +1,5 @@
 package online.privacy;
 /**
- * SetupActivity
- *
  * Configuration UI activity for the Privacy Online for Android app.
  *
  * Takes the username / password credentials for the Privacy Online account and validates them
@@ -26,6 +24,8 @@ package online.privacy;
  *
  * You should have received a copy of the GNU General Public License
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author James Ronan <jim@dev.uk2.net>
  */
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -238,8 +238,6 @@ public class SetupActivity extends AppCompatActivity {
 
 
     /**
-     * VerifyUserAccountReceiver
-     *
      * Public sub-class responsible for handling the result Broadcast from the PrivacyOnlineAPIService
      * service.
      */

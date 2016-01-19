@@ -1,10 +1,10 @@
 package online.privacy;
 /**
- * HeaderImageView
+ * Custom extended ImageView for the "Header" images.
  *
- * Custom extended ImageView used to display / manage the "Header" image on the main
- * ConnectionActivity screen. Encapsulated the logic for keeping state etc to this one view, rather
- * than having it strewn all over the other code in multiple places.
+ * Used to display / manage the "Header" image on the main ConnectionActivity screen. Encapsulates
+ * the logic for keeping state of this one view, rather than having it strewn all over the other
+ * code in multiple places.
  *
  * Copyright © 2016, privacy.online
  * All rights reserved.
@@ -23,6 +23,8 @@ package online.privacy;
  *
  * You should have received a copy of the GNU General Public License
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author James Ronan <jim@dev.uk2.net>
  */
 import android.app.Activity;
 import android.content.Context;
@@ -42,23 +44,17 @@ public class HeaderImageView extends ImageView {
     private Context  context;
 
     /**
-     * companionViewId
-     *
      * This is the Android Resource ID of the view that will disappear when the header expands.
      */
     private int companionViewId = 0;
 
     /**
-     * changedHeight
-     *
      * The height of the companion view as displayed. This will act as a benchmark for the
      * animations to know how far to grow/shrink.
      */
     private int heightChange = 0;
 
     /**
-     * isExpanded
-     *
      * Indicates the current status of the view.
      */
     private boolean isExpanded = false;
@@ -81,8 +77,6 @@ public class HeaderImageView extends ImageView {
     }
 
     /**
-     * setImageToAsset - Set this view's src asset bitmap image to the specified file.
-     *
      * Takes a filename that exists in the Android Assets folder for this app, and changes this
      * "ImageView" src to it.
      *
@@ -97,8 +91,6 @@ public class HeaderImageView extends ImageView {
     }
 
     /**
-     * changeImageToAsset - Swap this view's src asset bitmap image to the supplied file by way of fade.
-     *
      * Takes a filename that exists in the Android Assets folder for this app and changes this
      * "ImageView" src to it, by way of fading out the old image, and fading in the new one.
      *
@@ -148,19 +140,21 @@ public class HeaderImageView extends ImageView {
     }
 
     /**
-     * getIsExpanded
+     * Accessor for the isExpanded state member.
      *
-     * public accessor for the isExpanded state member.
-     *
+     * @return boolean HeaderImageView's current state.
      */
     public boolean getIsExpanded() {
         return isExpanded;
     }
 
     /**
-     * setIsExpanded
+     * Setter for the isExpanded state member.
      *
-     * public setter for the isExpanded state member.
+     * This does not change the visual state of the HeaderImageView. Merely provided to reset
+     * the internal state machine, should the application be closed in exceptional circumstance.
+     *
+     * @param boolean Value to set the HeaderImageView's internal state.
      */
     public void setIsExpanded(boolean isExpanded) {
         this.isExpanded = isExpanded;
@@ -168,7 +162,7 @@ public class HeaderImageView extends ImageView {
     }
 
     /**
-     * setGreyScale - Changes the image drawable in this view to black and white.
+     * Changes the image drawable in this view to black and white.
      *
      * This is presuming the image is colour to begin with. The ColorFilter won't do a lot if
      * it's already black and white.
@@ -181,7 +175,7 @@ public class HeaderImageView extends ImageView {
     }
 
     /**
-     * unsetGreyScale - Changes the image drawable in this view back to colour.
+     * Changes the image drawable in this view back to colour.
      *
      * This is presuming the image is a colour one, and has been made grey-scale by way of
      * setGreyScale(). Won't do a lot otherwise, as all it does is call this.setColorFilter(null);
@@ -191,11 +185,10 @@ public class HeaderImageView extends ImageView {
     }
 
     /**
-     * slideOpen - Increases the image height by amount of height of supplied view, using animation.
+     * Increases the image height by amount of height of supplied view, using animation.
      *
      * Increases the image height in amount equal to the height of the specified view object, using
      * an animated transition.
-     *
      */
     public void slideOpen() {
         loadExpandedState();
@@ -231,13 +224,12 @@ public class HeaderImageView extends ImageView {
 
 
     /**
-     * slideClosed - Reduces the image height by amount of height of supplied view, using animation.
+     * Reduces the image height by amount of height of supplied view, using animation.
      *
      * Reduces the image height in amount equal to the height of the specified view object, using
      * an animated transition.
      *
      * Also expands the given view to return it to it's previous state.
-     *
      */
     public void slideClosed() {
 
@@ -278,10 +270,7 @@ public class HeaderImageView extends ImageView {
     }
 
     /**
-     * setClosed
-     *
-     * Sets the HeaderImageView to the slid-in, greyscaled configuration. No animation takes place.
-     *
+     * Sets the HeaderImageView to the slid-in, grey-scaled configuration. No animation takes place.
      */
     public void setClosed() {
         int startHeight = this.getHeight();
@@ -293,11 +282,8 @@ public class HeaderImageView extends ImageView {
     }
 
     /**
-     * setOpen
-     *
-     * Sets the HeaderImageView to the slid-out, non-greyscaled configuration. No animation takes
+     * Sets the HeaderImageView to the slid-out, non-grey-scaled configuration. No animation takes
      * place.
-     *
      */
     public void setOpen() {
         loadHeightChange();
@@ -312,11 +298,9 @@ public class HeaderImageView extends ImageView {
 
 
     /**
-     * setCompanionView
+     * Used to pre-configure the HeaderImageView.
      *
-     * Used to pre-configure the HeaderImageView. Tells it which view resource should be manipulated
-     * along with the image itself. Also stores the height of said companion view, so we have an
-     * animation parameter.
+     * Tells it which view resource should be manipulated along with the image itself.
      *
      * @param viewResourceId Android ID of the view to control in addition to the Header.
      */
@@ -325,23 +309,10 @@ public class HeaderImageView extends ImageView {
     }
 
 
-    /**
-     * clearExpandedState
-     *
-     * If - for whatever reason - the app is killed while connected, the state will be wrong.
-     * We need to clear this state onDestroy. So implement a call for that here.
-     *
-     */
-    public void clearExpandedState() {
-        this.isExpanded = false;
-        saveExpandedState();
-    }
-
-
     // Hence follows: A bunch of private shit that no-one outside of this view class needs care about.
 
     // Because this instance doesn't persist across activities, we need to store the state in
-    // sharedpreferences as that persists.
+    // SharedPreferences as that persists.
     private SharedPreferences getOurPreferences() {
         return this.activity.getSharedPreferences(
                 this.activity.getString(R.string.privacyonline_preferences), Context.MODE_PRIVATE);
