@@ -23,6 +23,7 @@ package online.privacy;
  * You should have received a copy of the GNU General Public License
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
  */
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -42,6 +43,11 @@ import javax.net.ssl.HttpsURLConnection;
 public class PrivacyOnlineApiRequest {
 
     private static final String LOG_TAG = "p.o.api.request";
+    private Context context;
+
+    PrivacyOnlineApiRequest(Context context) {
+        this.context = context;
+    }
 
     /**
      * verifyUserAccount - Check user credentials against the Privacy Online API.
@@ -113,7 +119,7 @@ public class PrivacyOnlineApiRequest {
         InputStream  inputStream  = null;
         OutputStream outputStream = null;
         String       apiUrl       = "https://api.privacy.online";
-        String       apiKey       = "914B021A-8DE2-11E5-A61C-C0D88CCA4EEA";
+        String       apiKey       = this.context.getString(R.string.privacy_online_api_key);
         String       keyString    = "?key=" + apiKey;
 
         int payloadSize = jsonPayload.length();

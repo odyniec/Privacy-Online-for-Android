@@ -24,6 +24,7 @@ package online.privacy;
  * along with Privacy Online for Android.  If not, see <http://www.gnu.org/licenses/>.
  */
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -57,26 +58,26 @@ public class PrivacyOnlineAPIService extends IntentService {
                 Log.i(LOG_TAG, "Action is to verify user account");
                 final String username = intent.getStringExtra(PARAM_USERNAME);
                 final String password = intent.getStringExtra(PARAM_PASSWORD);
-                handleActionVerifyUserAccount(username, password);
+                handleActionVerifyUserAccount(getApplicationContext(), username, password);
 
             } else if (ACTION_GET_LOCATIONS.equals(action)) {
                 Log.i(LOG_TAG, "Action is to get location list.");
                 String caller = intent.getStringExtra(EXTRA_CALLER);
-                handleActionGetLocationList(caller);
+                handleActionGetLocationList(getApplicationContext(), caller);
             }
         }
     }
 
-    private void handleActionVerifyUserAccount(String username, String password) {
+    private void handleActionVerifyUserAccount(Context context, String username, String password) {
         Log.i(LOG_TAG, "Verify User handler executed.");
-        PrivacyOnlineApiRequest requestPrivacyAPI = new PrivacyOnlineApiRequest();
+        PrivacyOnlineApiRequest requestPrivacyAPI = new PrivacyOnlineApiRequest(context);
         boolean checkResult = requestPrivacyAPI.verifyUserAccount(username, password);
         broadcastVerifyAccountResult(checkResult);
     }
 
-    private void handleActionGetLocationList(String caller) {
+    private void handleActionGetLocationList(Context context, String caller) {
         Log.i(LOG_TAG, "Get Location List handler executed.");
-        PrivacyOnlineApiRequest requestPrivacyAPI = new PrivacyOnlineApiRequest();
+        PrivacyOnlineApiRequest requestPrivacyAPI = new PrivacyOnlineApiRequest(context);
         ArrayList<VPNLocation> locationList = requestPrivacyAPI.getLocationList();
         broadcastGetLocationListResult(caller, locationList);
     }
