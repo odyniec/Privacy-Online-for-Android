@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:versionCode="102">
+        android:versionCode="103">
         <activity
             android:name="online.privacy.ConnectionActivity"
             android:label="@string/app_name"
