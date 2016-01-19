@@ -9,3 +9,4 @@ privacyonline/*.apk
 privacyonline/src/main/res/values/refs.xml
 privacyonline/obj
 privacyonline/build
+privacyonline/ovpnlibs
