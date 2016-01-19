@@ -115,7 +115,6 @@ public class PrivacyOnlineApiRequest {
     // Private worker method that actually communicates with the Privacy Online API.
     private JSONObject makeAPIRequest(String method, String endPoint, String jsonPayload)
             throws IOException, JSONException {
-        Log.i(LOG_TAG, "Attempting to verify with data payload: " + jsonPayload);
         InputStream  inputStream  = null;
         OutputStream outputStream = null;
         String       apiUrl       = "https://api.privacy.online";
@@ -123,7 +122,6 @@ public class PrivacyOnlineApiRequest {
         String       keyString    = "?key=" + apiKey;
 
         int payloadSize = jsonPayload.length();
-        Log.i(LOG_TAG, "Payload size: " + payloadSize);
 
         try {
             URL url = new URL(apiUrl + endPoint + keyString);
@@ -151,7 +149,6 @@ public class PrivacyOnlineApiRequest {
 
             // Get the response.
             int responseCode = connection.getResponseCode();
-            Log.i(LOG_TAG, "Got response code: "+responseCode);
             inputStream = connection.getInputStream();
 
             String responseContent = readInputStream(inputStream, connection.getContentLength());
