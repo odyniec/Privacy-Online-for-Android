@@ -16,7 +16,7 @@
     <string name="about_heading_openssl">OpenSSL</string>
 
     <string name="about_text_hsi_address">517 W. 100 N., Suite 225\nProvidence, UT 84332\nToll Free Phone: 800.222.2165\nInternational Phone: 435.755.3433\nFAX: 435.755.3449</string>
-    <string name="about_text_sourcecode">The source code for Privacy Online for Android is freely available on <a href="https://github.com/UK2Group">GitHub</a>.</string>
+    <string name="about_text_sourcecode">The source code for Privacy Online for Android is freely available on <a href="https://github.com/UK2Group/Privacy-Online-for-Android">GitHub</a>.</string>
     <string name="about_text_openvpn_for_android">Privacy Online for Android\'s OpenVPN back-end service code is based upon "OpenVPN for Android" by Arne Schwabe, in accordance with the GPLv2 Licensing. You can find his project on <a href="https://github.com/schwabe/ics-openvpn">GitHub</a>.</string>
     <string name="about_text_openvpn">Copyright &#169; 2002&#8211;2010 OpenVPN Technologies, Inc.\nOpenVPN is a trademark of OpenVPN Technologies, Inc.</string>
     <string name="about_text_lzo">Copyright &#169; 1996&#8211;2011 Markus Franz Xaver Johannes Oberhumer.</string>
