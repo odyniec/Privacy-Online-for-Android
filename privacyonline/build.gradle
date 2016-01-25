@@ -26,6 +26,10 @@ android {
         disable 'Typos'
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     // Prevent auto Android.mk generation as we need to specify flags
     sourceSets.main {
         assets.srcDirs = ['src/main/assets', 'ovpnlibs/assets']
@@ -65,6 +69,15 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile ('org.powermock:powermock-api-mockito:1.6.2') {
+        exclude module: 'hamcrest-core'
+        exclude module: 'objenesis'
+    }
+    testCompile ('org.powermock:powermock-module-junit4:1.6.2') {
+        exclude module: 'hamcrest-core'
+        exclude module: 'objenesis'
+    }
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
 }

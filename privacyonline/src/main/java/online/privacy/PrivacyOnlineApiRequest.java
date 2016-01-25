@@ -146,7 +146,6 @@ public class PrivacyOnlineApiRequest {
             }
 
             // Get the response.
-            int responseCode = connection.getResponseCode();
             inputStream = connection.getInputStream();
 
             String responseContent = readInputStream(inputStream, connection.getContentLength());
